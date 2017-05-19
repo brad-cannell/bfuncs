@@ -23,7 +23,7 @@ Tools for data cleaning
 data(mtcars)
 ```
 
-**about\_data function**\*
+**about\_data function**
 
 ``` r
 # View number of observations and variables in a data frame, but not any of the data values
@@ -166,13 +166,10 @@ tabstat(mtcars$mpg, stats = c("n", "nmiss", "ci", "sum", "max", "min",
 Tools for evaluating model performace and diagnostic tests. This package was originally created to help with the development and evaluation of screening tools.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Tools for evaluating model performace and diagnostic tests. This package was originally created to help with the development and evaluation of screening tools.
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 **Create confusion matrix with conf\_matrix()**
 
 ``` r
-utils::data(mtcars)
+data(mtcars)
 
 # Create "true" outcome vector:
 truth <- mtcars$vs

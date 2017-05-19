@@ -16,5 +16,6 @@
 #' about_data(mtcars)
 #' names(mtcars)
 about_data <- function(x) {
-  cat(nrow(x), "observations and", length(x), "variables in the data \n")
+  dims <- format(dim(x), big.mark = ",")
+  cat(dims[1], "observations and", trimws(dims[2]), "variables")
 }

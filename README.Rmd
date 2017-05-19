@@ -1,0 +1,169 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# This package is a collection of simple functions I use sometimes 
+
+```{r}
+library(tidyverse)
+library(myFunctions)
+```
+
+## Tools for data cleaning   
+
+```{r}
+data(mtcars)
+```
+
+**about_data function***
+
+```{r about_data}
+# View number of observations and variables in a data frame, but not any of the data values
+about_data(mtcars)
+```
+
+**all_na function**
+
+```{r all_na}
+# Which rows contain only NA values
+df <- data.frame(
+  var1 = c(1, NA, 2, NA, 5, NA),
+  var2 = c(NA, "b", "c", NA, NA, NA),
+  var3 = c(TRUE, FALSE, TRUE, NA, FALSE, NA)
+)
+
+all_na(df)
+```
+
+**check_catvars function**
+
+```{r check_catvars}
+lapply(mtcars[c("cyl", "am", "mpg")], check_catvars)
+```
+
+**codebook function**
+
+```{r codebook}
+# Optional: Create label vector
+labels <- c("Miles Per Gallon", "Number of cylinders")
+
+# Codebook with one variable
+codebook(mtcars["mpg"], label = labels)
+
+# Codebook with multiple variables
+varlist <- c("mpg", "cyl")
+codebook(mtcars[varlist], label = labels)
+```
+
+**mean_center function**
+
+```{r mean_center}
+(mtcars$c.mpg <- mean_center(mtcars$mpg))
+```
+
+**recode_miss function**
+
+```{r recode_miss}
+recode_miss(mtcars$cyl, values = 4)
+```
+
+## Tools for descriptive tables
+
+```{r}
+# mean95 function
+mean95(mtcars$mpg)
+
+# props function
+props(mtcars$cyl)
+
+# stats function
+stats(mtcars$mpg)
+
+# tabstats function
+tabstat(mtcars$mpg, stats = c("n", "nmiss", "ci", "sum", "max", "min",
+"range", "sd", "var", "cv", "sem", "skew", "kurt", "p1", "p5", "p10",
+"p25", "p50", "median", "p75", "p90", "p95", "p99", "iqr", "q"))
+```
+
+## Tools for evaluating model performace and diagnostic tests. This package was originally created to help with the development and evaluation of screening tools.
+## Tools for evaluating model performace and diagnostic tests. This package was originally created to help with the development and evaluation of screening tools.
+
+**Create confusion matrix with conf_matrix()**
+
+```{r conf_matrix_example}
+utils::data(mtcars)
+
+# Create "true" outcome vector:
+truth <- mtcars$vs
+
+# Create a vector meant to represent a set of predicted outcomes:
+set.seed(123)
+predicted <- as.numeric(sample(0:1, length(truth), replace = TRUE))
+
+# Create confusion matrix
+my_cm <- conf_matrix(truth = truth, prediction = predicted)
+
+# -----------------------------------------------------------------------------
+# Example of using conf_matrix with multiple variables
+
+df <- tibble(
+  x1 = factor(c("No", "Yes")),
+  x2 = factor(c("No", "Yes")),
+  x3 = factor(c("Yes", "No"))
+)
+
+# Calculate measures
+test <- conf_matrix(truth = df$x1, prediction = df$x2, show_matrix = FALSE)
+as_tibble(test)
+
+# Make empty table
+results <- tibble(
+  var = NA,
+  tp = NA,
+  fp = NA,
+  fn = NA,
+  tn = NA,
+  sensativity = NA,
+  specificity = NA,
+  fpr = NA,
+  fnr = NA,
+  accuracy = NA,
+  misclassification = NA,
+  precision = NA,
+  prevalence = NA
+)
+
+# for each screener item:
+#   capture the name of the screener item
+#   put the name into the first column of the results tibble
+#   capture the performance measures of the screener item
+#   put each performance measure into the coresponding element in the results tibble
+var <- names(df[2:3])
+r <- 1
+for (i in var) {
+  results[r, 1] <- i
+  results[r, 2:13] <- conf_matrix(truth = df$x1, prediction = df[[i]], show_matrix = FALSE)
+  r <- r + 1
+}
+
+print(results)
+```
+
+#### Installation instructions:
+```{r eval = FALSE}
+devtools::install_github("brad-cannell/myFunctions")
+```
+
+

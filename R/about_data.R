@@ -15,7 +15,8 @@
 #' data("mtcars")
 #' about_data(mtcars)
 #' names(mtcars)
-about_data <- function(x) {
+about_data <- function(x, ...) {
   dims <- format(dim(x), big.mark = ",")
-  cat(dims[1], "observations and", trimws(dims[2]), "variables")
+  out  <- paste(dims[1], "observations and", trimws(dims[2]), "variables")
+  out
 }

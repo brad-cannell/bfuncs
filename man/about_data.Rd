@@ -4,10 +4,12 @@
 \alias{about_data}
 \title{Returns the Number of Observations and Variables in a Data Frame}
 \usage{
-about_data(x)
+about_data(x, ...)
 }
 \arguments{
 \item{x}{A data frame}
+
+\item{...}{Additional arguments}
 }
 \value{
 A character string

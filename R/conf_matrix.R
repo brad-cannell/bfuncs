@@ -26,7 +26,7 @@
 #'      proportion of positives that are incorrectly classified as a negative.
 #'      1 – sensitivity.}
 #'    \item{FDR}{False Discovery Rate. Measures the proportion of cases
-#'      predicted positive, that were truly negative.
+#'      predicted positive, that were truly negative.}
 #'    \item{Accuracy}{The overall proportion of correctly classified
 #'      observations.}
 #'    \item{Misclassification}{The overall proportion of incorrectly classified

@@ -15,6 +15,34 @@ diagnostic values.}
 \item{show_matrix}{A logical (TRUE or FALSE). Set to TRUE by default. Change
 to FALSE if you want a confusion matrix table to be printed to the console.}
 }
+\value{
+A list containing:
+ \describe{
+   \item{Sensativity}{(also called the true positive rate, or the recall
+     in some fields) measures the proportion of positives that are
+     correctly classified as such (e.g., the percentage of sick people who
+     are correctly classified as having the condition).}
+   \item{Specificity}{(also called the true negative rate) measures the
+     proportion of negatives that are correctly identified as such (e.g.,
+     the percentage of healthy people who are correctly identified as not
+     having the condition).}
+   \item{FPR}{False Positive Rate (Not really a rate). Measures the
+     proportion of negatives that are incorrectly classified as a positive.
+     1 - specificity.}
+   \item{FNR}{False Negative Rate (Not really a rate). Measures the
+     proportion of positives that are incorrectly classified as a negative.
+     1 – sensitivity.}
+   \item{FDR}{False Discovery Rate. Measures the proportion of cases
+     predicted positive, that were truly negative.}
+   \item{Accuracy}{The overall proportion of correctly classified
+     observations.}
+   \item{Misclassification}{The overall proportion of incorrectly classified
+     observations.}
+   \item{Precision}{The overall proportion of incorrectly classified
+     observations.}
+   \item{Prevalence}{The overall proportion of true positives.}
+ }
+}
 \description{
 Create a confusion matrix along with the following measures
  of performance

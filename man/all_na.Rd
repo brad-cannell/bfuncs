@@ -9,6 +9,9 @@ all_na(x)
 \arguments{
 \item{x}{A data frame}
 }
+\value{
+A vector of row numbers
+}
 \description{
 Given a data frame, this function returns the row number(s) where the value
  for every variable(s) in the row(s) is/are NA.

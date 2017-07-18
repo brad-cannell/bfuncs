@@ -7,6 +7,7 @@
 #'  in a data frame, but none of the data values.
 #'
 #' @param x A data frame
+#' @param ... Additional arguments
 #'
 #' @return A character string
 #' @export

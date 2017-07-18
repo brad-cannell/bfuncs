@@ -5,7 +5,7 @@
 #'
 #' @param x A data frame
 #'
-#' @return
+#' @return A vector of row numbers
 #' @export
 #'
 #' @examples

@@ -14,151 +14,43 @@ knitr::opts_chunk$set(
 )
 ```
 
-# This package is a collection of simple functions I use sometimes 
+# Brad's functions (bfuncs)
 
-```{r}
-library(tidyverse)
-library(myFunctions)
-```
+This repository is a random smattering of functions I wrote for me, but you can use them too.
 
-## Tools for data cleaning   
+Link to HTML package vignettes below.
 
-```{r}
-data(mtcars)
-```
+## Programing functions
 
-**about_data function**
+## Simulation functions
 
-```{r about_data}
-# View number of observations and variables in a data frame, but not any of the data values
-about_data(mtcars)
-```
+## Data wrangling functions
 
-**all_na function**
+* mean_center: mean center continuous variables.
 
-```{r all_na}
-# Which rows contain only NA values
-df <- data.frame(
-  var1 = c(1, NA, 2, NA, 5, NA),
-  var2 = c(NA, "b", "c", NA, NA, NA),
-  var3 = c(TRUE, FALSE, TRUE, NA, FALSE, NA)
-)
+## Data analysis functions
 
-all_na(df)
-```
+* conf_matrix: create a confusion matrix.
 
-**check_catvars function**
+* mean95: calculate mean and 95% confidence interval.
 
-```{r check_catvars}
-lapply(mtcars[c("cyl", "am", "mpg")], check_catvars)
-```
+* props: calculate proportions and 95% confidence intervals.
 
-**codebook function**
+* stats: estimate means and related statistics for continuous variables.
 
-```{r codebook}
-# Optional: Create label vector
-labels <- c("Miles Per Gallon", "Number of cylinders")
+* tabstats: compact table of summary statistics for continuous variables.
 
-# Codebook with one variable
-codebook(mtcars["mpg"], label = labels)
+## Presentation and dissemination functions
 
-# Codebook with multiple variables
-varlist <- c("mpg", "cyl")
-codebook(mtcars[varlist], label = labels)
-```
+* Add functions for creating tables
 
-**mean_center function**
+* about_data: view number of observations and variables in a data frame, but not any of the data values.
 
-```{r mean_center}
-(mtcars$c.mpg <- mean_center(mtcars$mpg))
-```
+* codebook: create a codebook / data dictionary from a data frame.
 
-**recode_miss function**
+## Other functions
 
-```{r recode_miss}
-recode_miss(mtcars$cyl, values = 4)
-```
-
-## Tools for descriptive tables
-
-```{r}
-# mean95 function
-mean95(mtcars$mpg)
-
-# props function
-props(mtcars$cyl)
-
-# stats function
-stats(mtcars$mpg)
-
-# tabstats function
-tabstat(mtcars$mpg, stats = c("n", "nmiss", "ci", "sum", "max", "min",
-"range", "sd", "var", "cv", "sem", "skew", "kurt", "p1", "p5", "p10",
-"p25", "p50", "median", "p75", "p90", "p95", "p99", "iqr", "q"))
-```
-
-## Tools for evaluating model performace and diagnostic tests. This package was originally created to help with the development and evaluation of screening tools.
-
-**Create confusion matrix with conf_matrix()**
-
-```{r conf_matrix_example}
-data(mtcars)
-
-# Create "true" outcome vector:
-truth <- mtcars$vs
-
-# Create a vector meant to represent a set of predicted outcomes:
-set.seed(123)
-predicted <- as.numeric(sample(0:1, length(truth), replace = TRUE))
-
-# Create confusion matrix
-my_cm <- conf_matrix(truth = truth, prediction = predicted)
-
-# -----------------------------------------------------------------------------
-# Example of using conf_matrix with multiple variables
-
-df <- tibble(
-  x1 = factor(c("No", "Yes")),
-  x2 = factor(c("No", "Yes")),
-  x3 = factor(c("Yes", "No"))
-)
-
-# Calculate measures
-test <- conf_matrix(truth = df$x1, prediction = df$x2, show_matrix = FALSE)
-as_tibble(test)
-
-# Make empty table
-results <- tibble(
-  var = NA,
-  tp = NA,
-  fp = NA,
-  fn = NA,
-  tn = NA,
-  sensativity = NA,
-  specificity = NA,
-  fpr = NA,
-  fnr = NA,
-  accuracy = NA,
-  misclassification = NA,
-  precision = NA,
-  prevalence = NA
-)
-
-# for each screener item:
-#   capture the name of the screener item
-#   put the name into the first column of the results tibble
-#   capture the performance measures of the screener item
-#   put each performance measure into the coresponding element in the results tibble
-var <- names(df[2:3])
-r <- 1
-for (i in var) {
-  results[r, 1] <- i
-  results[r, 2:13] <- conf_matrix(truth = df$x1, prediction = df[[i]], show_matrix = FALSE)
-  r <- r + 1
-}
-
-print(results)
-```
+-------------------------------------------------------------------------------
 
 #### Installation instructions:
 ```{r eval = FALSE}

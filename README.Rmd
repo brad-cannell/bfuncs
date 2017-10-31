@@ -54,7 +54,7 @@ Link to HTML package vignettes below.
 
 #### Installation instructions:
 ```{r eval = FALSE}
-devtools::install_github("brad-cannell/myFunctions")
+devtools::install_github("brad-cannell/bfuncs")
 ```
 
 

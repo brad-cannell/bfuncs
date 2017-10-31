@@ -47,5 +47,5 @@ Other functions
 #### Installation instructions:
 
 ``` r
-devtools::install_github("brad-cannell/myFunctions")
+devtools::install_github("brad-cannell/bfuncs")
 ```

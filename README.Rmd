@@ -16,9 +16,9 @@ knitr::opts_chunk$set(
 
 # Brad's functions (bfuncs)
 
-This repository is a random smattering of functions I wrote for me, but you can use them too.
+This repository is a random smattering of functions I wrote for myself, but you can use them too.
 
-Link to HTML package vignettes below.
+<!-- Need to make help vignettes and link to them below -->
 
 ## Programing functions
 

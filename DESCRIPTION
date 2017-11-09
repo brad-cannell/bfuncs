@@ -1,15 +1,15 @@
-Package: myFunctions
+Package: bfuncs
 Type: Package
-Title: Functions I use sometimes
-Version: 0.1.0
+Title: This Repository Is A Random Smattering Of Functions I Wrote For Myself - You Can Use Them Too
+Version: 0.1.1
 Author: person("Brad", "Cannell", email = "brad.cannell@gmail.com", role = c("aut", "cre"))
 Maintainer: Brad Cannell <brad.cannell@gmail.com>
 Description: Random functions for me.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/brad-cannell/my_functions
-BugReports: https://github.com/brad-cannell/my_functions/issues
+URL: https://github.com/brad-cannell/bfuncs
+BugReports: https://github.com/brad-cannell/bfuncs/issues
 Suggests: testthat
 Imports:
   gmodels, 

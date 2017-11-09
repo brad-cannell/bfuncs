@@ -24,13 +24,13 @@
 props <- function(x, citype = "normal", digits = 5) {
   name <- deparse(substitute(x))               # Grab variable string
   name <- sub("^[^\\$]*\\$", "", name)         # Regex remove up to $
-  var <- na.omit(x)                            # Remove NA
+  var <- stats::na.omit(x)                     # Remove NA
   N <- length(var)                             # N of non-missing values
   tab <- unclass(table(var))                   # Create a table
   levels <- names(tab)                         # Grab category names
   prop <- tab / N                              # Proportions
   se <- sqrt(prop * (1-prop)/(N-1))            # Standard errors of props
-  stat <- Vectorize(qt, "df")(0.975, N-1)      # tstats
+  stat <- Vectorize(stats::qt, "df")(0.975, N-1) # tstats
 
   if (citype == "normal") {                    # Normal approximation cis
     lower <- prop - stat * se                  # Lower ci

@@ -32,9 +32,9 @@ This repository is a random smattering of functions I wrote for myself, but you 
 
 * conf_matrix: create a confusion matrix.
 
-* mean95: calculate mean and 95% confidence interval.
+* [freq_table: estimate percents and 95 percent confidence intervals](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Frequency_Tables.html)
 
-* props: calculate proportions and 95% confidence intervals.
+* mean95: calculate mean and 95% confidence interval.
 
 * stats: estimate means and related statistics for continuous variables.
 

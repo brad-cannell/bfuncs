@@ -54,7 +54,7 @@ This repository is a random smattering of functions I wrote for myself, but you 
 
 #### Installation instructions:
 ```{r eval = FALSE}
-devtools::install_github("brad-cannell/bfuncs")
+devtools::install_github("brad-cannell/bfuncs", build_vignettes = TRUE)
 ```
 
 

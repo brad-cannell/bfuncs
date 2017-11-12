@@ -46,5 +46,5 @@ Other functions
 #### Installation instructions:
 
 ``` r
-devtools::install_github("brad-cannell/bfuncs")
+devtools::install_github("brad-cannell/bfuncs", build_vignettes = TRUE)
 ```

@@ -14,7 +14,7 @@
 #'   All standard errors are calculated as some version of:
 #'   sqrt(proportion * (1 - proportion) / (n - 1))
 #'
-#'   For one-way tables, the default 95percent confidence intervals displayed are
+#'   For one-way tables, the default 95 percent confidence intervals displayed are
 #'   log transformed confidence intervals equivalent to those used by Stata.
 #'   Additionally, freq_table will return Wald ("linear") confidence intervals
 #'   if the argument to ci_type = "wald".
@@ -26,7 +26,7 @@
 #' @param t_prob (1 - alpha / 2). Default value is 0.975, which corresponds to
 #'   an alpha of 0.05. Used to calculate a critical value from Student's t
 #'   distribution with n - 1 degrees of freedom.
-#' @param ci_type Selects the method used to estimate 95percent confidence intervals.
+#' @param ci_type Selects the method used to estimate 95 percent confidence intervals.
 #'   The default for one-way and two-way tables is log transformed ("log"). For
 #'   one-way tables only, ci_type can optionally calculate Wald ("linear")
 #'   confidence intervals using the "wald" argument.
@@ -70,9 +70,6 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", ...) {
 
   # ===========================================================================
   # Check for number of group vars:
-  # If 1 var then use Wald and overall prop
-  # If 2 vars then use logit transformation for CI's and give row prop in
-  # addition to overall.
   # ===========================================================================
   out <- x %>%
     summarise(n = n())
@@ -82,7 +79,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", ...) {
   # ===========================================================================
   if (ncol(out) == 2) { # else is in two-way tables.
 
-    # Update out to include elements need for Wald and Log transformed CI's
+    # Update out to include elements needed for Wald and Log transformed CI's
     # One-way tables
     out <- out %>%
       mutate(

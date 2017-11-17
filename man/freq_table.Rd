@@ -13,7 +13,7 @@ freq_table(x, t_prob = 0.975, ci_type = "log", ...)
 an alpha of 0.05. Used to calculate a critical value from Student's t
 distribution with n - 1 degrees of freedom.}
 
-\item{ci_type}{Selects the method used to estimate 95percent confidence intervals.
+\item{ci_type}{Selects the method used to estimate 95 percent confidence intervals.
 The default for one-way and two-way tables is log transformed ("log"). For
 one-way tables only, ci_type can optionally calculate Wald ("linear")
 confidence intervals using the "wald" argument.}
@@ -38,7 +38,7 @@ The freq_table function produces one-way and two-way frequency
   All standard errors are calculated as some version of:
   sqrt(proportion * (1 - proportion) / (n - 1))
 
-  For one-way tables, the default 95percent confidence intervals displayed are
+  For one-way tables, the default 95 percent confidence intervals displayed are
   log transformed confidence intervals equivalent to those used by Stata.
   Additionally, freq_table will return Wald ("linear") confidence intervals
   if the argument to ci_type = "wald".

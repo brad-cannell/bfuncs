@@ -1,7 +1,7 @@
 Package: bfuncs
 Type: Package
 Title: This Repository Is A Random Smattering Of Functions I Wrote For Myself - You Can Use Them Too
-Version: 0.1.1
+Version: 0.2
 Author: person("Brad", "Cannell", email = "brad.cannell@gmail.com", role = c("aut", "cre"))
 Maintainer: Brad Cannell <brad.cannell@gmail.com>
 Description: Random functions for me.

@@ -23,11 +23,7 @@ Data analysis functions
 
 -   [freq\_table: estimate percents and 95 percent confidence intervals](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Frequency_Tables.html)
 
--   mean95: calculate mean and 95% confidence interval.
-
--   stats: estimate means and related statistics for continuous variables.
-
--   tabstats: compact table of summary statistics for continuous variables.
+-   [tabstats: compact table of summary statistics for continuous variables.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Using_tabstat_with_dplyr.html)
 
 Presentation and dissemination functions
 ----------------------------------------

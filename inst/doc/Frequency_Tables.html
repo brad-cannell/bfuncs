@@ -69,25 +69,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Frequency Tables</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-11-10 <br> Updated: 2017-11-12</em></h4>
+<h4 class="date"><em>Created: 2017-11-10 <br> Updated: 2017-11-17</em></h4>
 
 
 
 <p>I initially created this file to help develop the freq_table function in <code>bfuncs</code>. Use this file for testing as you further develop the <code>freq_table</code> function (or any other functions related to categorical frequency tables). Additionally, as you come across different use cases or challenges, add them to this document.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
-<pre><code>## Warning: package 'tidyverse' was built under R version 3.4.2</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────── tidyverse 1.2.0 ──</code></pre>
-<pre><code>## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-## ✔ tibble  1.3.4     ✔ dplyr   0.7.4
-## ✔ tidyr   0.7.2     ✔ stringr 1.2.0
-## ✔ readr   1.1.1     ✔ forcats 0.2.0</code></pre>
-<pre><code>## Warning: package 'tidyr' was built under R version 3.4.2</code></pre>
-<pre><code>## Warning: package 'purrr' was built under R version 3.4.2</code></pre>
-<pre><code>## Warning: package 'dplyr' was built under R version 3.4.2</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">data</span>(mtcars)</code></pre></div>
 <ol style="list-style-type: decimal">
 <li><p>Remember, fist get it to work. Then, make it better.</p></li>
 <li><p>Let’s just take for granted that we are going to get a grouped dataframe. That’s easy enough to implement in R.</p></li>
@@ -109,11 +97,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">lower =</span> prop <span class="op">-</span><span class="st"> </span>tcrit <span class="op">*</span><span class="st"> </span>se,
     <span class="dt">upper =</span> prop <span class="op">+</span><span class="st"> </span>tcrit <span class="op">*</span><span class="st"> </span>se
   )</code></pre></div>
-<pre><code>## # A tibble: 2 x 8
-##      am     n cumsum    prop         se    tcrit     lower     upper
-##   &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1     0    19     32 0.59375 0.08820997 2.039513 0.4138446 0.7736554
-## 2     1    13     32 0.40625 0.08820997 2.039513 0.2263446 0.5861554</code></pre>
+<pre><code># A tibble: 2 x 8
+     am     n cumsum    prop         se    tcrit     lower     upper
+  &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1     0    19     32 0.59375 0.08820997 2.039513 0.4138446 0.7736554
+2     1    13     32 0.40625 0.08820997 2.039513 0.2263446 0.5861554</code></pre>
 <p>Double-checked with Stata and SAS. The se should be n-1 and the df should be n-1. These confindence limits match SAS exactly.</p>
 <p>Using logit transformed confidence intervals like Stata. <a href="https://www.stata.com/manuals13/rproportion.pdf" class="uri">https://www.stata.com/manuals13/rproportion.pdf</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span>
@@ -132,11 +120,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <span class="dt">upper     =</span> <span class="kw">exp</span>(log_upper) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(log_upper))
     ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">select</span>(<span class="dv">1</span>, n, prop, se, lower, upper)</code></pre></div>
-<pre><code>## # A tibble: 2 x 6
-##      am     n    prop         se     lower     upper
-##   &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
-## 1     0    19 0.59375 0.08820997 0.4094225 0.7549765
-## 2     1    13 0.40625 0.08820997 0.2450235 0.5905775</code></pre>
+<pre><code># A tibble: 2 x 6
+     am     n    prop         se     lower     upper
+  &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1     0    19 0.59375 0.08820997 0.4094225 0.7549765
+2     1    13 0.40625 0.08820997 0.2450235 0.5905775</code></pre>
 <p>This matches Stata exactly.</p>
 </div>
 <div id="two-way-frequency-tables" class="section level1">
@@ -154,16 +142,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">lower =</span> prop <span class="op">-</span><span class="st"> </span>tcrit <span class="op">*</span><span class="st"> </span>se,
     <span class="dt">upper =</span> prop <span class="op">+</span><span class="st"> </span>tcrit <span class="op">*</span><span class="st"> </span>se
   ) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, percent, sep, lower, upper)</code></pre></div>
-<pre><code>## # A tibble: 6 x 8
-## # Groups:   am [2]
-##      am   cyl     n cumsum  percent       sep       lower     upper
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
-## 1     0     4     3     19 15.78947  8.365468 -0.01719651 0.3329860
-## 2     0     6     4     19 21.05263  9.352877  0.01476835 0.4062843
-## 3     0     8    12     19 63.15789 11.066473  0.39995500 0.8632029
-## 4     1     4     8     13 61.53846 13.493200  0.32388175 0.9068875
-## 5     1     6     3     13 23.07692 11.685454 -0.02167966 0.4832181
-## 6     1     8     2     13 15.38462 10.006825 -0.06233816 0.3700305</code></pre>
+<pre><code># A tibble: 6 x 8
+# Groups:   am [2]
+     am   cyl     n cumsum  percent       sep       lower     upper
+  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;  &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+1     0     4     3     19 15.78947  8.365468 -0.01719651 0.3329860
+2     0     6     4     19 21.05263  9.352877  0.01476835 0.4062843
+3     0     8    12     19 63.15789 11.066473  0.39995500 0.8632029
+4     1     4     8     13 61.53846 13.493200  0.32388175 0.9068875
+5     1     6     3     13 23.07692 11.685454 -0.02167966 0.4832181
+6     1     8     2     13 15.38462 10.006825 -0.06233816 0.3700305</code></pre>
 <p>These don’t match SAS. The Standard errors are off. The SAS documentation says they use the Taylor series variance estimation method.</p>
 <p><a href="https://support.sas.com/documentation/cdl/en/statug/63347/HTML/default/viewer.htm#statug_surveyfreq_a0000000217.htm" class="uri">https://support.sas.com/documentation/cdl/en/statug/63347/HTML/default/viewer.htm#statug_surveyfreq_a0000000217.htm</a></p>
 <p>I don’t know how to calculate that. Seeing if I can reproduce Stata results.</p>
@@ -185,16 +173,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <span class="dt">upper     =</span> <span class="kw">exp</span>(log_upper) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(log_upper))
   ) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, n, group_n, total_n, prop, se, lower, upper)  </code></pre></div>
-<pre><code>## # A tibble: 6 x 9
-##      am   cyl     n group_n total_n      prop         se      lower
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
-## 1     0     4     3      19      32 0.1578947 0.08594701 0.04777477
-## 2     0     6     4      19      32 0.2105263 0.09609168 0.07579485
-## 3     0     8    12      19      32 0.6315789 0.11369721 0.38756354
-## 4     1     4     8      13      32 0.6153846 0.14044168 0.32296598
-## 5     1     6     3      13      32 0.2307692 0.12162606 0.06905055
-## 6     1     8     2      13      32 0.1538462 0.10415434 0.03433831
-## # ... with 1 more variables: upper &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 6 x 9
+     am   cyl     n group_n total_n      prop         se      lower
+  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1     0     4     3      19      32 0.1578947 0.08594701 0.04777477
+2     0     6     4      19      32 0.2105263 0.09609168 0.07579485
+3     0     8    12      19      32 0.6315789 0.11369721 0.38756354
+4     1     4     8      13      32 0.6153846 0.14044168 0.32296598
+5     1     6     3      13      32 0.2307692 0.12162606 0.06905055
+6     1     8     2      13      32 0.1538462 0.10415434 0.03433831
+# ... with 1 more variables: upper &lt;dbl&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="co"># map_at(.at = c(5:8), ~ . * 100) %&gt;% </span>
   <span class="co"># as_tibble()</span></code></pre></div>
 <p>Exact same results as Stata.</p>
@@ -342,26 +330,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>()</code></pre></div>
-<pre><code>## # A tibble: 2 x 8
-##      am     n n_total percent       se   t_crit  lcl_log  ucl_log
-##   &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1     0    19      32  59.375 8.820997 2.039513 40.94225 75.49765
-## 2     1    13      32  40.625 8.820997 2.039513 24.50235 59.05775</code></pre>
+<pre><code># A tibble: 2 x 8
+     am     n n_total percent       se   t_crit  lcl_log  ucl_log
+  &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1     0    19      32  59.375 8.820997 2.039513 40.94225 75.49765
+2     1    13      32  40.625 8.820997 2.039513 24.50235 59.05775</code></pre>
 <p>Test two-way tables</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>()</code></pre></div>
-<pre><code>## # A tibble: 6 x 13
-##      am   cyl     n n_group n_total percent_total se_total lcl_total_log
-##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;         &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;
-## 1     0     4     3      19      32         9.375 5.235146      2.859820
-## 2     0     6     4      19      32        12.500 5.939887      4.506576
-## 3     0     8    12      19      32        37.500 8.695104     21.969117
-## 4     1     4     8      13      32        25.000 7.777138     12.514741
-## 5     1     6     3      13      32         9.375 5.235146      2.859820
-## 6     1     8     2      13      32         6.250 4.347552      1.446671
-## # ... with 5 more variables: ucl_total_log &lt;dbl&gt;, percent_row &lt;dbl&gt;,
-## #   se_row &lt;dbl&gt;, lcl_row_log &lt;dbl&gt;, ucl_row_log &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 6 x 13
+     am   cyl     n n_group n_total percent_total se_total lcl_total_log
+  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;int&gt;         &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;
+1     0     4     3      19      32         9.375 5.235146      2.859820
+2     0     6     4      19      32        12.500 5.939887      4.506576
+3     0     8    12      19      32        37.500 8.695104     21.969117
+4     1     4     8      13      32        25.000 7.777138     12.514741
+5     1     6     3      13      32         9.375 5.235146      2.859820
+6     1     8     2      13      32         6.250 4.347552      1.446671
+# ... with 5 more variables: ucl_total_log &lt;dbl&gt;, percent_row &lt;dbl&gt;,
+#   se_row &lt;dbl&gt;, lcl_row_log &lt;dbl&gt;, ucl_row_log &lt;dbl&gt;</code></pre>
 <p>Data checks:<br />
 * One-way Wald matches SAS.<br />
 * One-way log transformed matches Stata.<br />

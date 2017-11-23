@@ -81,6 +81,9 @@ mean_table <- function(.data, x, digits = 2, ...) {
     ) %>%
     as.tibble()
 
+  # Add mean_table class
+  class(out) <- append(class(out), "mean_table")
+
   # Return tibble of results
   out
 }

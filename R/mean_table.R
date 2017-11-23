@@ -81,8 +81,18 @@ mean_table <- function(.data, x, digits = 2, ...) {
     ) %>%
     as.tibble()
 
-  # Add mean_table class
+  # ===========================================================================
+  # Classes of output
+  # If the input data frame (.data) was a grouped data frame, pass that
+  # information on to out. It can be used later in format_table.
+  # Add mean_table class no matter what. It will also be used later in
+  # format_table
+  # ===========================================================================
   class(out) <- append(class(out), "mean_table")
+
+  if ("grouped_df" %in% class(.data)) {
+    class(out) <- append(class(out), "grouped_df")
+  }
 
   # Return tibble of results
   out

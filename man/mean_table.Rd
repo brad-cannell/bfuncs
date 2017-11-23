@@ -2,7 +2,7 @@
 % Please edit documentation in R/mean_table.R
 \name{mean_table}
 \alias{mean_table}
-\title{Estimate Percents and 95 Percent Confidence Intervals  in dplyr Pipelines}
+\title{Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines}
 \usage{
 mean_table(.data, x, digits = 2, ...)
 }

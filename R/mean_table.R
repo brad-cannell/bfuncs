@@ -1,4 +1,4 @@
-#' @title Estimate Percents and 95 Percent Confidence Intervals  in dplyr Pipelines
+#' @title Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines
 #'
 #' @description The mean_table function produces overall and grouped
 #'   tables of means with related statistics. In addition to means, the

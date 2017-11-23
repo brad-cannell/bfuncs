@@ -60,9 +60,9 @@ mean_table <- function(.data, x, ...) {
       var    = quo_name(response_var),                         # Grab variable (x) name
       n_miss = is.na(.data[[quo_name(response_var)]]) %>% sum, # Count missing from before drop
       n      = n(),
-      mean   = mean(mpg),
+      mean   = mean(!!response_var),
       t_crit = qt(0.975, n - 1),
-      sem    = sd(mpg) / sqrt(n),
+      sem    = sd(!!response_var) / sqrt(n),
       lcl    = mean - t_crit * sem,
       ucl    = mean + t_crit * sem
     )

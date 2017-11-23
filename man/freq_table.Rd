@@ -56,12 +56,27 @@ mtcars \%>\%
   group_by(am) \%>\%
   freq_table()
 
+#> # A tibble: 2 x 8
+#>      am     n n_total percent       se   t_crit  lcl_log  ucl_log
+#>     <dbl> <int>   <int>   <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
+#> 1     0    19      32  59.375 8.820997 2.039513 40.94225 75.49765
+#> 2     1    13      32  40.625 8.820997 2.039513 24.50235 59.05775
+
 # Two-way frequency table
 mtcars \%>\%
   group_by(am, cyl) \%>\%
   freq_table()
 
-# More examples in r_notes > frequency_tables.Rmd
+#> A tibble: 6 x 13
+#>      am   cyl     n n_group n_total percent_total se_total lcl_total_log ucl_total_log percent_row
+#>     <dbl> <dbl> <int>   <int>   <int>         <dbl>    <dbl>         <dbl>         <dbl>       <dbl>
+#> 1     0     4     3      19      32         9.375 5.235146      2.859820      26.65944    15.78947
+#> 2     0     6     4      19      32        12.500 5.939887      4.506576      30.18928    21.05263
+#> 3     0     8    12      19      32        37.500 8.695104     21.969117      56.11463    63.15789
+#> 4     1     4     8      13      32        25.000 7.777138     12.514741      43.71685    61.53846
+#> 5     1     6     3      13      32         9.375 5.235146      2.859820      26.65944    23.07692
+#> 6     1     8     2      13      32         6.250 4.347552      1.446671      23.24074    15.38462
+#> # ... with 3 more variables: se_row <dbl>, lcl_row_log <dbl>, ucl_row_log <dbl>
 }
 \references{
 Agresti, A. (2012). Categorical Data Analysis (3rd ed.). Hoboken, NJ: Wiley.

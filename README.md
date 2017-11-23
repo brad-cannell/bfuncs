@@ -1,43 +1,38 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-Brad's functions (bfuncs)
-=========================
+# Brad's functions (bfuncs)
 
 This repository is a random smattering of functions I wrote for myself, but you can use them too.
 
 <!-- Need to make help vignettes and link to them below -->
-Programing functions
---------------------
 
-Simulation functions
---------------------
+## Programing functions
 
-Data wrangling functions
-------------------------
+## Simulation functions
 
--   mean\_center: mean center continuous variables.
+## Data wrangling functions
 
-Data analysis functions
------------------------
+* mean_center: mean center continuous variables.
 
--   conf\_matrix: create a confusion matrix.
+## Data analysis functions
 
--   [freq\_table: estimate percents and 95 percent confidence intervals](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Frequency_Tables.html)
+* conf_matrix: create a confusion matrix.
 
--   [tabstats: compact table of summary statistics for continuous variables.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Using_tabstat_with_dplyr.html)
+* [freq_table: estimate percents and 95 percent confidence intervals in dplyr pipelines](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Frequency_Tables.html)
 
-Presentation and dissemination functions
-----------------------------------------
+* mean_table: estimate means and 95 percent confidence intervals in dplyr pipelines
 
--   Add functions for creating tables
+* [tabstats: compact table of summary statistics for continuous variables.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Using_tabstat_with_dplyr.html)
 
--   about\_data: view number of observations and variables in a data frame, but not any of the data values.
+## Presentation and dissemination functions
 
--   codebook: create a codebook / data dictionary from a data frame.
+* Add functions for creating tables
 
-Other functions
----------------
+* about_data: view number of observations and variables in a data frame, but not any of the data values.
 
-------------------------------------------------------------------------
+* codebook: create a codebook / data dictionary from a data frame.
+
+## Other functions
+
+-------------------------------------------------------------------------------
 
 #### Installation instructions:
 

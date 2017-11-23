@@ -2,7 +2,7 @@
 % Please edit documentation in R/freq_table.R
 \name{freq_table}
 \alias{freq_table}
-\title{Estimate Percents and 95 Percent Confidence Intervals}
+\title{Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines}
 \usage{
 freq_table(x, t_prob = 0.975, ci_type = "log", ...)
 }

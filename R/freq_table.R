@@ -1,4 +1,4 @@
-#' @title Estimate Percents and 95 Percent Confidence Intervals
+#' @title Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines
 #'
 #' @description The freq_table function produces one-way and two-way frequency
 #'   tables for categorical variables. In addition to frequencies, the

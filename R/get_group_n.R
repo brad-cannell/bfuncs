@@ -1,6 +1,6 @@
 #' @title Formatted Group Sample Size for Tables
 #'
-#' @description Given a tibble and a filter expression, get_n returns
+#' @description Given a tibble and a filter expression, get_group_n returns
 #'   the group sample size formatted as "N = XXXX". Made to work in a dplyr
 #'   pipeline, and used when creating tables for publications / reports.
 #'
@@ -17,10 +17,10 @@
 #' data(mtcars)
 #'
 #' # Get sample size for cars with 4 cylinders
-#' mtcars %>% get_n(cyl == 4)
+#' mtcars %>% get_group_n(cyl == 4)
 #'
 #' #> [1] "N = 11"
-get_n <- function(.data, ...) {
+get_group_n <- function(.data, ...) {
   filter_exp <- quos(...)
 
   .data %>%

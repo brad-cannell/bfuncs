@@ -7,7 +7,7 @@
 mean_table(.data, x, digits = 2, ...)
 }
 \arguments{
-\item{.data}{A tibble or grouped tibble}
+\item{.data}{A tibble or grouped tibble.}
 
 \item{x}{The continuous response variable for which the statistics are
 desired.}

@@ -7,7 +7,7 @@
 #'   tibbles, mean_table displays these statistics for each category of the
 #'   group_by variable.
 #'
-#' @param .data A tibble or grouped tibble
+#' @param .data A tibble or grouped tibble.
 #' @param x The continuous response variable for which the statistics are
 #'   desired.
 #' @param digits Round mean, lcl, and ucl to `digits`. Default is 2.

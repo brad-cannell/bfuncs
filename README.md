@@ -24,11 +24,11 @@ This repository is a random smattering of functions I wrote for myself, but you 
 
 ## Presentation and dissemination functions
 
-* Add functions for creating tables
-
 * about_data: view number of observations and variables in a data frame, but not any of the data values.
 
 * codebook: create a codebook / data dictionary from a data frame.
+
+* get_group_n: To help with making tables. Given a tibble and a filter expression, get_group_n returns the group sample size formatted as "N = XXXX".
 
 ## Other functions
 

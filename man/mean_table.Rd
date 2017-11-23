@@ -29,6 +29,7 @@ The mean_table function produces overall and grouped
 }
 \examples{
 library(tidyverse)
+library(bfuncs)
 
 data(mtcars)
 

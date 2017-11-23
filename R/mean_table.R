@@ -21,6 +21,7 @@
 #'
 #' @examples
 #' library(tidyverse)
+#' library(bfuncs)
 #'
 #' data(mtcars)
 #'

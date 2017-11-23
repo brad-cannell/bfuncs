@@ -10,6 +10,7 @@
 #' @param .data A tibble or grouped tibble
 #' @param x The continuous response variable for which the statistics are
 #'   desired.
+#' @param digits Round mean, lcl, and ucl to `digits`. Default is 2.
 #' @param ... Other parameters to be passed on.
 #'
 #' @return A tibble
@@ -28,9 +29,9 @@
 #'   mean_table(mpg)
 #'
 #' #> # A tibble: 1 x 8
-#' #>     var n_miss     n     mean   t_crit      sem      lcl      ucl
-#' #>   <chr>  <int> <int>    <dbl>    <dbl>    <dbl>    <dbl>    <dbl>
-#' #> 1   mpg      0    32 20.09062 2.039513 1.065424 17.91768 22.26357
+#' #>     var n_miss     n  mean   t_crit      sem   lcl   ucl
+#' #>   <chr>  <int> <int> <dbl>    <dbl>    <dbl> <dbl> <dbl>
+#' #> 1   mpg      0    32 20.09 2.039513 1.065424 17.92 22.26
 #'
 #' # Grouped means table
 #' mtcars %>%
@@ -38,12 +39,20 @@
 #'   mean_table(mpg)
 #'
 #' #> # A tibble: 3 x 9
-#' #>     cyl   var n_miss     n     mean   t_crit       sem      lcl      ucl
-#' #>   <dbl> <chr>  <int> <int>    <dbl>    <dbl>     <dbl>    <dbl>    <dbl>
-#' #> 1     4   mpg      0    11 26.66364 2.228139 1.3597642 23.63389 29.69338
-#' #> 2     6   mpg      0     7 19.74286 2.446912 0.5493967 18.39853 21.08718
-#' #> 3     8   mpg      0    14 15.10000 2.160369 0.6842016 13.62187 16.57813
-mean_table <- function(.data, x, ...) {
+#' #>     cyl   var n_miss     n  mean   t_crit       sem   lcl   ucl
+#' #>   <dbl> <chr>  <int> <int> <dbl>    <dbl>     <dbl> <dbl> <dbl>
+#' #> 1     4   mpg      0    11 26.66 2.228139 1.3597642 23.63 29.69
+#' #> 2     6   mpg      0     7 19.74 2.446912 0.5493967 18.40 21.09
+#' #> 3     8   mpg      0    14 15.10 2.160369 0.6842016 13.62 16.58
+mean_table <- function(.data, x, digits = 2, ...) {
+
+  # ===========================================================================
+  # Quick data checks
+  # ===========================================================================
+  if (!("data.frame" %in% class(.data))) {
+    stop("Expecting the class of .data to include data.frame. Instead, the ",
+         "class was ", class(.data))
+  }
 
   # ===========================================================================
   # quos arguments to function that will be used below
@@ -64,8 +73,12 @@ mean_table <- function(.data, x, ...) {
       t_crit = qt(0.975, n - 1),
       sem    = sd(!!response_var) / sqrt(n),
       lcl    = mean - t_crit * sem,
-      ucl    = mean + t_crit * sem
-    )
+      ucl    = mean + t_crit * sem,
+      mean   = round(mean, digits),                            # Round mean
+      lcl    = round(lcl, digits),                             # Round lcl
+      ucl    = round(ucl, digits)                              # Round ucl
+    ) %>%
+    as.tibble()
 
   # Return tibble of results
   out

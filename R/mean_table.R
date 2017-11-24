@@ -90,11 +90,12 @@ mean_table <- function(.data, x, digits = 2, ...) {
   # Add mean_table class no matter what. It will also be used later in
   # format_table
   # ===========================================================================
-  class(out) <- append(class(out), "mean_table")
-
   if ("grouped_df" %in% class(.data)) {
-    class(out) <- append(class(out), "grouped_df")
+    class(out) <- c("grouped_df", class(out))
   }
+
+  # Add mean_table class to all out objects
+  class(out) <- c("mean_table", class(out))
 
   # Return tibble of results
   out

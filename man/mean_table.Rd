@@ -34,6 +34,7 @@ library(bfuncs)
 data(mtcars)
 
 # Overall mean table
+
 mtcars \%>\%
   mean_table(mpg)
 
@@ -43,6 +44,7 @@ mtcars \%>\%
 #> 1   mpg      0    32 20.09 2.039513 1.065424 17.92 22.26
 
 # Grouped means table
+
 mtcars \%>\%
   group_by(cyl) \%>\%
   mean_table(mpg)

@@ -52,6 +52,7 @@ library(tidyverse)
 data(mtcars)
 
 # One-way frequency table
+
 mtcars \%>\%
   group_by(am) \%>\%
   freq_table()
@@ -63,6 +64,7 @@ mtcars \%>\%
 #> 2     1    13      32  40.625 8.820997 2.039513 24.50235 59.05775
 
 # Two-way frequency table
+
 mtcars \%>\%
   group_by(am, cyl) \%>\%
   freq_table()

@@ -1,5 +1,5 @@
 ---
-title: "Frequency Tables"
+title: "Descriptive Analysis in a dplyr Pipeline"
 author: "Brad Cannell"
 date: "Created: 2017-11-10 <br> Updated: `r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,14 +9,76 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-I initially created this file to help develop the freq_table function in `bfuncs`. Use this file for testing as you further develop the `freq_table` function (or any other functions related to categorical frequency tables). Additionally, as you come across different use cases or challenges, add them to this document.
+I initially created this file to help develop the `freq_table` function in `bfuncs`. I've since adapted it to encompass general descriptive data analysis using R in a `dplyr` pipeline. Herein, descriptive analysis refers to basic univariate or bivariate statistics calculated for continuous and categorical variables (e.g., means and percentages). This vignette is not intended to be representative of every possible descriptive analysis that one may want to carry out on a given data set. Rather, it is intended to be representative of the descriptive analyses I most commonly need while conducting epidemiologic research.
 
 ```{r}
 library(tidyverse)
+library(bfuncs)
+```
+
+```{r}
 data(mtcars)
 ```
 
-1. Remember, fist get it to work. Then, make it better.
+Table of contents:
+
+[Univariate means and 95% confidence intervals]()
+
+[Bivariate means and 95% confidence intervals]()
+
+[Univariate percentages and 95% Wald confidence intervals]()
+
+[Univariate percentages and 95% log transformed confidence intervals]()
+
+[Bivariate percentages and 95% log transformed confidence intervals]()
+
+# Univariate means and 95% confidence intervals
+
+In this example, we will calculate the overall mean and 95% confidence interval for the variable mpg in the mtcars data set. 
+
+By default, only the n, mean, and 95% confidence interval for the mean are returned. Additionally, the values of all the returned statistics are rounded to the hundredths place. These are the numerical summaries of the data that I am most frequently interested in. Additionally, I rarely need the precision of the estimates to be any greater than the hundredths place.
+
+The confidence intervals are calculated as:
+
+$$ {\bar{x} \pm t_{(1-\alpha / 2, n-1)}} \frac{s}{\sqrt{n}} $$
+
+This matches the method used by SAS: http://support.sas.com/documentation/cdl/en/proc/65145/HTML/default/viewer.htm#p0klmrp4k89pz0n1p72t0clpavyx.htm
+
+```{r}
+mtcars %>% 
+  mean_table(mpg)
+```
+
+By adjusting the `t_prob` parameter, it is possible to change the width of the confidence intervals. The example below returns a 99% confidence interval.
+
+The value for t-prob is calculated as 1 - alpha / 2.
+
+```{r}
+alpha <- 0.01
+t <- 1 - alpha / 2
+
+mtcars %>% 
+  mean_table(mpg, t_prob = t)
+```
+
+With the `output = "all"` option, mean_table also returns the number of missing values, the critical value from student's t distribution with degrees of freedom n - 1, and the standard error of the mean.
+
+We can also control the precision of the statistics using the `digits` parameter.
+
+```{r}
+mtcars %>% 
+  mean_table(mpg, output = "all", digits = 5)
+```
+
+This output matches the output 
+
+![](/Users/bradcannell/Dropbox/R/Packages/bfuncs/vignettes/mean_mpg.png)
+
+As you can see in the SAS output below...
+Type of confidence intervals
+Give the type of confidence interval (Wald)
+
+
 
 2. Let's just take for granted that we are going to get a grouped dataframe. That's easy enough to implement in R.
 

@@ -8,12 +8,27 @@
 #'   group_by variable.
 #'
 #' @param .data A tibble or grouped tibble.
+#'
 #' @param x The continuous response variable for which the statistics are
 #'   desired.
+#'
+#' @param t_prob (1 - alpha / 2). Default value is 0.975, which corresponds to
+#'   an alpha of 0.05. Used to calculate a critical value from Student's t
+#'   distribution with n - 1 degrees of freedom.
+#'
+#' @param output Options for this parameter are "limited" (the default) and
+#'   "all".
+#'
+#'   Limited output includes the n, mean, and 95% confidence interval for the
+#'   mean. Using output = "all" also returns the standard error of the number
+#'   of missing values for x, the critical t-value, and the standard error of
+#'   the mean.
+#'
 #' @param digits Round mean, lcl, and ucl to `digits`. Default is 2.
+#'
 #' @param ... Other parameters to be passed on.
 #'
-#' @return A tibble
+#' @return A tibble of class "mean_table" or "mean_table_grouped"
 #' @export
 #'
 #' @references
@@ -25,42 +40,50 @@
 #'
 #' data(mtcars)
 #'
-#' # Overall mean table
+#' # Overall mean table with defaults
 #'
 #' mtcars %>%
 #'   mean_table(mpg)
 #'
-#' #> # A tibble: 1 x 8
-#' #>     var n_miss     n  mean   t_crit      sem   lcl   ucl
-#' #>   <chr>  <int> <int> <dbl>    <dbl>    <dbl> <dbl> <dbl>
-#' #> 1   mpg      0    32 20.09 2.039513 1.065424 17.92 22.26
+#' #> # A tibble: 1 x 5
+#' #>     var     n  mean   lcl   ucl
+#' #>   <chr> <int> <dbl> <dbl> <dbl>
+#' #> 1   mpg    32 20.09 17.92 22.26
 #'
-#' # Grouped means table
+#' # Grouped means table with defaults
 #'
 #' mtcars %>%
 #'   group_by(cyl) %>%
 #'   mean_table(mpg)
 #'
-#' #> # A tibble: 3 x 9
-#' #>     cyl   var n_miss     n  mean   t_crit       sem   lcl   ucl
-#' #>   <dbl> <chr>  <int> <int> <dbl>    <dbl>     <dbl> <dbl> <dbl>
-#' #> 1     4   mpg      0    11 26.66 2.228139 1.3597642 23.63 29.69
-#' #> 2     6   mpg      0     7 19.74 2.446912 0.5493967 18.40 21.09
-#' #> 3     8   mpg      0    14 15.10 2.160369 0.6842016 13.62 16.58
-mean_table <- function(.data, x, digits = 2, ...) {
+#' #> # A tibble: 3 x 6
+#' #>     cyl   var     n  mean   lcl   ucl
+#' #>   <dbl> <chr> <int> <dbl> <dbl> <dbl>
+#' #> 1     4   mpg    11 26.66 23.63 29.69
+#' #> 2     6   mpg     7 19.74 18.40 21.09
+#' #> 3     8   mpg    14 15.10 13.62 16.58
+
+mean_table <- function(.data, x, t_prob = 0.975, output = "limited", digits = 2, ...) {
+
+  # ===========================================================================
+  # Enquo the x argument so that it can be used in the dplyr pipeline below.
+  # ===========================================================================
+  response_var <- enquo(x)
+
 
   # ===========================================================================
   # Quick data checks
   # ===========================================================================
   if (!("data.frame" %in% class(.data))) {
-    stop("Expecting the class of .data to include data.frame. Instead, the ",
+    message("Expecting the class of .data to include data.frame. Instead, the ",
          "class was ", class(.data))
   }
 
-  # ===========================================================================
-  # quos arguments to function that will be used below
-  # ===========================================================================
-  response_var <- enquo(x)
+  if (missing(x)) {
+    stop("No argument was passed to the 'x' parameter. Expecting 'x' to be a ",
+         "numeric column.")
+
+  }
 
   # ===========================================================================
   # One-way table of means and related stats
@@ -73,7 +96,7 @@ mean_table <- function(.data, x, digits = 2, ...) {
       n_miss = is.na(.data[[quo_name(response_var)]]) %>% sum, # Count missing from before drop
       n      = n(),
       mean   = mean(!!response_var),
-      t_crit = qt(0.975, n - 1),
+      t_crit = qt(t_prob, n - 1),
       sem    = sd(!!response_var) / sqrt(n),
       lcl    = mean - t_crit * sem,
       ucl    = mean + t_crit * sem,
@@ -85,17 +108,31 @@ mean_table <- function(.data, x, digits = 2, ...) {
 
   # ===========================================================================
   # Classes of output
-  # If the input data frame (.data) was a grouped data frame, pass that
+  # If the input data frame (.data) was a grouped data frame, then the output
+  # will be a bivariate analysis of means ("mean_table_grouped"). Pass that
   # information on to out. It can be used later in format_table.
-  # Add mean_table class no matter what. It will also be used later in
-  # format_table
+  # Otherwise the output will be a univariate analysis of means ("mean_table")
+  # That class will also be used later in format_table.
   # ===========================================================================
   if ("grouped_df" %in% class(.data)) {
-    class(out) <- c("grouped_df", class(out))
+    class(out) <- c("mean_table_grouped", class(out))
+  } else {
+    class(out) <- c("mean_table", class(out))
   }
 
-  # Add mean_table class to all out objects
-  class(out) <- c("mean_table", class(out))
+  # Control output
+  # Typically, I only want the frequency, mean, and 95% CI
+  # Make that the default
+  if (output == "limited" && class(out) == "mean_table") {
+    out <- out %>%
+      select(var, n, mean, lcl, ucl)
+
+  } else if (output == "limited" && class(out) == "mean_table_grouped") {
+    out <- out %>%
+      select(1, var, n, mean, lcl, ucl)
+  } else {
+    out <- out # do nothing
+  }
 
   # Return tibble of results
   out

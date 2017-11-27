@@ -17,7 +17,7 @@ desired.}
 \item{...}{Other parameters to be passed on.}
 }
 \value{
-A tibble
+A tibble of class "mean_table" or "mean_table_grouped"
 }
 \description{
 The mean_table function produces overall and grouped

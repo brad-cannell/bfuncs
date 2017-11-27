@@ -51,7 +51,7 @@
 #'
 #' @param ... Other parameters to be passed on.
 #'
-#' @return A tibble
+#' @return A tibble with class "freq_table_one_way" or "freq_table_two_way"
 #' @export
 #'
 #' @references
@@ -193,6 +193,9 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", output = "limited", d
 
     }
 
+    # Add freq_table class to out
+    class(out) <- c("freq_table_one_way", class(out))
+
 
     # ===========================================================================
     # Two-way tables
@@ -260,6 +263,9 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", output = "limited", d
                lcl_total_log, ucl_total_log, percent_row, se_row, t_crit_row,
                lcl_row_log, ucl_row_log)
     }
+
+    # Add freq_table class to out
+    class(out) <- c("freq_table_two_way", class(out))
 
   } else { # Grouped by more than two variables, or not grouped.
     stop(

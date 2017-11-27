@@ -38,7 +38,7 @@ Default is 2.}
 \item{...}{Other parameters to be passed on.}
 }
 \value{
-A tibble
+A tibble with class "freq_table_one_way" or "freq_table_two_way"
 }
 \description{
 The freq_table function produces one-way and two-way frequency

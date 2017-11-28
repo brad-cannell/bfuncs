@@ -75,11 +75,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <p>Table of contents:</p>
 <p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p> </p>
 <hr />
 <p>The immediate results of statistical analyses are rarely fit for general consumption. This vignette walks through strategies and functions I’ve created to help make my results ready for presentation/dissemination.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
 <span class="kw">library</span>(bfuncs)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)</code></pre></div>
+<p> </p>
 <hr />
 <div id="stat-tables" class="section level1">
 <h1>Creating tables of summary statistics</h1>
@@ -93,9 +95,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><p>Calculate the statistics of interest</p></li>
 <li><p>Format the statistics of interest for presentation</p></li>
 <li><p>Fill in the table shell</p></li>
+<li><p>Polish up the filled in table shell</p></li>
+<li><p>Knit to Kable</p></li>
 <li><p>Polish up the resulting Word document</p></li>
 </ol>
 <p>I’ll walk through each step below…</p>
+<p> </p>
+<hr />
 <div id="start-with-a-.rmd-file-whose-output-is-a-word-document" class="section level2">
 <h2>Start with a .Rmd file whose output is a Word document</h2>
 <p>Create a new R markdown document. Set the output format to “Word”. Edit the YAML header should look something like this:</p>
@@ -108,6 +114,8 @@ output<span class="op">:</span>
 <p>This file should only be used to create this one specific table, and most of the code chunks should have the echo=FALSE option set. In other words, the file should only create a single table, and the only code chunk that creates a result that viewable in the output Word document should be the final code chunk that prints your filled-in table shell.</p>
 <p>Finally, to limit the amount of polishing you need to do later in the process, you can reference a Word template document in the YAML header, as I’ve done above. More information about the Word templates is available here:</p>
 <p><a href="http://rmarkdown.rstudio.com/articles_docx.html" class="uri">http://rmarkdown.rstudio.com/articles_docx.html</a></p>
+<p> </p>
+<hr />
 </div>
 <div id="create-a-table-shell" class="section level2">
 <h2>Create a table shell</h2>
@@ -121,6 +129,8 @@ output<span class="op">:</span>
 <li><p>Of course, you can add more groups (or fewer groups) as needed.</p></li>
 <li><p>I find it’s best to keep the column names easy to work with at this point. We will make them more presentation ready later on.</p></li>
 </ul>
+<p> </p>
+<hr />
 </div>
 <div id="calculate-the-statistics-of-interest" class="section level2">
 <h2>Calculate the statistics of interest</h2>
@@ -132,6 +142,8 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
   <span class="dt">am_0     =</span> mtcars <span class="op">%&gt;%</span><span class="st"> </span>bfuncs<span class="op">::</span><span class="kw">get_group_n</span>(am <span class="op">==</span><span class="st"> </span><span class="dv">0</span>),
   <span class="dt">am_1     =</span> mtcars <span class="op">%&gt;%</span><span class="st"> </span>bfuncs<span class="op">::</span><span class="kw">get_group_n</span>(am <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)
 )</code></pre></div>
+<p> </p>
+<hr />
 <div id="calculating-and-formatting-descriptive-statistics-for-continuous-variables" class="section level3">
 <h3>Calculating and formatting descriptive statistics for continuous variables</h3>
 <p>The descriptive analysis vignette gives examples for calculating common descriptive statistics for continuous variables. For example:</p>
@@ -179,19 +191,356 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 ##   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;
 ## 1     0   mpg 19 (17.15)
 ## 2     1   mpg 13 (24.39)</code></pre>
+<p> </p>
+<hr />
 </div>
 </div>
 <div id="calculating-and-formatting-descriptive-statistics-for-categorical-variables" class="section level3">
 <h3>Calculating and formatting descriptive statistics for categorical variables</h3>
-<p>The descriptive analysis vignette gives examples for calculating common descriptive statistics for continuous variables. For example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg)</code></pre></div>
-<pre><code>## # A tibble: 2 x 6
-##      am   var     n  mean   lcl   ucl
-##   &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0   mpg    19 17.15 15.30 19.00
-## 2     1   mpg    13 24.39 20.67 28.12</code></pre>
-<p><a href="#top">top</a></p>
+<p>This section is similar to the previous, except we are now analyzing categorical variables.</p>
+<div id="example-overall-percent-and-95-confidence-interval-the-default" class="section level4">
+<h4>Example: Overall percent and 95% confidence interval (the default)</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>()</code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##      am            percent_95
+##   &lt;dbl&gt;                 &lt;chr&gt;
+## 1     0 59.38 (40.94 - 75.50)
+## 2     1 40.62 (24.50 - 59.06)</code></pre>
 </div>
+<div id="example-overall-n-and-percent" class="section level4">
+<h4>Example: Overall n and percent</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>(<span class="dt">stats =</span> <span class="st">&quot;n and percent&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##      am  n_percent
+##   &lt;dbl&gt;      &lt;chr&gt;
+## 1     0 19 (59.38)
+## 2     1 13 (40.62)</code></pre>
+</div>
+<div id="example-row-percent-and-95-confidence-interval-the-default" class="section level4">
+<h4>Example: Row percent and 95% confidence interval (the default)</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>()</code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##      am   cyl        percent_row_95
+##   &lt;dbl&gt; &lt;dbl&gt;                 &lt;chr&gt;
+## 1     0     4 15.79 ( 4.78 - 41.20)
+## 2     0     6 21.05 ( 7.58 - 46.44)
+## 3     0     8 63.16 (38.76 - 82.28)
+## 4     1     4 61.54 (32.30 - 84.29)
+## 5     1     6 23.08 ( 6.91 - 54.82)
+## 6     1     8 15.38 ( 3.43 - 48.18)</code></pre>
+</div>
+<div id="example-n-and-row-percent" class="section level4">
+<h4>Example: N and row percent</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>(<span class="dt">output =</span> <span class="st">&quot;all&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>(<span class="dt">stats =</span> <span class="st">&quot;n and percent&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 6 x 3
+##      am   cyl n_percent_total
+##   &lt;dbl&gt; &lt;dbl&gt;           &lt;chr&gt;
+## 1     0     4       3 ( 9.38)
+## 2     0     6       4 (12.50)
+## 3     0     8      12 (37.50)
+## 4     1     4       8 (25.00)
+## 5     1     6       3 ( 9.38)
+## 6     1     8       2 ( 6.25)</code></pre>
+<p> </p>
+<hr />
+</div>
+</div>
+</div>
+<div id="further-formatting-for-presentation" class="section level2">
+<h2>Further formatting for presentation</h2>
+<p>At this point, the statistics of interest are calculated and the values themselves are formatted. If we are not comparing two or more groups in the current table, we may be able to skip this section and go straight to filling in the table shell.</p>
+<p>However, if we are comparing two or more groups, then some additional formatting is needed. Currently, our groups make up the rows of the formatted table. Typically, we want the groups to make up the columns of the formatted table. I’ve found <code>tidyr::spread()</code> to be really useful for fixing this problem. For example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>)</code></pre></div>
+<pre><code>## # A tibble: 3 x 3
+##     cyl                   `0`                   `1`
+## * &lt;dbl&gt;                 &lt;chr&gt;                 &lt;chr&gt;
+## 1     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 2     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)
+## 3     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)</code></pre>
+<p>Where:</p>
+<ul>
+<li><p>Key = the variable whose levels make up our comparison groups of interest</p></li>
+<li><p>Value = the values we are interested in comparing</p></li>
+</ul>
+<p>We are getting closer to having this in a form that can be used to fill out our table shell. However, we still need to assign the name of the first column (cyl) as a value to a new column named “variable” and we need to change the names of the existing variables to “class”, am_0, and am_1 to match our table shell.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span>cyl, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)</code></pre></div>
+<pre><code>## # A tibble: 3 x 4
+##   class                  am_0                  am_1 variable
+##   &lt;dbl&gt;                 &lt;chr&gt;                 &lt;chr&gt;    &lt;chr&gt;
+## 1     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)      cyl
+## 2     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)      cyl
+## 3     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)      cyl</code></pre>
+<p>There may be better ways to do this, but this is the best I’ve found so far.</p>
+<p> </p>
+<hr />
+</div>
+<div id="fill-in-the-table-shell" class="section level2">
+<h2>Fill in the table shell</h2>
+<p>Again, there are multiple ways to go about completing this step. I will need to build out this section over time. In the current example the most straight forward method is probably to think of each characteristic of interest as a row in the table. We will stack the rows on top of each other the create the full table using <code>dplyr::bind_rows()</code>.</p>
+<p>First, an example using just one variable:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">row &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span>cyl, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class)) <span class="co"># Need for bind_rows below</span>
+
+<span class="kw">bind_rows</span>(table, row)</code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   variable class                  am_0                  am_1
+##      &lt;chr&gt; &lt;chr&gt;                 &lt;chr&gt;                 &lt;chr&gt;
+## 1                               N = 19                N = 13
+## 2      cyl     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 3      cyl     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)
+## 4      cyl     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)</code></pre>
+<p>Then, it’s trivial to extend this method to multiple variables using a for loop.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Select variables </span>
+cat_vars &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
+
+<span class="co"># Execute freq_table and row bind results to table</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(cat_vars)) {
+  
+  <span class="co"># Calculate mean and 95% CI</span>
+  row &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(am, <span class="op">!!</span>cat_vars[[i]]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span><span class="op">!!</span>cat_vars[[i]], <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class)) <span class="co"># Need for bind_rows below</span>
+
+  <span class="co"># Append to bottom of table</span>
+  table &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(table, row)
+}
+
+<span class="kw">print</span>(table)</code></pre></div>
+<pre><code>## # A tibble: 6 x 4
+##   variable class                  am_0                  am_1
+##      &lt;chr&gt; &lt;chr&gt;                 &lt;chr&gt;                 &lt;chr&gt;
+## 1                               N = 19                N = 13
+## 2      cyl     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 3      cyl     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)
+## 4      cyl     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)
+## 5       vs     0 63.16 (38.76 - 82.28) 46.15 (20.83 - 73.63)
+## 6       vs     1 36.84 (17.72 - 61.24) 53.85 (26.37 - 79.17)</code></pre>
+<ul>
+<li><p>Still thinking about potentially more elegant ways to go about the filling in the table shell step. It’s challenging because there are just so many different variations on the state of the data at the beginning of this step and the format of the table I want to result from this step.</p></li>
+<li><p>An additional drawback to this method is that intermingling continuous and categorical variables requires multiple for loops. This is probably something worth addressing in the future.</p></li>
+</ul>
+<div id="example-continuous-and-categorical-variables" class="section level4">
+<h4>Example: Continuous and categorical variables</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Reset the table shell</span>
+<span class="co"># ---------------------</span>
+table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
+  <span class="dt">variable =</span> <span class="st">&quot;&quot;</span>,
+  <span class="dt">class    =</span> <span class="st">&quot;&quot;</span>,
+  <span class="dt">am_0     =</span> mtcars <span class="op">%&gt;%</span><span class="st"> </span>bfuncs<span class="op">::</span><span class="kw">get_group_n</span>(am <span class="op">==</span><span class="st"> </span><span class="dv">0</span>),
+  <span class="dt">am_1     =</span> mtcars <span class="op">%&gt;%</span><span class="st"> </span>bfuncs<span class="op">::</span><span class="kw">get_group_n</span>(am <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)
+)
+
+
+<span class="co"># Select variables</span>
+<span class="co"># ----------------</span>
+cont_vars &lt;-<span class="st"> </span><span class="kw">quos</span>(mpg, disp)
+cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
+
+
+<span class="co"># Fill in continuous variables</span>
+<span class="co"># ----------------------------</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(cont_vars)) {
+  
+  <span class="co"># Calculate mean and 95% CI</span>
+  row &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>bfuncs<span class="op">::</span><span class="kw">mean_table</span>(<span class="op">!!</span>cont_vars[[i]]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span>bfuncs<span class="op">::</span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> mean_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;variable&quot;</span> =<span class="st"> </span>var, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)
+
+  <span class="co"># Append to bottom of table</span>
+  table &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(table, row)
+}
+
+
+<span class="co"># Fill in categorical variables</span>
+<span class="co"># -----------------------------</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(cat_vars)) {
+  
+  <span class="co"># Calculate mean and 95% CI</span>
+  row &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(am, <span class="op">!!</span>cat_vars[[i]]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span><span class="op">!!</span>cat_vars[[i]], <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class)) <span class="co"># Need for bind_rows below</span>
+
+  <span class="co"># Append to bottom of table</span>
+  table &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(table, row)
+}
+
+<span class="kw">print</span>(table)</code></pre></div>
+<pre><code>## # A tibble: 8 x 4
+##   variable class                     am_0                     am_1
+##      &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;                    &lt;chr&gt;
+## 1                                  N = 19                   N = 13
+## 2      mpg  &lt;NA&gt;    17.15 (15.30 - 19.00)    24.39 (20.67 - 28.12)
+## 3     disp  &lt;NA&gt; 290.38 (237.28 - 343.48) 143.53 ( 90.83 - 196.23)
+## 4      cyl     4    15.79 ( 4.78 - 41.20)    61.54 (32.30 - 84.29)
+## 5      cyl     6    21.05 ( 7.58 - 46.44)    23.08 ( 6.91 - 54.82)
+## 6      cyl     8    63.16 (38.76 - 82.28)    15.38 ( 3.43 - 48.18)
+## 7       vs     0    63.16 (38.76 - 82.28)    46.15 (20.83 - 73.63)
+## 8       vs     1    36.84 (17.72 - 61.24)    53.85 (26.37 - 79.17)</code></pre>
+<ul>
+<li>Again, this still feels clunky.</li>
+</ul>
+<p>&amp; nbsp;</p>
+<hr />
+</div>
+</div>
+<div id="polish-up-the-filled-in-table-shell" class="section level2">
+<h2>Polish up the filled in table shell</h2>
+<p>At this point, we basically have the table. Now, we just need to do a couple more things before knitting our Word document.</p>
+<ul>
+<li><p>Improve the row headers</p></li>
+<li><p>Remove duplicate variable names for categorical variables</p></li>
+<li><p>Slide classes to the left, under variable names</p></li>
+</ul>
+<div id="example-improve-row-headers" class="section level4">
+<h4>Example: Improve row headers</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table &lt;-<span class="st"> </span>table <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">variable =</span> <span class="kw">if_else</span>(variable <span class="op">==</span><span class="st"> &quot;mpg&quot;</span>, <span class="st">&quot;Miles per gallon, mean (95% CI)&quot;</span>, variable),
+    <span class="dt">variable =</span> <span class="kw">if_else</span>(variable <span class="op">==</span><span class="st"> &quot;disp&quot;</span>, <span class="st">&quot;Displacement, mean (95% CI)&quot;</span>, variable),
+    <span class="dt">variable =</span> <span class="kw">if_else</span>(variable <span class="op">==</span><span class="st"> &quot;cyl&quot;</span>, <span class="st">&quot;Number of cylinders, percent (95% CI)&quot;</span>, variable),
+    <span class="dt">variable =</span> <span class="kw">if_else</span>(variable <span class="op">==</span><span class="st"> &quot;vs&quot;</span>, <span class="st">&quot;V/S, percent (95% CI)&quot;</span>, variable)
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>print</code></pre></div>
+<pre><code>## # A tibble: 8 x 4
+##                                variable class                     am_0
+##                                   &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;
+## 1                                                               N = 19
+## 2       Miles per gallon, mean (95% CI)  &lt;NA&gt;    17.15 (15.30 - 19.00)
+## 3           Displacement, mean (95% CI)  &lt;NA&gt; 290.38 (237.28 - 343.48)
+## 4 Number of cylinders, percent (95% CI)     4    15.79 ( 4.78 - 41.20)
+## 5 Number of cylinders, percent (95% CI)     6    21.05 ( 7.58 - 46.44)
+## 6 Number of cylinders, percent (95% CI)     8    63.16 (38.76 - 82.28)
+## 7                 V/S, percent (95% CI)     0    63.16 (38.76 - 82.28)
+## 8                 V/S, percent (95% CI)     1    36.84 (17.72 - 61.24)
+## # ... with 1 more variables: am_1 &lt;chr&gt;</code></pre>
+</div>
+<div id="example-remove-duplicate-variable-names-for-categorical-variables" class="section level4">
+<h4>Example: Remove duplicate variable names for categorical variables</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table &lt;-<span class="st"> </span>table <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(variable) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">x =</span> <span class="kw">duplicated</span>(variable),
+    <span class="dt">x =</span> <span class="kw">if_else</span>(variable <span class="op">==</span><span class="st"> &quot;&quot;</span>, <span class="ot">NA</span>, x)
+  ) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(
+    <span class="dt">variable =</span> <span class="kw">if_else</span>(x <span class="op">==</span><span class="st"> </span><span class="ot">TRUE</span>, <span class="st">&quot;&quot;</span>, variable),
+    <span class="dt">variable =</span> <span class="kw">if_else</span>(<span class="kw">is.na</span>(variable), <span class="st">&quot;&quot;</span>, variable),
+    <span class="dt">x =</span> <span class="ot">NULL</span>
+  ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>print</code></pre></div>
+<pre><code>## # A tibble: 8 x 4
+##                                variable class                     am_0
+##                                   &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;
+## 1                                                               N = 19
+## 2       Miles per gallon, mean (95% CI)  &lt;NA&gt;    17.15 (15.30 - 19.00)
+## 3           Displacement, mean (95% CI)  &lt;NA&gt; 290.38 (237.28 - 343.48)
+## 4 Number of cylinders, percent (95% CI)     4    15.79 ( 4.78 - 41.20)
+## 5                                           6    21.05 ( 7.58 - 46.44)
+## 6                                           8    63.16 (38.76 - 82.28)
+## 7                 V/S, percent (95% CI)     0    63.16 (38.76 - 82.28)
+## 8                                           1    36.84 (17.72 - 61.24)
+## # ... with 1 more variables: am_1 &lt;chr&gt;</code></pre>
+<ul>
+<li>This point, we may be content with the formatting. However, we may also want to slide the class values under the variable values and drop the class column.</li>
+</ul>
+</div>
+<div id="example-slide-classes-to-the-left-under-variable-names" class="section level4">
+<h4>Example: Slide classes to the left, under variable names</h4>
+<ul>
+<li><p>Add tabs in front of classes</p></li>
+<li><p>For some reason, R automatically strips the leading white space.</p></li>
+<li><p>The best work around I can come up with is to add dashes, then find and replaces dashes with white space in Word.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># table %&gt;% </span>
+<span class="co">#   mutate(</span>
+<span class="co">#     class = stringr::str_replace(class, &quot;^&quot;, &quot;---&quot;),</span>
+<span class="co">#     variable = if_else(variable == &quot;&quot;, class, variable),</span>
+<span class="co">#     class = NULL</span>
+<span class="co">#   )</span></code></pre></div>
+<ul>
+<li>Not working. Need to figure out how I did this before.</li>
+</ul>
+<p> </p>
+<hr />
+</div>
+</div>
+<div id="knit-to-kable" class="section level2">
+<h2>Knit to Kable</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table_kable &lt;-<span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>(table, <span class="dt">col.names =</span> <span class="kw">c</span>(
+  <span class="st">&quot;Characteristic&quot;</span>,
+  <span class="st">&quot;Class&quot;</span>,
+  <span class="st">&quot;Automatic Transmission&quot;</span>, 
+  <span class="st">&quot;manual Transmission&quot;</span>)
+)
+
+<span class="kw">print</span>(table_kable)</code></pre></div>
+<pre><code>## 
+## 
+## Characteristic                          Class   Automatic Transmission     manual Transmission      
+## --------------------------------------  ------  -------------------------  -------------------------
+##                                                 N = 19                     N = 13                   
+## Miles per gallon, mean (95% CI)         NA      17.15 (15.30 - 19.00)      24.39 (20.67 - 28.12)    
+## Displacement, mean (95% CI)             NA      290.38 (237.28 - 343.48)   143.53 ( 90.83 - 196.23) 
+## Number of cylinders, percent (95% CI)   4       15.79 ( 4.78 - 41.20)      61.54 (32.30 - 84.29)    
+##                                         6       21.05 ( 7.58 - 46.44)      23.08 ( 6.91 - 54.82)    
+##                                         8       63.16 (38.76 - 82.28)      15.38 ( 3.43 - 48.18)    
+## V/S, percent (95% CI)                   0       63.16 (38.76 - 82.28)      46.15 (20.83 - 73.63)    
+##                                         1       36.84 (17.72 - 61.24)      53.85 (26.37 - 79.17)</code></pre>
+<ul>
+<li>Get rid of class NA.</li>
+</ul>
+<p> </p>
+<hr />
+</div>
+<div id="polish-up-the-resulting-word-document" class="section level2">
+<h2>Polish up the resulting Word document</h2>
+<p>Typically do some stuff like:</p>
+<ul>
+<li>Find and replace — with white space<br />
+</li>
+<li>Reorient to landscape<br />
+</li>
+<li>Remove bold from title - except “Table 1”<br />
+</li>
+<li>Center columns 3 and above from top to bottom<br />
+</li>
+<li>Adjust column widths as needed<br />
+</li>
+<li>Add bottom border to table</li>
+</ul>
+<p>There may be packages now that con do some of this programatically. Look at officer and wordr.</p>
+<p> </p>
+<p><a href="#top">top</a></p>
 </div>
 </div>
 

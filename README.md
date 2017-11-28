@@ -38,7 +38,9 @@ Functions that help with assist with making the data itself, or the results of s
 
 * codebook: create a codebook / data dictionary from a data frame.
 
-* get_group_n: To help with making tables. Given a tibble and a filter expression, get_group_n returns the group sample size formatted as "N = XXXX".
+* [format_table: To help with creating summary tables](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/presentation_dissemination.html)
+
+* [get_group_n: To help with making tables. Given a tibble and a filter expression, get_group_n returns the group sample size formatted as "N = XXXX".](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/presentation_dissemination.html)
 
 
 -------------------------------------------------------------------------------

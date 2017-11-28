@@ -46,7 +46,10 @@ format_table <- function(.data, digits = 2, ...) {
   # ===========================================================================
   # Quick data checks
   # ===========================================================================
-  if (!("mean_table" %in% class(.data) | "freq_table" %in% class(.data))) {
+  if (!("mean_table"         %in% class(.data) ||
+        "mean_table_grouped" %in% class(.data) ||
+        "freq_table_one_way" %in% class(.data) ||
+        "freq_table_two_way" %in% class(.data))) {
     stop("Expecting the class of .data to include mean_table. Instead, the ",
          "class was ", class(.data))
   }
@@ -79,3 +82,4 @@ format_table <- function(.data, digits = 2, ...) {
   # Return tibble of results
   out
 }
+

@@ -33,14 +33,13 @@
 #'   one-way tables only, ci_type can optionally calculate Wald ("linear")
 #'   confidence intervals using the "wald" argument.
 #'
-#' @param output Options for this parameter are "limited" (the default) and
-#'   "all".
+#' @param output Options for this parameter are "default" and "all".
 #'
-#'   For one-way tables with limited output, the count, overall n, percent
+#'   For one-way tables with default output, the count, overall n, percent
 #'   and 95 percent confidence interval are returned. Using output = "all" also
 #'   returns the standard error of the percent and the critical t-value.
 #'
-#'   For two-way tables with limited output, the count, group n, overall n, row
+#'   For two-way tables with default output, the count, group n, overall n, row
 #'   percent, and 95 percent confidence interval for the row percent are
 #'   returned. Using output = "all" also returns the overall percent, standard
 #'   error of the percent, 95 percent confidence interval for the overall
@@ -94,7 +93,7 @@
 #' #> 5     1     6     3      13      32       23.08        6.91       54.82
 #' #> 6     1     8     2      13      32       15.38        3.43       48.18
 
-freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "limited", digits = 2, ...) {
+freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default", digits = 2, ...) {
 
   # ===========================================================================
   # Check for grouped tibble
@@ -147,7 +146,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "limited",
       # Control output
       # Typically, I only want the frequency, percent and 95% CI
       # Make that the default
-      if (output == "limited") {
+      if (output == "default") {
         out <- out %>%
           select(1, n, n_total, percent, lcl_wald, ucl_wald)
 
@@ -182,7 +181,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "limited",
       # Control output
       # Typically, I only want the frequency, percent and 95% CI
       # Make that the default
-      if (output == "limited") {
+      if (output == "default") {
         out <- out %>%
           select(1, n, n_total, percent, lcl_log, ucl_log)
 
@@ -253,7 +252,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "limited",
     # Control output
     # Typically, I only want the frequency, row percent and 95% CI for the row percent
     # Make that the default
-    if (output == "limited") {
+    if (output == "default") {
       out <- out %>%
         select(1:2, n, n_group, n_total, percent_row, lcl_row_log, ucl_row_log)
 

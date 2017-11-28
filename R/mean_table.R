@@ -16,10 +16,9 @@
 #'   an alpha of 0.05. Used to calculate a critical value from Student's t
 #'   distribution with n - 1 degrees of freedom.
 #'
-#' @param output Options for this parameter are "limited" (the default) and
-#'   "all".
+#' @param output Options for this parameter are "default" and "all".
 #'
-#'   Limited output includes the n, mean, and 95% confidence interval for the
+#'   Default output includes the n, mean, and 95% confidence interval for the
 #'   mean. Using output = "all" also returns the standard error of the number
 #'   of missing values for x, the critical t-value, and the standard error of
 #'   the mean.
@@ -63,7 +62,7 @@
 #' #> 2     6   mpg     7 19.74 18.40 21.09
 #' #> 3     8   mpg    14 15.10 13.62 16.58
 
-mean_table <- function(.data, x, t_prob = 0.975, output = "limited", digits = 2, ...) {
+mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2, ...) {
 
   # ===========================================================================
   # Enquo the x argument so that it can be used in the dplyr pipeline below.
@@ -123,11 +122,11 @@ mean_table <- function(.data, x, t_prob = 0.975, output = "limited", digits = 2,
   # Control output
   # Typically, I only want the frequency, mean, and 95% CI
   # Make that the default
-  if (output == "limited" && class(out) == "mean_table") {
+  if (output == "default" && class(out) == "mean_table") {
     out <- out %>%
       select(var, n, mean, lcl, ucl)
 
-  } else if (output == "limited" && class(out) == "mean_table_grouped") {
+  } else if (output == "default" && class(out) == "mean_table_grouped") {
     out <- out %>%
       select(1, var, n, mean, lcl, ucl)
   } else {

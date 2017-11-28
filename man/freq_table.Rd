@@ -4,7 +4,7 @@
 \alias{freq_table}
 \title{Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines}
 \usage{
-freq_table(x, t_prob = 0.975, ci_type = "log", output = "limited",
+freq_table(x, t_prob = 0.975, ci_type = "logit", output = "default",
   digits = 2, ...)
 }
 \arguments{
@@ -15,18 +15,17 @@ an alpha of 0.05. Used to calculate a critical value from Student's t
 distribution with n - 1 degrees of freedom.}
 
 \item{ci_type}{Selects the method used to estimate 95 percent confidence intervals.
-The default for one-way and two-way tables is log transformed ("log"). For
+The default for one-way and two-way tables is logit transformed ("log"). For
 one-way tables only, ci_type can optionally calculate Wald ("linear")
 confidence intervals using the "wald" argument.}
 
-\item{output}{Options for this parameter are "limited" (the default) and
-  "all".
+\item{output}{Options for this parameter are "default" and "all".
 
-  For one-way tables with limited output, the count, overall n, percent
+  For one-way tables with default output, the count, overall n, percent
   and 95 percent confidence interval are returned. Using output = "all" also
   returns the standard error of the percent and the critical t-value.
 
-  For two-way tables with limited output, the count, group n, overall n, row
+  For two-way tables with default output, the count, group n, overall n, row
   percent, and 95 percent confidence interval for the row percent are
   returned. Using output = "all" also returns the overall percent, standard
   error of the percent, 95 percent confidence interval for the overall
@@ -56,11 +55,11 @@ The freq_table function produces one-way and two-way frequency
   sqrt(proportion * (1 - proportion) / (n - 1))
 
   For one-way tables, the default 95 percent confidence intervals displayed are
-  log transformed confidence intervals equivalent to those used by Stata.
+  logit transformed confidence intervals equivalent to those used by Stata.
   Additionally, freq_table will return Wald ("linear") confidence intervals
   if the argument to ci_type = "wald".
 
-  For two-way tables, freq_table returns log transformed confidence
+  For two-way tables, freq_table returns logit transformed confidence
   intervals equivalent to those used by Stata.
 }
 \examples{

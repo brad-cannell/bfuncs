@@ -4,13 +4,24 @@
 \alias{mean_table}
 \title{Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines}
 \usage{
-mean_table(.data, x, digits = 2, ...)
+mean_table(.data, x, t_prob = 0.975, output = "default", digits = 2, ...)
 }
 \arguments{
 \item{.data}{A tibble or grouped tibble.}
 
 \item{x}{The continuous response variable for which the statistics are
 desired.}
+
+\item{t_prob}{(1 - alpha / 2). Default value is 0.975, which corresponds to
+an alpha of 0.05. Used to calculate a critical value from Student's t
+distribution with n - 1 degrees of freedom.}
+
+\item{output}{Options for this parameter are "default" and "all".
+
+  Default output includes the n, mean, and 95% confidence interval for the
+  mean. Using output = "all" also returns the standard error of the number
+  of missing values for x, the critical t-value, and the standard error of
+  the mean.}
 
 \item{digits}{Round mean, lcl, and ucl to `digits`. Default is 2.}
 
@@ -33,28 +44,28 @@ library(bfuncs)
 
 data(mtcars)
 
-# Overall mean table
+# Overall mean table with defaults
 
 mtcars \%>\%
   mean_table(mpg)
 
-#> # A tibble: 1 x 8
-#>     var n_miss     n  mean   t_crit      sem   lcl   ucl
-#>   <chr>  <int> <int> <dbl>    <dbl>    <dbl> <dbl> <dbl>
-#> 1   mpg      0    32 20.09 2.039513 1.065424 17.92 22.26
+#> # A tibble: 1 x 5
+#>     var     n  mean   lcl   ucl
+#>   <chr> <int> <dbl> <dbl> <dbl>
+#> 1   mpg    32 20.09 17.92 22.26
 
-# Grouped means table
+# Grouped means table with defaults
 
 mtcars \%>\%
   group_by(cyl) \%>\%
   mean_table(mpg)
 
-#> # A tibble: 3 x 9
-#>     cyl   var n_miss     n  mean   t_crit       sem   lcl   ucl
-#>   <dbl> <chr>  <int> <int> <dbl>    <dbl>     <dbl> <dbl> <dbl>
-#> 1     4   mpg      0    11 26.66 2.228139 1.3597642 23.63 29.69
-#> 2     6   mpg      0     7 19.74 2.446912 0.5493967 18.40 21.09
-#> 3     8   mpg      0    14 15.10 2.160369 0.6842016 13.62 16.58
+#> # A tibble: 3 x 6
+#>     cyl   var     n  mean   lcl   ucl
+#>   <dbl> <chr> <int> <dbl> <dbl> <dbl>
+#> 1     4   mpg    11 26.66 23.63 29.69
+#> 2     6   mpg     7 19.74 18.40 21.09
+#> 3     8   mpg    14 15.10 13.62 16.58
 }
 \references{
 SAS documentation: http://support.sas.com/documentation/cdl/en/proc/65145/HTML/default/viewer.htm#p0klmrp4k89pz0n1p72t0clpavyx.htm

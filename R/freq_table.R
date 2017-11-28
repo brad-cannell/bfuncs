@@ -22,7 +22,16 @@
 #'   For two-way tables, freq_table returns logit transformed confidence
 #'   intervals equivalent to those used by Stata.
 #'
-#' @param x A grouped tibble, i.e., class == "grouped_df"
+#' @param x A grouped tibble, i.e., class == "grouped_df".
+#'
+#'   For two-way tables, the count for each level of the variable in the
+#'   first argument to group_by will be the denominator for row percentages
+#'   and their 95% confidence intervals. Said another way, the goal of the
+#'   analysis is to compare percentages of some characteristic across two or
+#'   more groups of interest, then the variable in the first argument to
+#'   group_by should contain the groups of interest, and the variable in the
+#'   second argument to group_by should contain the characteristic of
+#'   interest.
 #'
 #' @param t_prob (1 - alpha / 2). Default value is 0.975, which corresponds to
 #'   an alpha of 0.05. Used to calculate a critical value from Student's t
@@ -45,7 +54,7 @@
 #'   error of the percent, 95 percent confidence interval for the overall
 #'   percent, the standard error of the row percent, and the critical t-values.
 #'
-#' @param digits Round percentages and confidence intervals to `digits`.
+#' @param digits Round percentages and confidence intervals to digits.
 #'   Default is 2.
 #'
 #' @param ... Other parameters to be passed on.
@@ -139,8 +148,8 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
           lcl_wald = lcl_wald * 100,
           ucl_wald = ucl_wald * 100,
           percent  = round(percent, digits),  # Round percent
-          lcl_wald = round(lcl_wald, digits), # Round confidence intervals
-          ucl_wald = round(ucl_wald, digits)
+          lcl      = round(lcl_wald, digits), # Round confidence intervals
+          ucl      = round(ucl_wald, digits)
         )
 
       # Control output
@@ -148,11 +157,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
       # Make that the default
       if (output == "default") {
         out <- out %>%
-          select(1, n, n_total, percent, lcl_wald, ucl_wald)
+          select(1, n, n_total, percent, lcl, ucl)
 
       } else if (output == "all") {
         out <- out %>%
-          select(1, n, n_total, percent, se, t_crit, lcl_wald, ucl_wald)
+          select(1, n, n_total, percent, se, t_crit, lcl, ucl)
       }
 
       # Calculate logit transformed CI's
@@ -174,8 +183,8 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
           lcl_log  = lcl_log * 100,
           ucl_log  = ucl_log * 100,
           percent  = round(percent, digits), # Round percent
-          lcl_log  = round(lcl_log, digits), # Round confidence intervals
-          ucl_log  = round(ucl_log, digits)
+          lcl      = round(lcl_log, digits), # Round confidence intervals
+          ucl      = round(ucl_log, digits)
         )
 
       # Control output
@@ -183,11 +192,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
       # Make that the default
       if (output == "default") {
         out <- out %>%
-          select(1, n, n_total, percent, lcl_log, ucl_log)
+          select(1, n, n_total, percent, lcl, ucl)
 
       } else if (output == "all") {
         out <- out %>%
-          select(1, n, n_total, percent, se, t_crit, lcl_log, ucl_log)
+          select(1, n, n_total, percent, se, t_crit, lcl, ucl)
       }
 
     }
@@ -226,8 +235,8 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
         lcl_total_log  = lcl_total_log * 100,
         ucl_total_log  = ucl_total_log * 100,
         percent_total  = round(percent_total, digits), # Round percent
-        lcl_total_log  = round(lcl_total_log, digits), # Round confidence intervals
-        ucl_total_log  = round(ucl_total_log, digits),
+        lcl_total      = round(lcl_total_log, digits), # Round confidence intervals
+        ucl_total      = round(ucl_total_log, digits),
 
 
         # Estimate row percent se and CI's
@@ -245,8 +254,8 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
         lcl_row_log  = lcl_row_log * 100,
         ucl_row_log  = ucl_row_log * 100,
         percent_row  = round(percent_row, digits), # Round percent
-        lcl_row_log  = round(lcl_row_log, digits), # Round confidence intervals
-        ucl_row_log  = round(ucl_row_log, digits)
+        lcl_row      = round(lcl_row_log, digits), # Round confidence intervals
+        ucl_row      = round(ucl_row_log, digits)
       )
 
     # Control output
@@ -254,13 +263,13 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # Make that the default
     if (output == "default") {
       out <- out %>%
-        select(1:2, n, n_group, n_total, percent_row, lcl_row_log, ucl_row_log)
+        select(1:2, n, n_group, n_total, percent_row, lcl_row, ucl_row)
 
     } else if (output == "all") {
       out <- out %>%
         select(1:2, n, n_group, n_total, percent_total, se_total, t_crit_total,
-               lcl_total_log, ucl_total_log, percent_row, se_row, t_crit_row,
-               lcl_row_log, ucl_row_log)
+               lcl_total, ucl_total, percent_row, se_row, t_crit_row,
+               lcl_row, ucl_row)
     }
 
     # Add freq_table class to out

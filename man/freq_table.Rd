@@ -8,7 +8,16 @@ freq_table(x, t_prob = 0.975, ci_type = "logit", output = "default",
   digits = 2, ...)
 }
 \arguments{
-\item{x}{A grouped tibble, i.e., class == "grouped_df"}
+\item{x}{A grouped tibble, i.e., class == "grouped_df".
+
+  For two-way tables, the count for each level of the variable in the
+  first argument to group_by will be the denominator for row percentages
+  and their 95% confidence intervals. Said another way, the goal of the
+  analysis is to compare percentages of some characteristic across two or
+  more groups of interest, then the variable in the first argument to
+  group_by should contain the groups of interest, and the variable in the
+  second argument to group_by should contain the characteristic of
+  interest.}
 
 \item{t_prob}{(1 - alpha / 2). Default value is 0.975, which corresponds to
 an alpha of 0.05. Used to calculate a critical value from Student's t
@@ -31,7 +40,7 @@ confidence intervals using the "wald" argument.}
   error of the percent, 95 percent confidence interval for the overall
   percent, the standard error of the row percent, and the critical t-values.}
 
-\item{digits}{Round percentages and confidence intervals to `digits`.
+\item{digits}{Round percentages and confidence intervals to digits.
 Default is 2.}
 
 \item{...}{Other parameters to be passed on.}

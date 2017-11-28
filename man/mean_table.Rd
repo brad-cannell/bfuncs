@@ -23,7 +23,7 @@ distribution with n - 1 degrees of freedom.}
   of missing values for x, the critical t-value, and the standard error of
   the mean.}
 
-\item{digits}{Round mean, lcl, and ucl to `digits`. Default is 2.}
+\item{digits}{Round mean, lcl, and ucl to digits. Default is 2.}
 
 \item{...}{Other parameters to be passed on.}
 }

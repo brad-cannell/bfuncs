@@ -23,7 +23,7 @@
 #'   of missing values for x, the critical t-value, and the standard error of
 #'   the mean.
 #'
-#' @param digits Round mean, lcl, and ucl to `digits`. Default is 2.
+#' @param digits Round mean, lcl, and ucl to digits. Default is 2.
 #'
 #' @param ... Other parameters to be passed on.
 #'

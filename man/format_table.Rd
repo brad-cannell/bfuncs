@@ -2,25 +2,42 @@
 % Please edit documentation in R/format_table.R
 \name{format_table}
 \alias{format_table}
-\title{Format freq_table and mean_table for Publication Tables
-
-#' @description The format_table function takes the results of the
-  function or the mean_table function and formats them for publication
-  tables. For example, a mean and 95% confidence interval would be formatted
-  as 24.00 (21.00 - 27.00) by default.}
+\alias{format_table.mean_table}
+\alias{format_table.mean_table_grouped}
+\title{Format freq_table and mean_table Output for Publication and Dissemination}
 \usage{
-format_table(.data, digits = 2, ...)
+format_table(.data, ...)
+
+\method{format_table}{mean_table}(.data, digits = 2, stats = "mean and ci",
+  ...)
+
+\method{format_table}{mean_table_grouped}(.data, digits = 2,
+  stats = "mean and ci", ...)
 }
 \arguments{
-\item{.data}{A data frame of class mean_table.}
-
-\item{digits}{Determines the number of decimal place to display. Passed to
-the "nsmall =" parameter of the format function.}
+\item{.data}{A data frame of an accepted class.}
 
 \item{...}{Other parameters to be passed on.}
+
+\item{digits}{Determines the number of decimal place to display. Passed to
+  the "nsmall =" parameter of the format function.
+
+  Note: Changing the digits argument to format_table will change the number
+  of digits displayed, but does not change the underlying rounding of the
+  value. That must be changed in the digits argument to mean_table or
+  freq_table.}
+
+\item{stats}{Options for this parameter are "mean and ci" (default) and
+"n and mean". They control which formatted statistics are returned.}
 }
 \value{
 A tibble.
+}
+\description{
+The format_table function is an S3 generic. It currently has
+  methods for formatting the output of the freq_table and mean_table
+  functions. For example, a mean and 95% confidence interval would be
+  formatted as 24.00 (21.00 - 27.00) by default.
 }
 \examples{
 library(tidyverse)
@@ -29,6 +46,7 @@ library(bfuncs)
 data(mtcars)
 
 # Overall mean table
+
 mtcars \%>\%
   mean_table(mpg) \%>\%
   format_table()
@@ -39,6 +57,7 @@ mtcars \%>\%
 #> 1   mpg 20.09 (17.92 - 22.26)
 
 # Grouped means table
+
 mtcars \%>\%
   group_by(cyl) \%>\%
   mean_table(mpg) \%>\%

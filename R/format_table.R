@@ -1,14 +1,24 @@
-#' @title Format freq_table and mean_table for Publication Tables
+#' @title Format freq_table and mean_table Output for Publication and Dissemination
 #'
-#' #' @description The format_table function takes the results of the
-#'   function or the mean_table function and formats them for publication
-#'   tables. For example, a mean and 95% confidence interval would be formatted
-#'   as 24.00 (21.00 - 27.00) by default.
+#' @description The format_table function is an S3 generic. It currently has
+#'   methods for formatting the output of the freq_table and mean_table
+#'   functions. For example, a mean and 95% confidence interval would be
+#'   formatted as 24.00 (21.00 - 27.00) by default.
 #'
-#' @param .data A data frame of class mean_table.
+#' @param .data A data frame of an accepted class.
+#'
+#' @param ... Other parameters to be passed on.
+#'
 #' @param digits Determines the number of decimal place to display. Passed to
 #'   the "nsmall =" parameter of the format function.
-#' @param ... Other parameters to be passed on.
+#'
+#'   Note: Changing the digits argument to format_table will change the number
+#'   of digits displayed, but does not change the underlying rounding of the
+#'   value. That must be changed in the digits argument to mean_table or
+#'   freq_table.
+#'
+#' @param stats Options for this parameter are "mean and ci" (default) and
+#'   "n and mean". They control which formatted statistics are returned.
 #'
 #' @return A tibble.
 #' @export
@@ -20,6 +30,7 @@
 #' data(mtcars)
 #'
 #' # Overall mean table
+#'
 #' mtcars %>%
 #'   mean_table(mpg) %>%
 #'   format_table()
@@ -30,6 +41,7 @@
 #' #> 1   mpg 20.09 (17.92 - 22.26)
 #'
 #' # Grouped means table
+#'
 #' mtcars %>%
 #'   group_by(cyl) %>%
 #'   mean_table(mpg) %>%
@@ -41,45 +53,91 @@
 #' #> 1     4   mpg 26.66 (23.63 - 29.69)
 #' #> 2     6   mpg 19.74 (18.40 - 21.09)
 #' #> 3     8   mpg 15.10 (13.62 - 16.58)
-format_table <- function(.data, digits = 2, ...) {
 
-  # ===========================================================================
-  # Quick data checks
-  # ===========================================================================
-  if (!("mean_table"         %in% class(.data) ||
-        "mean_table_grouped" %in% class(.data) ||
-        "freq_table_one_way" %in% class(.data) ||
-        "freq_table_two_way" %in% class(.data))) {
-    stop("Expecting the class of .data to include mean_table. Instead, the ",
-         "class was ", class(.data))
-  }
+# =============================================================================
+# S3 Generic function
+# =============================================================================
+format_table <- function(.data, ...) {
+  UseMethod("format_table")
+}
 
-  # ===========================================================================
-  # Perform operations of interest
-  # Format mean, lcl, and ucl as character and ensure number of decimal places
-  # shown. Then paste together as a formatted string.
-  # ===========================================================================
+
+
+
+# =============================================================================
+# Method for class mean_table
+# Overall means
+# =============================================================================
+#' @inheritParams format_table
+#' @export
+#' @rdname format_table
+format_table.mean_table <- function(.data, digits = 2, stats = "mean and ci", ...) {
+
+  # Format statistics
   out <- .data %>%
     mutate(
       mean    = format(mean, nsmall = digits),
       lcl     = format(lcl,  nsmall = digits),
       ucl     = format(ucl,  nsmall = digits),
-      mean_95 = paste0(mean, " (", lcl, " - ", ucl, ")")
+      mean_95 = paste0(mean, " (", lcl, " - ", ucl, ")"),
+      n_mean  = paste0(n, " (", mean, ")")
     )
 
-  # ===========================================================================
-  # Check to see if .data is grouped
-  # If so, we need to keep the group variable name too (column 1)
-  # ===========================================================================
-  if ("grouped_df" %in% class(.data)) {
-    out <- out %>%
-      select(1, var, mean_95)
-  } else {
+  # Control output
+  if (stats == "mean and ci") {
     out <- out %>%
       select(var, mean_95)
+
+  } else if (stats == "n and mean") {
+    out <- out %>%
+      select(var, n_mean )
   }
 
-  # Return tibble of results
+  # Return result
   out
 }
+
+
+
+
+# =============================================================================
+# Method for class mean_table_grouped
+# Grouped means
+# =============================================================================
+#' @inheritParams format_table
+#' @export
+#' @rdname format_table
+format_table.mean_table_grouped <- function(.data, digits = 2, stats = "mean and ci", ...) {
+
+  # Format statistics
+  out <- .data %>%
+    mutate(
+      mean    = format(mean, nsmall = digits),
+      lcl     = format(lcl,  nsmall = digits),
+      ucl     = format(ucl,  nsmall = digits),
+      mean_95 = paste0(mean, " (", lcl, " - ", ucl, ")"),
+      n_mean  = paste0(n, " (", mean, ")")
+    )
+
+  # Control output
+  if (stats == "mean and ci") {
+    out <- out %>%
+      select(1, var, mean_95)
+
+  } else if (stats == "n and mean") {
+    out <- out %>%
+      select(1, var, n_mean )
+  }
+
+  # Return result
+  out
+}
+
+
+
+
+# =============================================================================
+# Method for class freq_table_one_way
+# One-way frequency tables
+# =============================================================================
 

@@ -11,6 +11,8 @@ vignette: >
 
 Table of contents:
 
+[About data](#about-data)
+
 [Univariate means and 95% confidence intervals](#univariate-means)
 
 [Bivariate means and 95% confidence intervals](#bivariate-means)
@@ -32,6 +34,19 @@ library(bfuncs)
 
 ```{r}
 data(mtcars)
+```
+
+
+
+
+-------------------------------------------------------------------------------
+
+# About data {#about-data}
+
+This is a really simple function. Frequently when I am working on an analysis project, I want to do a quick check of the data, but can't allow any of the raw data values to be exposed for privacy reasons. In such cases `str()` doesn't work, because some data values are visible in the returned output. Conversely, the `dim()` function works, but it's return value may not be intuitive to people viewing my code who aren't familiar with R. Therefore, I created the `about_data` function. 
+
+```{r}
+about_data(mtcars)
 ```
 
 

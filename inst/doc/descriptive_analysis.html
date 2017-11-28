@@ -69,11 +69,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Descriptive Analysis in a dplyr Pipeline</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-11-10 <br> Updated: 2017-11-28</em></h4>
+<h4 class="date"><em>Created: 2017-11-10 <br> Updated: 2017-11-27</em></h4>
 
 
 
 <p>Table of contents:</p>
+<p><a href="#about-data">About data</a></p>
 <p><a href="#univariate-means">Univariate means and 95% confidence intervals</a></p>
 <p><a href="#bivariate-means">Bivariate means and 95% confidence intervals</a></p>
 <p><a href="#one-way-log">Univariate percentages and 95% log transformed confidence intervals</a></p>
@@ -85,6 +86,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(bfuncs)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)</code></pre></div>
 <hr />
+<div id="about-data" class="section level1">
+<h1>About data</h1>
+<p>This is a really simple function. Frequently when I am working on an analysis project, I want to do a quick check of the data, but can’t allow any of the raw data values to be exposed for privacy reasons. In such cases <code>str()</code> doesn’t work, because some data values are visible in the returned output. Conversely, the <code>dim()</code> function works, but it’s return value may not be intuitive to people viewing my code who aren’t familiar with R. Therefore, I created the <code>about_data</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">about_data</span>(mtcars)</code></pre></div>
+<pre><code>## [1] &quot;32 observations and 11 variables&quot;</code></pre>
+<hr />
+</div>
 <div id="univariate-means" class="section level1">
 <h1>Univariate means and 95% confidence intervals</h1>
 <p>In this example, we will calculate the overall mean and 95% confidence interval for the variable mpg in the mtcars data set.</p>

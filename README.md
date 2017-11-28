@@ -22,7 +22,7 @@ Functions that manipulate data in some way. But, in and of themselves, do not pr
 
 Functions that take data as an input and produces some numerical summary or visualization about the data.
 
-* about_data: view number of observations and variables in a data frame, but not any of the data values.
+* [about_data: view number of observations and variables in a data frame, but not any of the data values.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/descriptive_analysis.html)
 
 * conf_matrix: create a confusion matrix.
 

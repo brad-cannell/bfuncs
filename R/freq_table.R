@@ -15,11 +15,11 @@
 #'   sqrt(proportion * (1 - proportion) / (n - 1))
 #'
 #'   For one-way tables, the default 95 percent confidence intervals displayed are
-#'   log transformed confidence intervals equivalent to those used by Stata.
+#'   logit transformed confidence intervals equivalent to those used by Stata.
 #'   Additionally, freq_table will return Wald ("linear") confidence intervals
 #'   if the argument to ci_type = "wald".
 #'
-#'   For two-way tables, freq_table returns log transformed confidence
+#'   For two-way tables, freq_table returns logit transformed confidence
 #'   intervals equivalent to those used by Stata.
 #'
 #' @param x A grouped tibble, i.e., class == "grouped_df"
@@ -29,7 +29,7 @@
 #'   distribution with n - 1 degrees of freedom.
 #'
 #' @param ci_type Selects the method used to estimate 95 percent confidence intervals.
-#'   The default for one-way and two-way tables is log transformed ("log"). For
+#'   The default for one-way and two-way tables is logit transformed ("log"). For
 #'   one-way tables only, ci_type can optionally calculate Wald ("linear")
 #'   confidence intervals using the "wald" argument.
 #'
@@ -94,7 +94,7 @@
 #' #> 5     1     6     3      13      32       23.08        6.91       54.82
 #' #> 6     1     8     2      13      32       15.38        3.43       48.18
 
-freq_table <- function(x, t_prob = 0.975, ci_type = "log", output = "limited", digits = 2, ...) {
+freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "limited", digits = 2, ...) {
 
   # ===========================================================================
   # Check for grouped tibble
@@ -115,7 +115,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", output = "limited", d
   # ===========================================================================
   if (ncol(out) == 2) { # else is in two-way tables.
 
-    # Update out to include elements needed for Wald and Log transformed CI's
+    # Update out to include elements needed for Wald and Logit transformed CI's
     # One-way tables
     out <- out %>%
       mutate(
@@ -156,11 +156,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", output = "limited", d
           select(1, n, n_total, percent, se, t_crit, lcl_wald, ucl_wald)
       }
 
-      # Calculate log transformed CI's
+      # Calculate logit transformed CI's
       # ------------------------------
       # and put prop, se, and CI's on percent scale
       # One-way tables
-    } else if (ci_type == "log") {
+    } else if (ci_type == "logit") {
 
       out <- out %>%
         mutate(
@@ -199,7 +199,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "log", output = "limited", d
 
     # ===========================================================================
     # Two-way tables
-    # Only logged transformed CI's
+    # Only logit transformed CI's
     # Need percent and row percent
     # ===========================================================================
   } else if (ncol(out) == 3) { # if is one-way tables

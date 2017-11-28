@@ -26,11 +26,11 @@ Functions that take data as an input and produces some numerical summary or visu
 
 * conf_matrix: create a confusion matrix.
 
-* [freq_table: estimate percentages and 95 percent confidence intervals in dplyr pipelines](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Frequency_Tables.html)
+* [freq_table: estimate percentages and 95 percent confidence intervals in dplyr pipelines](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/descriptive_analysis.html)
 
-* mean_table: estimate means and 95 percent confidence intervals in dplyr pipelines
+* [mean_table: estimate means and 95 percent confidence intervals in dplyr pipelines](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/descriptive_analysis.html)
 
-* [tabstats: compact table of summary statistics for continuous variables.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/Using_tabstat_with_dplyr.html)
+* [tabstats: compact table of summary statistics for continuous variables.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/using_tabstat_with_dplyr.html)
 
 ## Presentation and dissemination functions
 

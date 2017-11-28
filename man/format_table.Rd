@@ -4,6 +4,8 @@
 \alias{format_table}
 \alias{format_table.mean_table}
 \alias{format_table.mean_table_grouped}
+\alias{format_table.freq_table_one_way}
+\alias{format_table.freq_table_two_way}
 \title{Format freq_table and mean_table Output for Publication and Dissemination}
 \usage{
 format_table(.data, ...)
@@ -13,6 +15,12 @@ format_table(.data, ...)
 
 \method{format_table}{mean_table_grouped}(.data, digits = 2,
   stats = "mean and ci", ...)
+
+\method{format_table}{freq_table_one_way}(.data, digits = 2,
+  stats = "percent and ci", ...)
+
+\method{format_table}{freq_table_two_way}(.data, digits = 2,
+  stats = "row percent and ci", ...)
 }
 \arguments{
 \item{.data}{A data frame of an accepted class.}
@@ -27,8 +35,17 @@ format_table(.data, ...)
   value. That must be changed in the digits argument to mean_table or
   freq_table.}
 
-\item{stats}{Options for this parameter are "mean and ci" (default) and
-"n and mean". They control which formatted statistics are returned.}
+\item{stats}{Options for this parameter control which formatted statistics
+  are returned.
+
+  For mean_table and mean_table_grouped classes, the options are
+  "mean and ci" (default) and "n and mean".
+
+  For the freq_table_one_way class, the options are "percent and ci" and
+  "n and percent".
+
+  For the freq_table_two_way class, the options are "row percent and ci"
+  (default), "n and row percent", "percent and ci", "n and percent".}
 }
 \value{
 A tibble.

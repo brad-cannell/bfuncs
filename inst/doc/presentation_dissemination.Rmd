@@ -45,21 +45,21 @@ Having said that, below I walk through the basic strategy I’ve developed over 
 
 In general, the flow goes something like this:
 
-1. Start with a .Rmd file whose output is a word document
+1. [Start with a .Rmd file whose output is a word document](#start)
 
-2. Create a table shell
+2. [Create a table shell](#make-shell)
 
-3. Calculate the statistics of interest
+3. [Calculate the statistics of interest](#stats-for-table)
 
-4. Format the statistics of interest for presentation
+4. [Format the statistics of interest for presentation](#format-stats)
 
-5. Fill in the table shell
+5. [Fill in the table shell](#fill-shell)
 
-6. Polish up the filled in table shell
+6. [Polish up the filled in table shell](#polish-shell)
 
-7. Knit to Kable
+7. [Knit to Kable](#kable)
 
-8. Polish up the resulting Word document
+8. [Polish up the resulting Word document](#polish_word)
 
 I’ll walk through each step below…
 
@@ -70,7 +70,7 @@ I’ll walk through each step below…
 
 -------------------------------------------------------------------------------
 
-## Start with a .Rmd file whose output is a Word document
+## Start with a .Rmd file whose output is a Word document {#start}
 
 Create a new R markdown document. Set the output format to "Word". Edit the YAML header should look something like this:
 
@@ -91,6 +91,8 @@ Finally, to limit the amount of polishing you need to do later in the process, y
 
 http://rmarkdown.rstudio.com/articles_docx.html
 
+[top](#top)
+
 &nbsp;
 
 
@@ -98,7 +100,7 @@ http://rmarkdown.rstudio.com/articles_docx.html
 
 -------------------------------------------------------------------------------
 
-## Create a table shell
+## Create a table shell {#make-shell}
 
 ```{r}
 table <- tibble(
@@ -113,6 +115,9 @@ table <- tibble(
 
 * I find it's best to keep the column names easy to work with at this point. We will make them more presentation ready later on.
 
+[Creating tables of summary statistics](#stat-tables)
+
+[top](#top)
 
 &nbsp;
 
@@ -121,7 +126,7 @@ table <- tibble(
 
 -------------------------------------------------------------------------------
 
-## Calculate the statistics of interest
+## Calculate the statistics of interest {#stats-for-table}
 
 This part may vary quite a bit from table to table. However, every descriptive table should include group sample sizes. The `get_grou_n` is helpful for calculating the group sample size, and returning it in a presentation-ready format.
 
@@ -135,14 +140,7 @@ table <- tibble(
 )
 ```
 
-&nbsp;
-
-
-
-
--------------------------------------------------------------------------------
-
-### Calculating and formatting descriptive statistics for continuous variables
+### Calculating formatted descriptive statistics for continuous variables
 
 The descriptive analysis vignette gives examples for calculating common descriptive statistics for continuous variables. For example: 
 
@@ -187,7 +185,7 @@ mtcars %>% group_by(am) %>% mean_table(mpg) %>% format_table(stats = "n and mean
 
 -------------------------------------------------------------------------------
 
-### Calculating and formatting descriptive statistics for categorical variables
+### Calculating formatted descriptive statistics for categorical variables
 
 This section is similar to the previous, except we are now analyzing categorical variables.
 
@@ -215,6 +213,10 @@ mtcars %>% group_by(am, cyl) %>% freq_table() %>% format_table()
 mtcars %>% group_by(am, cyl) %>% freq_table(output = "all") %>% format_table(stats = "n and percent")
 ```
 
+[Creating tables of summary statistics](#stat-tables)
+
+[top](#top)
+
 &nbsp;
 
 
@@ -222,7 +224,7 @@ mtcars %>% group_by(am, cyl) %>% freq_table(output = "all") %>% format_table(sta
 
 -------------------------------------------------------------------------------
 
-## Further formatting for presentation
+## Further formatting for presentation {#format-stats}
 
 At this point, the statistics of interest are calculated and the values themselves are formatted. If we are not comparing two or more groups in the current table, we may be able to skip this section and go straight to filling in the table shell. 
 
@@ -257,6 +259,10 @@ mtcars %>%
 
 There may be better ways to do this, but this is the best I've found so far.
 
+[Creating tables of summary statistics](#stat-tables)
+
+[top](#top)
+
 &nbsp;
 
 
@@ -264,7 +270,7 @@ There may be better ways to do this, but this is the best I've found so far.
 
 -------------------------------------------------------------------------------
 
-## Fill in the table shell
+## Fill in the table shell {#fill-shell}
 
 Again, there are multiple ways to go about completing this step. I will need to build out this section over time. In the current example the most straight forward method is probably to think of each characteristic of interest as a row in the table. We will stack the rows on top of each other the create the full table using `dplyr::bind_rows()`. 
 
@@ -372,6 +378,10 @@ print(table)
 
 * Again, this still feels clunky.
 
+[Creating tables of summary statistics](#stat-tables)
+
+[top](#top)
+
 & nbsp;
 
 
@@ -379,7 +389,7 @@ print(table)
 
 -------------------------------------------------------------------------------
 
-## Polish up the filled in table shell
+## Polish up the filled in table shell {#polish-shell}
 
 At this point, we basically have the table. Now, we just need to do a couple more things before knitting our Word document.
 
@@ -442,6 +452,10 @@ table <- table %>%
 
 * Not working. Need to figure out how I did this before.
 
+[Creating tables of summary statistics](#stat-tables)
+
+[top](#top)
+
 &nbsp;
 
 
@@ -449,7 +463,7 @@ table <- table %>%
 
 -------------------------------------------------------------------------------
 
-## Knit to Kable
+## Knit to Kable {#kable}
 
 ```{r}
 table_kable <- knitr::kable(table, col.names = c(
@@ -464,6 +478,10 @@ print(table_kable)
 
 * Get rid of class NA.
 
+[Creating tables of summary statistics](#stat-tables)
+
+[top](#top)
+
 &nbsp;
 
 
@@ -471,7 +489,7 @@ print(table_kable)
 
 -------------------------------------------------------------------------------
 
-## Polish up the resulting Word document
+## Polish up the resulting Word document {#polish_word}
 
 Typically do some stuff like:
 
@@ -484,11 +502,11 @@ Typically do some stuff like:
 
 There may be packages now that con do some of this programatically. Look at officer and wordr.
 
-&nbsp;
-
+[Creating tables of summary statistics](#stat-tables)
 
 [top](#top)
 
+&nbsp;
 
 
 

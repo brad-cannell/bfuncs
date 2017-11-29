@@ -90,19 +90,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Having said that, below I walk through the basic strategy I’ve developed over time for moving closer to automating the processes of putting my results into presentation-ready summary tables.</p>
 <p>In general, the flow goes something like this:</p>
 <ol style="list-style-type: decimal">
-<li><p>Start with a .Rmd file whose output is a word document</p></li>
-<li><p>Create a table shell</p></li>
-<li><p>Calculate the statistics of interest</p></li>
-<li><p>Format the statistics of interest for presentation</p></li>
-<li><p>Fill in the table shell</p></li>
-<li><p>Polish up the filled in table shell</p></li>
-<li><p>Knit to Kable</p></li>
-<li><p>Polish up the resulting Word document</p></li>
+<li><p><a href="#start">Start with a .Rmd file whose output is a word document</a></p></li>
+<li><p><a href="#make-shell">Create a table shell</a></p></li>
+<li><p><a href="#stats-for-table">Calculate the statistics of interest</a></p></li>
+<li><p><a href="#format-stats">Format the statistics of interest for presentation</a></p></li>
+<li><p><a href="#fill-shell">Fill in the table shell</a></p></li>
+<li><p><a href="#polish-shell">Polish up the filled in table shell</a></p></li>
+<li><p><a href="#kable">Knit to Kable</a></p></li>
+<li><p><a href="#polish_word">Polish up the resulting Word document</a></p></li>
 </ol>
 <p>I’ll walk through each step below…</p>
 <p> </p>
 <hr />
-<div id="start-with-a-.rmd-file-whose-output-is-a-word-document" class="section level2">
+<div id="start" class="section level2">
 <h2>Start with a .Rmd file whose output is a Word document</h2>
 <p>Create a new R markdown document. Set the output format to “Word”. Edit the YAML header should look something like this:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="op">---</span>
@@ -114,10 +114,11 @@ output<span class="op">:</span>
 <p>This file should only be used to create this one specific table, and most of the code chunks should have the echo=FALSE option set. In other words, the file should only create a single table, and the only code chunk that creates a result that viewable in the output Word document should be the final code chunk that prints your filled-in table shell.</p>
 <p>Finally, to limit the amount of polishing you need to do later in the process, you can reference a Word template document in the YAML header, as I’ve done above. More information about the Word templates is available here:</p>
 <p><a href="http://rmarkdown.rstudio.com/articles_docx.html" class="uri">http://rmarkdown.rstudio.com/articles_docx.html</a></p>
+<p><a href="#top">top</a></p>
 <p> </p>
 <hr />
 </div>
-<div id="create-a-table-shell" class="section level2">
+<div id="make-shell" class="section level2">
 <h2>Create a table shell</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
   <span class="dt">variable =</span> <span class="st">&quot;&quot;</span>, <span class="co"># Variable names</span>
@@ -129,10 +130,12 @@ output<span class="op">:</span>
 <li><p>Of course, you can add more groups (or fewer groups) as needed.</p></li>
 <li><p>I find it’s best to keep the column names easy to work with at this point. We will make them more presentation ready later on.</p></li>
 </ul>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p><a href="#top">top</a></p>
 <p> </p>
 <hr />
 </div>
-<div id="calculate-the-statistics-of-interest" class="section level2">
+<div id="stats-for-table" class="section level2">
 <h2>Calculate the statistics of interest</h2>
 <p>This part may vary quite a bit from table to table. However, every descriptive table should include group sample sizes. The <code>get_grou_n</code> is helpful for calculating the group sample size, and returning it in a presentation-ready format.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Same as above, add n's to table</span>
@@ -142,10 +145,8 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
   <span class="dt">am_0     =</span> mtcars <span class="op">%&gt;%</span><span class="st"> </span>bfuncs<span class="op">::</span><span class="kw">get_group_n</span>(am <span class="op">==</span><span class="st"> </span><span class="dv">0</span>),
   <span class="dt">am_1     =</span> mtcars <span class="op">%&gt;%</span><span class="st"> </span>bfuncs<span class="op">::</span><span class="kw">get_group_n</span>(am <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)
 )</code></pre></div>
-<p> </p>
-<hr />
-<div id="calculating-and-formatting-descriptive-statistics-for-continuous-variables" class="section level3">
-<h3>Calculating and formatting descriptive statistics for continuous variables</h3>
+<div id="calculating-formatted-descriptive-statistics-for-continuous-variables" class="section level3">
+<h3>Calculating formatted descriptive statistics for continuous variables</h3>
 <p>The descriptive analysis vignette gives examples for calculating common descriptive statistics for continuous variables. For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg)</code></pre></div>
 <pre><code>## # A tibble: 2 x 6
@@ -195,8 +196,8 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <hr />
 </div>
 </div>
-<div id="calculating-and-formatting-descriptive-statistics-for-categorical-variables" class="section level3">
-<h3>Calculating and formatting descriptive statistics for categorical variables</h3>
+<div id="calculating-formatted-descriptive-statistics-for-categorical-variables" class="section level3">
+<h3>Calculating formatted descriptive statistics for categorical variables</h3>
 <p>This section is similar to the previous, except we are now analyzing categorical variables.</p>
 <div id="example-overall-percent-and-95-confidence-interval-the-default" class="section level4">
 <h4>Example: Overall percent and 95% confidence interval (the default)</h4>
@@ -241,12 +242,14 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 ## 4     1     4       8 (25.00)
 ## 5     1     6       3 ( 9.38)
 ## 6     1     8       2 ( 6.25)</code></pre>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p><a href="#top">top</a></p>
 <p> </p>
 <hr />
 </div>
 </div>
 </div>
-<div id="further-formatting-for-presentation" class="section level2">
+<div id="format-stats" class="section level2">
 <h2>Further formatting for presentation</h2>
 <p>At this point, the statistics of interest are calculated and the values themselves are formatted. If we are not comparing two or more groups in the current table, we may be able to skip this section and go straight to filling in the table shell.</p>
 <p>However, if we are comparing two or more groups, then some additional formatting is needed. Currently, our groups make up the rows of the formatted table. Typically, we want the groups to make up the columns of the formatted table. I’ve found <code>tidyr::spread()</code> to be really useful for fixing this problem. For example:</p>
@@ -281,10 +284,12 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 ## 2     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)      cyl
 ## 3     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)      cyl</code></pre>
 <p>There may be better ways to do this, but this is the best I’ve found so far.</p>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p><a href="#top">top</a></p>
 <p> </p>
 <hr />
 </div>
-<div id="fill-in-the-table-shell" class="section level2">
+<div id="fill-shell" class="section level2">
 <h2>Fill in the table shell</h2>
 <p>Again, there are multiple ways to go about completing this step. I will need to build out this section over time. In the current example the most straight forward method is probably to think of each characteristic of interest as a row in the table. We will stack the rows on top of each other the create the full table using <code>dplyr::bind_rows()</code>.</p>
 <p>First, an example using just one variable:</p>
@@ -408,11 +413,13 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <ul>
 <li>Again, this still feels clunky.</li>
 </ul>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p><a href="#top">top</a></p>
 <p>&amp; nbsp;</p>
 <hr />
 </div>
 </div>
-<div id="polish-up-the-filled-in-table-shell" class="section level2">
+<div id="polish-shell" class="section level2">
 <h2>Polish up the filled in table shell</h2>
 <p>At this point, we basically have the table. Now, we just need to do a couple more things before knitting our Word document.</p>
 <ul>
@@ -490,11 +497,13 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <ul>
 <li>Not working. Need to figure out how I did this before.</li>
 </ul>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p><a href="#top">top</a></p>
 <p> </p>
 <hr />
 </div>
 </div>
-<div id="knit-to-kable" class="section level2">
+<div id="kable" class="section level2">
 <h2>Knit to Kable</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">table_kable &lt;-<span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>(table, <span class="dt">col.names =</span> <span class="kw">c</span>(
   <span class="st">&quot;Characteristic&quot;</span>,
@@ -519,10 +528,12 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <ul>
 <li>Get rid of class NA.</li>
 </ul>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
+<p><a href="#top">top</a></p>
 <p> </p>
 <hr />
 </div>
-<div id="polish-up-the-resulting-word-document" class="section level2">
+<div id="polish_word" class="section level2">
 <h2>Polish up the resulting Word document</h2>
 <p>Typically do some stuff like:</p>
 <ul>
@@ -539,8 +550,9 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <li>Add bottom border to table</li>
 </ul>
 <p>There may be packages now that con do some of this programatically. Look at officer and wordr.</p>
-<p> </p>
+<p><a href="#stat-tables">Creating tables of summary statistics</a></p>
 <p><a href="#top">top</a></p>
+<p> </p>
 </div>
 </div>
 

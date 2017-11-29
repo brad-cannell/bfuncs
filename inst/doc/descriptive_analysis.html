@@ -69,7 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Descriptive Analysis in a dplyr Pipeline</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-11-10 <br> Updated: 2017-11-28</em></h4>
+<h4 class="date"><em>Created: 2017-11-10 <br> Updated: 2017-11-29</em></h4>
 
 
 
@@ -82,8 +82,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><a href="#two-way-log">Bivariate percentages and 95% log transformed confidence intervals</a></p>
 <hr />
 <p>I initially created this file to help develop the <code>freq_table</code> function in <code>bfuncs</code>. I’ve since adapted it to encompass general descriptive data analysis using R in a <code>dplyr</code> pipeline. Herein, descriptive analysis refers to basic univariate or bivariate statistics calculated for continuous and categorical variables (e.g., means and percentages). This vignette is not intended to be representative of every possible descriptive analysis that one may want to carry out on a given data set. Rather, it is intended to be representative of the descriptive analyses I most commonly need while conducting epidemiologic research.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
-<span class="kw">library</span>(bfuncs)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
+<pre><code>## ── Attaching packages ─────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
+## ✔ tibble  1.3.4     ✔ dplyr   0.7.4
+## ✔ tidyr   0.7.2     ✔ stringr 1.2.0
+## ✔ readr   1.1.1     ✔ forcats 0.2.0</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bfuncs)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(mtcars)</code></pre></div>
 <hr />
 <div id="about-data" class="section level1">

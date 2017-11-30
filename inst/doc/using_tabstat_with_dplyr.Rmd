@@ -1,0 +1,76 @@
+---
+title: "Using tabstat with dplyr"
+date: "Created: 2017-11-17 <br> Updated: `r Sys.Date()`"
+author: "Brad Cannell"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using tabstat with dplyr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(comment = NA)
+Sys.setenv(TZ = "US/Central")
+```
+
+```{r load_packages, message=FALSE}
+# Load packages
+library(tidyverse)
+library(bfuncs)
+```
+
+```{r}
+data("mtcars")
+```
+
+Helpful websites: 
+
+[Aggregation with dplyr](https://www.r-bloggers.com/aggregation-with-dplyr-summarise-and-summarise_each/)
+
+[SO summarise with multiple return values](https://stackoverflow.com/questions/22240816/dplyr-summarise-with-multiple-return-values-from-a-single-function)
+
+[R for data science](http://r4ds.had.co.nz/many-models.html)
+
+I originally created the tabstat function awhile back. I didn't create it to work with dplyr pipes and it never worked with grouped variables. Need to address both of those issues below.
+
+I can calculate the mean, and many other statistics for continuous variables using dplyr::summarise. However, dplyr::summarise can only be used to return single number statistics. Because 95% CI's do not fit this requirement, I have to build my own function.
+
+Acutally, maybe I should just use the do function and make a note in r notes. still need to find a function that returns 95% CI's to use with "do". 
+
+# Example 1: Mean no grouping
+
+```{r}
+mtcars %>% 
+  summarise(mean_mpg = mean(mpg))
+```
+
+# Example 2: Mean with grouping
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  summarise(mean_mpg = mean(mpg))
+```
+
+# Example 3: Tabstat (multiple return values) no grouping
+
+```{r}
+mtcars %>% 
+  do(tabstat(.$mpg, stats = c("n", "ci")))
+```
+
+# Example 4: Tabstat (multiple return values) with grouping
+
+```{r}
+mtcars %>% 
+  group_by(cyl) %>% 
+  do(tabstat(.$mpg, stats = c("n", "ci")))
+```
+
+So, using "do" isn't necessarily the most elegant solution ever, but it seems to work just fine.
+
+
+```{r echo=FALSE}
+sessionInfo()
+```

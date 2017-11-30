@@ -69,7 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Presenting and Disseminating Results</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-11-28 <br> Updated: 2017-11-29</em></h4>
+<h4 class="date"><em>Created: 2017-11-28 <br> Updated: 2017-11-30</em></h4>
 
 
 
@@ -149,11 +149,11 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <h3>Calculating formatted descriptive statistics for continuous variables</h3>
 <p>The descriptive analysis vignette gives examples for calculating common descriptive statistics for continuous variables. For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg)</code></pre></div>
-<pre><code>## # A tibble: 2 x 6
-##      am   var     n  mean   lcl   ucl
-##   &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0   mpg    19 17.15 15.30 19.00
-## 2     1   mpg    13 24.39 20.67 28.12</code></pre>
+<pre><code>## # A tibble: 2 x 8
+##      am   var     n  mean   lcl   ucl   min   max
+##   &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0   mpg    19 17.15 15.30 19.00  10.4  24.4
+## 2     1   mpg    13 24.39 20.67 28.12  15.0  33.9</code></pre>
 <p>Although the statistics we need are there, they aren’t in a form that can easily be put into a Word table. To help with that process, I’ve created the <code>format_table</code> function.</p>
 <p>The <code>format_table</code> function is an S3 generic. It currently has methods for formatting the output of the <code>freq_table</code> and <code>mean_table</code> functions. Examples of how to use of <code>format_table</code> will be give here and below.</p>
 <div id="example-mean-and-95-confidence-interval-the-default-overall" class="section level4">

@@ -3,9 +3,9 @@
 #' @description The mean_table function produces overall and grouped
 #'   tables of means with related statistics. In addition to means, the
 #'   mean_table missing/non-missing frequencies, the standared error of the
-#'   mean (sem), and 95% confidence intervals for the mean(s). For grouped
-#'   tibbles, mean_table displays these statistics for each category of the
-#'   group_by variable.
+#'   mean (sem), the 95% confidence intervals for the mean(s), the minimum
+#'   value, and the maximum value. For grouped tibbles, mean_table displays
+#'   these statistics for each category of the group_by variable.
 #'
 #' @param .data A tibble or grouped tibble.
 #'
@@ -45,9 +45,9 @@
 #'   mean_table(mpg)
 #'
 #' #> # A tibble: 1 x 5
-#' #>     var     n  mean   lcl   ucl
-#' #>   <chr> <int> <dbl> <dbl> <dbl>
-#' #> 1   mpg    32 20.09 17.92 22.26
+#' #>     var     n  mean   lcl   ucl   min   max
+#' #>   <chr> <int> <dbl> <dbl> <dbl> <dbl> <dbl>
+#' #> 1   mpg    32 20.09 17.92 22.26  10.4  33.9
 #'
 #' # Grouped means table with defaults
 #'
@@ -56,11 +56,11 @@
 #'   mean_table(mpg)
 #'
 #' #> # A tibble: 3 x 6
-#' #>     cyl   var     n  mean   lcl   ucl
-#' #>   <dbl> <chr> <int> <dbl> <dbl> <dbl>
-#' #> 1     4   mpg    11 26.66 23.63 29.69
-#' #> 2     6   mpg     7 19.74 18.40 21.09
-#' #> 3     8   mpg    14 15.10 13.62 16.58
+#' #>     cyl   var     n  mean   lcl   ucl   min   max
+#' #>   <dbl> <chr> <int> <dbl> <dbl> <dbl> <dbl> <dbl>
+#' #> 1     4   mpg    11 26.66 23.63 29.69  21.4  33.9
+#' #> 2     6   mpg     7 19.74 18.40 21.09  17.8  21.4
+#' #> 3     8   mpg    14 15.10 13.62 16.58  10.4  19.2
 
 mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2, ...) {
 
@@ -101,7 +101,9 @@ mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2,
       ucl    = mean + t_crit * sem,
       mean   = round(mean, digits),                            # Round mean
       lcl    = round(lcl, digits),                             # Round lcl
-      ucl    = round(ucl, digits)                              # Round ucl
+      ucl    = round(ucl, digits),                             # Round ucl
+      min    = min(!!response_var),
+      max    = max(!!response_var)
     ) %>%
     as.tibble()
 
@@ -124,11 +126,11 @@ mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2,
   # Make that the default
   if (output == "default" && class(out) == "mean_table") {
     out <- out %>%
-      select(var, n, mean, lcl, ucl)
+      select(var, n, mean, lcl, ucl, min, max)
 
   } else if (output == "default" && class(out) == "mean_table_grouped") {
     out <- out %>%
-      select(1, var, n, mean, lcl, ucl)
+      select(1, var, n, mean, lcl, ucl, min, max)
   } else {
     out <- out # do nothing
   }

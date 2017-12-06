@@ -95,7 +95,7 @@ mtcars \%>\%
   freq_table()
 
 #> # A tibble: 6 x 8
-#>      am   cyl     n n_group n_total percent_row lcl_row_log ucl_row_log
+#>      am   cyl     n n_row n_total percent_row lcl_row_log ucl_row_log
 #>     <dbl> <dbl> <int>   <int>   <int>       <dbl>       <dbl>       <dbl>
 #> 1     0     4     3      19      32       15.79        4.78       41.20
 #> 2     0     6     4      19      32       21.05        7.58       46.44

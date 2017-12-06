@@ -93,7 +93,7 @@
 #'   freq_table()
 #'
 #' #> # A tibble: 6 x 8
-#' #>      am   cyl     n n_group n_total percent_row lcl_row_log ucl_row_log
+#' #>      am   cyl     n n_row n_total percent_row lcl_row_log ucl_row_log
 #' #>     <dbl> <dbl> <int>   <int>   <int>       <dbl>       <dbl>       <dbl>
 #' #> 1     0     4     3      19      32       15.79        4.78       41.20
 #' #> 2     0     6     4      19      32       21.05        7.58       46.44
@@ -214,7 +214,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
 
     out <- out %>%
       # Calculate within row n
-      mutate(n_group = sum(n)) %>%
+      mutate(n_row = sum(n)) %>%
       # Ungroup to get total_n
       ungroup() %>%
       mutate(
@@ -240,8 +240,8 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
 
 
         # Estimate row percent se and CI's
-        prop_row     = n / n_group,
-        se_row       = sqrt(prop_row * (1 - prop_row) / (n_group - 1)), # group n - 1
+        prop_row     = n / n_row,
+        se_row       = sqrt(prop_row * (1 - prop_row) / (n_row - 1)), # group n - 1
         t_crit_row   = stats::qt(t_prob, df = n_total - 1), # overall n - 1
         prop_log_row = log(prop_row) - log(1 - prop_row),
         se_log_row   = se_row / (prop_row * (1 - prop_row)),
@@ -263,11 +263,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # Make that the default
     if (output == "default") {
       out <- out %>%
-        select(1:2, n, n_group, n_total, percent_row, lcl_row, ucl_row)
+        select(1:2, n, n_row, n_total, percent_row, lcl_row, ucl_row)
 
     } else if (output == "all") {
       out <- out %>%
-        select(1:2, n, n_group, n_total, percent_total, se_total, t_crit_total,
+        select(1:2, n, n_row, n_total, percent_total, se_total, t_crit_total,
                lcl_total, ucl_total, percent_row, se_row, t_crit_row,
                lcl_row, ucl_row)
     }

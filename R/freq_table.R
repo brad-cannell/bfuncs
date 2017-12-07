@@ -104,6 +104,16 @@
 
 freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default", digits = 2, ...) {
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  n = n_total = prop = t_crit = se = lcl_wald = ucl_wald = percent = NULL
+  lcl = ucl = prop_log = se_log = lcl_log = ucl_log = prop_total = NULL
+  se_total = prop_log_total = t_crit_total = se_log_total = lcl_total_log = NULL
+  percent_total = n_row = prop_row = se_row = prop_log_row = t_crit_row = NULL
+  se_log_row = lcl_row_log = ucl_row_log = percent_row = lcl_row = NULL
+  ucl_row = lcl_total = ucl_total = ucl_total_log = NULL
+
   # ===========================================================================
   # Check for grouped tibble
   # ===========================================================================
@@ -116,7 +126,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
   # Check for number of group vars:
   # ===========================================================================
   out <- x %>%
-    summarise(n = n())
+    dplyr::summarise(n = n())
 
   # ===========================================================================
   # One-way tables
@@ -126,7 +136,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # Update out to include elements needed for Wald and Logit transformed CI's
     # One-way tables
     out <- out %>%
-      mutate(
+      dplyr::mutate(
         n_total = sum(n),
         prop    = n / n_total,
         se      = sqrt(prop * (1 - prop) / (n_total - 1)),
@@ -140,7 +150,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     if (ci_type == "wald") {
 
       out <- out %>%
-        mutate(
+        dplyr::mutate(
           lcl_wald = prop - t_crit * se,
           ucl_wald = prop + t_crit * se,
           percent  = prop * 100,
@@ -157,11 +167,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
       # Make that the default
       if (output == "default") {
         out <- out %>%
-          select(1, n, n_total, percent, lcl, ucl)
+          dplyr::select(1, n, n_total, percent, lcl, ucl)
 
       } else if (output == "all") {
         out <- out %>%
-          select(1, n, n_total, percent, se, t_crit, lcl, ucl)
+          dplyr::select(1, n, n_total, percent, se, t_crit, lcl, ucl)
       }
 
       # Calculate logit transformed CI's
@@ -171,7 +181,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     } else if (ci_type == "logit") {
 
       out <- out %>%
-        mutate(
+        dplyr::mutate(
           prop_log = log(prop) - log(1 - prop),
           se_log   = se / (prop * (1 - prop)),
           lcl_log  = prop_log - t_crit * se_log,
@@ -192,11 +202,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
       # Make that the default
       if (output == "default") {
         out <- out %>%
-          select(1, n, n_total, percent, lcl, ucl)
+          dplyr::select(1, n, n_total, percent, lcl, ucl)
 
       } else if (output == "all") {
         out <- out %>%
-          select(1, n, n_total, percent, se, t_crit, lcl, ucl)
+          dplyr::select(1, n, n_total, percent, se, t_crit, lcl, ucl)
       }
 
     }
@@ -214,10 +224,10 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
 
     out <- out %>%
       # Calculate within row n
-      mutate(n_row = sum(n)) %>%
+      dplyr::mutate(n_row = sum(n)) %>%
       # Ungroup to get total_n
-      ungroup() %>%
-      mutate(
+      dplyr::ungroup() %>%
+      dplyr::mutate(
 
         # Estimate overall percent se and CI's
         n_total        = sum(n),
@@ -263,11 +273,11 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # Make that the default
     if (output == "default") {
       out <- out %>%
-        select(1:2, n, n_row, n_total, percent_row, lcl_row, ucl_row)
+        dplyr::select(1:2, n, n_row, n_total, percent_row, lcl_row, ucl_row)
 
     } else if (output == "all") {
       out <- out %>%
-        select(1:2, n, n_row, n_total, percent_total, se_total, t_crit_total,
+        dplyr::select(1:2, n, n_row, n_total, percent_total, se_total, t_crit_total,
                lcl_total, ucl_total, percent_row, se_row, t_crit_row,
                lcl_row, ucl_row)
     }

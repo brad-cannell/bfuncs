@@ -21,11 +21,22 @@
 #'
 #' #> [1] "N = 11"
 get_group_n <- function(.data, ...) {
-  filter_exp <- quos(...)
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  n = NULL
+
+  # Turn filter expression into a quoture
+  filter_exp <- rlang::quos(...)
+
+  # Filter .data by the filter expression (e.g., cyl == 4)
+  # Count number of remaining rows
+  # Format number of rows as: N = XX
+  # Return as a character vector
   .data %>%
-    filter(!!!filter_exp) %>%
-    summarise(n = n()) %>%
-    mutate(n = paste0("N = ", format(n, big.mark = ","))) %>%
-    pull(n)
+    dplyr::filter(!!!filter_exp) %>%
+    dplyr::summarise(n = n()) %>%
+    dplyr::mutate(n = paste0("N = ", format(n, big.mark = ","))) %>%
+    dplyr::pull(n)
 }

@@ -64,10 +64,16 @@
 
 mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2, ...) {
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  n = t_crit = sem = lcl = ucl = var = NULL
+
+
   # ===========================================================================
   # Enquo the x argument so that it can be used in the dplyr pipeline below.
   # ===========================================================================
-  response_var <- enquo(x)
+  response_var <- rlang::enquo(x)
 
 
   # ===========================================================================
@@ -89,23 +95,23 @@ mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2,
   # Just "works" if grouped_df too
   # ===========================================================================
   out <- .data %>%
-    filter(!is.na(!!response_var)) %>%                         # Drop missing
-    summarise(
-      var    = quo_name(response_var),                         # Grab variable (x) name
-      n_miss = is.na(.data[[quo_name(response_var)]]) %>% sum, # Count missing from before drop
+    dplyr::filter(!is.na(!!response_var)) %>%                         # Drop missing
+    dplyr::summarise(
+      var    = rlang::quo_name(response_var),                         # Grab variable (x) name
+      n_miss = is.na(.data[[rlang::quo_name(response_var)]]) %>% sum, # Count missing from before drop
       n      = n(),
       mean   = mean(!!response_var),
-      t_crit = qt(t_prob, n - 1),
-      sem    = sd(!!response_var) / sqrt(n),
+      t_crit = stats::qt(t_prob, n - 1),
+      sem    = stats::sd(!!response_var) / sqrt(n),
       lcl    = mean - t_crit * sem,
       ucl    = mean + t_crit * sem,
-      mean   = round(mean, digits),                            # Round mean
-      lcl    = round(lcl, digits),                             # Round lcl
-      ucl    = round(ucl, digits),                             # Round ucl
+      mean   = round(mean, digits),   # Round mean
+      lcl    = round(lcl, digits),    # Round lcl
+      ucl    = round(ucl, digits),    # Round ucl
       min    = min(!!response_var),
       max    = max(!!response_var)
     ) %>%
-    as.tibble()
+    tibble::as.tibble()
 
   # ===========================================================================
   # Classes of output
@@ -126,11 +132,11 @@ mean_table <- function(.data, x, t_prob = 0.975, output = "default", digits = 2,
   # Make that the default
   if (output == "default" && class(out) == "mean_table") {
     out <- out %>%
-      select(var, n, mean, lcl, ucl, min, max)
+      dplyr::select(var, n, mean, lcl, ucl, min, max)
 
   } else if (output == "default" && class(out) == "mean_table_grouped") {
     out <- out %>%
-      select(1, var, n, mean, lcl, ucl, min, max)
+      dplyr::select(1, var, n, mean, lcl, ucl, min, max)
   } else {
     out <- out # do nothing
   }

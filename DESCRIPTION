@@ -11,12 +11,15 @@ LazyData: true
 URL: https://github.com/brad-cannell/bfuncs
 BugReports: https://github.com/brad-cannell/bfuncs/issues
 Suggests: testthat,
-    knitr,
     rmarkdown
 Imports:
   gmodels, 
   knitr,
   tibble,
-  tidyverse
+  tidyverse,
+  magrittr,
+  dplyr,
+  utils,
+  rlang
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

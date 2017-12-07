@@ -30,6 +30,8 @@
 #'   (default), "n and row percent", "percent and ci", "n and percent".
 #'
 #' @return A tibble.
+#'
+#' @import magrittr
 #' @export
 #'
 #' @examples
@@ -63,7 +65,6 @@
 #' #> 2     6   mpg 19.74 (18.40 - 21.09)
 #' #> 3     8   mpg 15.10 (13.62 - 16.58)
 
-
 # =============================================================================
 # S3 Generic function
 # =============================================================================
@@ -84,9 +85,14 @@ format_table <- function(.data, ...) {
 
 format_table.mean_table <- function(.data, digits = 2, stats = "mean and ci", ...) {
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  lcl = ucl = n = var = mean_95 = n_mean = NULL
+
   # Format statistics
   out <- .data %>%
-    mutate(
+    dplyr::mutate(
       mean    = format(mean, nsmall = digits),
       lcl     = format(lcl,  nsmall = digits),
       ucl     = format(ucl,  nsmall = digits),
@@ -97,11 +103,11 @@ format_table.mean_table <- function(.data, digits = 2, stats = "mean and ci", ..
   # Control output
   if (stats == "mean and ci") {
     out <- out %>%
-      select(var, mean_95)
+      dplyr::select(var, mean_95)
 
   } else if (stats == "n and mean") {
     out <- out %>%
-      select(var, n_mean )
+      dplyr::select(var, n_mean )
   }
 
   # Return result
@@ -121,9 +127,15 @@ format_table.mean_table <- function(.data, digits = 2, stats = "mean and ci", ..
 
 format_table.mean_table_grouped <- function(.data, digits = 2, stats = "mean and ci", ...) {
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  lcl = ucl = n = var = mean_95 = n_mean = NULL
+
+
   # Format statistics
   out <- .data %>%
-    mutate(
+    dplyr::mutate(
       mean    = format(mean, nsmall = digits),
       lcl     = format(lcl,  nsmall = digits),
       ucl     = format(ucl,  nsmall = digits),
@@ -134,11 +146,11 @@ format_table.mean_table_grouped <- function(.data, digits = 2, stats = "mean and
   # Control output
   if (stats == "mean and ci") {
     out <- out %>%
-      select(1, var, mean_95)
+      dplyr::select(1, var, mean_95)
 
   } else if (stats == "n and mean") {
     out <- out %>%
-      select(1, var, n_mean )
+      dplyr::select(1, var, n_mean )
   }
 
   # Return result
@@ -158,9 +170,14 @@ format_table.mean_table_grouped <- function(.data, digits = 2, stats = "mean and
 
 format_table.freq_table_one_way <- function(.data, digits = 2, stats = "percent and ci", ...) {
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  percent = lcl = ucl = n = percent_95 = n_percent = NULL
+
   # Format statistics
   out <- .data %>%
-    mutate(
+    dplyr::mutate(
       percent    = format(percent, nsmall = digits),
       lcl        = format(lcl,  nsmall = digits),
       ucl        = format(ucl,  nsmall = digits),
@@ -171,11 +188,11 @@ format_table.freq_table_one_way <- function(.data, digits = 2, stats = "percent 
   # Control output
   if (stats == "percent and ci") {
     out <- out %>%
-      select(1, percent_95)
+      dplyr::select(1, percent_95)
 
   } else if (stats == "n and percent") {
     out <- out %>%
-      select(1, n_percent )
+      dplyr::select(1, n_percent )
   }
 
   # Return result
@@ -195,6 +212,14 @@ format_table.freq_table_one_way <- function(.data, digits = 2, stats = "percent 
 
 format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row percent and ci", ...) {
 
+  # ------------------------------------------------------------------
+  # Prevents R CMD check: "no visible binding for global variable ‘.’"
+  # ------------------------------------------------------------------
+  percent_row = lcl_row = ucl_row = n = percent_total = lcl_total = NULL
+  ucl_total = percent_row_95 = n_percent_row = percent_total_95 = NULL
+  n_percent_total = NULL
+
+
   # Figure out if .data includes overall percentages or not
   # --------------------------------------------------------
   # This depends whether the argument to the "output" parameter of freq_table
@@ -210,7 +235,7 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
   # Format row statistics
   # ---------------------
   out <- .data %>%
-    mutate(
+    dplyr::mutate(
       percent_row    = format(percent_row, nsmall = digits),
       lcl_row        = format(lcl_row,  nsmall = digits),
       ucl_row        = format(ucl_row,  nsmall = digits),
@@ -222,7 +247,7 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
   # -------------------------
   if ((stats == "percent and ci" || stats == "n and percent") && has_overall_percent) {
     out <- out %>%
-      mutate(
+      dplyr::mutate(
         percent_total    = format(percent_total, nsmall = digits),
         lcl_total        = format(lcl_total,  nsmall = digits),
         ucl_total        = format(ucl_total,  nsmall = digits),
@@ -236,11 +261,11 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
   # --------------
   if (stats == "row percent and ci") {
     out <- out %>%
-      select(1:2, percent_row_95)
+      dplyr::select(1:2, percent_row_95)
 
   } else if (stats == "n and row percent") {
     out <- out %>%
-      select(1:2, n_percent_row)
+      dplyr::select(1:2, n_percent_row)
 
   } else if ((stats == "percent and ci" || stats == "n and percent") && !has_overall_percent) {
     stop("In order to pass stats = 'percent and ci' or 'n and percent' to format_table ",
@@ -248,11 +273,11 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
 
   } else if (stats == "percent and ci" && has_overall_percent) {
     out <- out %>%
-      select(1:2, percent_total_95)
+      dplyr::select(1:2, percent_total_95)
 
   } else if (stats == "n and percent" && has_overall_percent) {
     out <- out %>%
-      select(1:2, n_percent_total)
+      dplyr::select(1:2, n_percent_total)
   }
 
   # Return result

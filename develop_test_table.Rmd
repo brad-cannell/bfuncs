@@ -66,19 +66,19 @@ There is one problem with the chi-square test, which is that the sampling distri
 
 Field, Andy; Miles, Jeremy; Field, Zoe. Discovering Statistics Using R (p. 816). SAGE Publications. Kindle Edition. 
 
-# Fisher's exact test
-
-http://quantpsy.org/fisher/fisher.htm
-
-The exact probability of the chi-square statistic is given by:
-
-$$\chi^2 = \frac{(a+b)! + (c+d)! + (a+c)! +(b+d)!}{a! + b! + c! + d!}$$
+# Put into a function
 
 ```{r}
-numerator <- factorial((12 + 7)) * factorial((6 + 7)) * factorial((12 + 6)) * factorial((7 + 7))
-denominator <- factorial(12) * factorial(7) * factorial(6) * factorial(7) * factorial(32)
-fisher = numerator / denominator
+chi_square_test <- 
 ```
+
+
+# Fisher's exact test
+
+Maybe I should just calculate other p-values outside of dplyr, then put add them back inot the tables.
+Pearson is easy. Fisher is hard. Just use R's built-in Fisher exact test.
+Inside function, if Fisher called, convert to matrix and run fisher.test.
+Just quickly figure out the best way to convert n's to m x n matrix where m or n are > 2.
 
 ```{r}
 ft <- stats::fisher.test(mtcars$am, mtcars$vs)
@@ -92,25 +92,10 @@ fisher.test(mx)
 ```
 
 
-Maybe I should just calculate other p-values outside of dplyr, then put add them back inot the tables.
 
 
 
-How do you calculate all other cases as or more extreme?
 
-```{r}
-df3 <- df2 %>% 
-  mutate(
-    row_margins = unique(n_row) %>% list(),
-    col_margins = unique(n_col) %>% list(),
-    row_factorial = row_margins %>% unlist %>% unique %>% factorial() %>% list(),
-    col_factorial = col_margins %>% unlist %>% unique %>% factorial() %>% list(),
-    numerator = c(unique(unlist(row_factorial)), unique(unlist(col_factorial))) %>% sum
-    
-  ) 
-
-View(df3)
-```
 
 
 ```{r}

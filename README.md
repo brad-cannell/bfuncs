@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/brad-cannell/bfuncs.svg?branch=master)](https://travis-ci.org/brad-cannell/bfuncs)
+
 # Brad's functions (bfuncs)
 
 This repository is a random smattering of functions I wrote for myself, but you can use them too.

@@ -4,6 +4,14 @@ This repository is a random smattering of functions I wrote for myself, but you 
 
 <!-- Need to make help vignettes and link to them below -->
 
+#### Installation instructions:
+
+``` r
+devtools::install_github("brad-cannell/bfuncs", build_vignettes = TRUE)
+```
+
+-------------------------------------------------------------------------------
+
 ## Programing functions
 
 Functions that help with writing functions, but on their own, don't produce any result that is useful for manipulating or analyzing data (think %>%).
@@ -43,10 +51,3 @@ Functions that help with assist with making the data itself, or the results of s
 * [get_group_n: To help with making tables. Given a tibble and a filter expression, get_group_n returns the group sample size formatted as "N = XXXX".](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/presentation_dissemination.html)
 
 
--------------------------------------------------------------------------------
-
-#### Installation instructions:
-
-``` r
-devtools::install_github("brad-cannell/bfuncs", build_vignettes = TRUE)
-```

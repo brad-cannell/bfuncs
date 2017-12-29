@@ -38,6 +38,8 @@ Functions that take data as an input and produces some numerical summary or visu
 
 * [freq_table: estimate percentages and 95 percent confidence intervals in dplyr pipelines](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/descriptive_analysis.html)
 
+* [freq_test: hypothesis testing for frequency tables](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/freq_test.html)
+
 * [mean_table: estimate means and 95 percent confidence intervals in dplyr pipelines](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/descriptive_analysis.html)
 
 * [tabstats: compact table of summary statistics for continuous variables.](https://rawgit.com/brad-cannell/bfuncs/master/inst/doc/using_tabstat_with_dplyr.html)

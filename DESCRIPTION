@@ -10,16 +10,18 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/brad-cannell/bfuncs
 BugReports: https://github.com/brad-cannell/bfuncs/issues
-Suggests: testthat,
-    rmarkdown
+Suggests:
+    testthat,
+    rmarkdown,
+    knitr
 Imports:
   gmodels, 
-  knitr,
   tibble,
   tidyverse,
   magrittr,
   dplyr,
   utils,
-  rlang
+  rlang,
+  DiagrammeR
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

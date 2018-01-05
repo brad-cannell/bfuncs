@@ -18,6 +18,6 @@
 #' names(mtcars)
 about_data <- function(x, ...) {
   dims <- format(dim(x), big.mark = ",")
-  out  <- paste(dims[1], "observations and", trimws(dims[2]), "variables")
+  out  <- paste0(dims[1], " observations and ", trimws(dims[2]), " variables")
   out
 }

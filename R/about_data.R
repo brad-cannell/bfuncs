@@ -17,7 +17,23 @@
 #' about_data(mtcars)
 #' names(mtcars)
 about_data <- function(x, ...) {
-  dims <- format(dim(x), big.mark = ",")
-  out  <- paste0(dims[1], " observations and ", trimws(dims[2]), " variables")
+
+  # Make sure x is a data frame
+  # ---------------------------
+  if (!("data.frame" %in% class(x))) {
+    stop("Expecting x to be a data frame. Instead, x had class: ",
+         paste(class(x), collapse = " "))
+  }
+
+  # Format the output
+  # -----------------
+  out  <- paste(
+    format(dim(x)[1], big.mark = ","), # formatted rows
+    "observations and",
+    format(dim(x)[2], big.mark = ","), # formatted cols
+    "variables"
+  )
+
+  # Return out
   out
 }

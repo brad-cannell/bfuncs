@@ -73,7 +73,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the freq_test Function</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-12-06 <br> Updated: 2017-12-29</em></h4>
+<h4 class="date"><em>Created: 2017-12-06 <br> Updated: 2018-01-05</em></h4>
 
 
 
@@ -99,8 +99,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Because we want different behavior for different classes of inputs, freq_test is an S3 generic function with multiple methods.</p>
 <p>The name freq_test is easy to reason about, sounds similar to freq_table, which must be the input to freq_test, and is general enough to contain chi-square, fisher, etc.</p>
 <p>The flowchart below illustrates the scenarios, and related hypothesis tests, discussed in this vignette.</p>
-<div id="htmlwidget-b1a3fea7b58b984a25f6" style="width:288px;height:288px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b1a3fea7b58b984a25f6">{"x":{"diagram":"\ndigraph freq_table {\n  \n  # A graph statement\n  # -----------------\n  graph [overlap = true, fontsize = 10]\n\n\n  # Node statements\n  # Count left to right, top to bottom\n  # ----------------------------------\n  node [shape    = box,\n        fontname = Helvetica]\n  01 [label = \"Counts/\nProportions\"] \n  02 [label = \"Univariate\"]\n  03 [label = \"Bivariate\"] \n  04 [label = \"Two-category\"]\n  05 [label = \"N-category\"]\n  06 [label = \"Two-category\"]\n  07 [label = \"N-category\"]\n  08 [label = \"Pearson\"]\n  09 [label = \"Pearson\"]\n  10 [label = \"Expected > 5\"]\n  11 [label = \"Expected <= 5\"]\n  12 [label = \"Expected > 5\"]\n  13 [label = \"Expected <= 5\"]\n  14 [label = \"Pearson\"]\n  15 [label = \"Fisher\"]  \n  16 [label = \"Pearson\"]\n  17 [label = \"Fisher\"]\n\n\n  # Edge statements\n  # ---------------\n  01 -> {02, 03}\n  02 -> {04, 05} \n  03 -> {06, 07}\n  04 -> 08\n  05 -> 09\n  06 -> {10, 11}\n  07 -> {12, 13}\n  10 -> 14\n  11 -> 15\n  12 -> 16\n  13 -> 17\n}\n\n\n# Labels\n# ------","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-fed899085aa804eab031" style="width:288px;height:288px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fed899085aa804eab031">{"x":{"diagram":"\ndigraph freq_table {\n  \n  # A graph statement\n  # -----------------\n  graph [overlap = true, fontsize = 10]\n\n\n  # Node statements\n  # Count left to right, top to bottom\n  # ----------------------------------\n  node [shape    = box,\n        fontname = Helvetica]\n  01 [label = \"Counts/\nProportions\"] \n  02 [label = \"Univariate\"]\n  03 [label = \"Bivariate\"] \n  04 [label = \"Two-category\"]\n  05 [label = \"N-category\"]\n  06 [label = \"Two-category\"]\n  07 [label = \"N-category\"]\n  08 [label = \"Pearson\"]\n  09 [label = \"Pearson\"]\n  10 [label = \"Expected > 5\"]\n  11 [label = \"Expected <= 5\"]\n  12 [label = \"Expected > 5\"]\n  13 [label = \"Expected <= 5\"]\n  14 [label = \"Pearson\"]\n  15 [label = \"Fisher\"]  \n  16 [label = \"Pearson\"]\n  17 [label = \"Fisher\"]\n\n\n  # Edge statements\n  # ---------------\n  01 -> {02, 03}\n  02 -> {04, 05} \n  03 -> {06, 07}\n  04 -> 08\n  05 -> 09\n  06 -> {10, 11}\n  07 -> {12, 13}\n  10 -> 14\n  11 -> 15\n  12 -> 16\n  13 -> 17\n}\n\n\n# Labels\n# ------","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <div id="table-of-contents" class="section level1">
 <h1>Table of Contents</h1>
 <ul>

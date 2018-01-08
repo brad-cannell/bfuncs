@@ -73,7 +73,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Using the freq_test Function</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-12-06 <br> Updated: 2018-01-05</em></h4>
+<h4 class="date"><em>Created: 2017-12-06 <br> Updated: 2018-01-07</em></h4>
 
 
 
@@ -99,8 +99,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Because we want different behavior for different classes of inputs, freq_test is an S3 generic function with multiple methods.</p>
 <p>The name freq_test is easy to reason about, sounds similar to freq_table, which must be the input to freq_test, and is general enough to contain chi-square, fisher, etc.</p>
 <p>The flowchart below illustrates the scenarios, and related hypothesis tests, discussed in this vignette.</p>
-<div id="htmlwidget-fed899085aa804eab031" style="width:288px;height:288px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fed899085aa804eab031">{"x":{"diagram":"\ndigraph freq_table {\n  \n  # A graph statement\n  # -----------------\n  graph [overlap = true, fontsize = 10]\n\n\n  # Node statements\n  # Count left to right, top to bottom\n  # ----------------------------------\n  node [shape    = box,\n        fontname = Helvetica]\n  01 [label = \"Counts/\nProportions\"] \n  02 [label = \"Univariate\"]\n  03 [label = \"Bivariate\"] \n  04 [label = \"Two-category\"]\n  05 [label = \"N-category\"]\n  06 [label = \"Two-category\"]\n  07 [label = \"N-category\"]\n  08 [label = \"Pearson\"]\n  09 [label = \"Pearson\"]\n  10 [label = \"Expected > 5\"]\n  11 [label = \"Expected <= 5\"]\n  12 [label = \"Expected > 5\"]\n  13 [label = \"Expected <= 5\"]\n  14 [label = \"Pearson\"]\n  15 [label = \"Fisher\"]  \n  16 [label = \"Pearson\"]\n  17 [label = \"Fisher\"]\n\n\n  # Edge statements\n  # ---------------\n  01 -> {02, 03}\n  02 -> {04, 05} \n  03 -> {06, 07}\n  04 -> 08\n  05 -> 09\n  06 -> {10, 11}\n  07 -> {12, 13}\n  10 -> 14\n  11 -> 15\n  12 -> 16\n  13 -> 17\n}\n\n\n# Labels\n# ------","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5387c9d2b4eec0abca97" style="width:288px;height:288px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5387c9d2b4eec0abca97">{"x":{"diagram":"\ndigraph freq_table {\n  \n  # A graph statement\n  # -----------------\n  graph [overlap = true, fontsize = 10]\n\n\n  # Node statements\n  # Count left to right, top to bottom\n  # ----------------------------------\n  node [shape    = box,\n        fontname = Helvetica]\n  01 [label = \"Counts/\nProportions\"] \n  02 [label = \"Univariate\"]\n  03 [label = \"Bivariate\"] \n  04 [label = \"Two-category\"]\n  05 [label = \"N-category\"]\n  06 [label = \"Two-category\"]\n  07 [label = \"N-category\"]\n  08 [label = \"Pearson\"]\n  09 [label = \"Pearson\"]\n  10 [label = \"Expected > 5\"]\n  11 [label = \"Expected <= 5\"]\n  12 [label = \"Expected > 5\"]\n  13 [label = \"Expected <= 5\"]\n  14 [label = \"Pearson\"]\n  15 [label = \"Fisher\"]  \n  16 [label = \"Pearson\"]\n  17 [label = \"Fisher\"]\n\n\n  # Edge statements\n  # ---------------\n  01 -> {02, 03}\n  02 -> {04, 05} \n  03 -> {06, 07}\n  04 -> 08\n  05 -> 09\n  06 -> {10, 11}\n  07 -> {12, 13}\n  10 -> 14\n  11 -> 15\n  12 -> 16\n  13 -> 17\n}\n\n\n# Labels\n# ------","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <div id="table-of-contents" class="section level1">
 <h1>Table of Contents</h1>
 <ul>
@@ -133,11 +133,11 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">students <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(male) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>()
-<span class="co">#&gt; # A tibble: 2 x 6</span>
-<span class="co">#&gt;    male     n n_total percent   lcl   ucl</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     0     9      20      45 23.76 68.23</span>
-<span class="co">#&gt; 2     1    11      20      55 31.77 76.24</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 2 x 7</span>
+<span class="co">#&gt;     var   cat     n n_total percent   lcl   ucl</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  male     0     9      20      45 23.76 68.23</span>
+<span class="co">#&gt; 2  male     1    11      20      55 31.77 76.24</span></code></pre></div>
 <p>The frequencies returned to us by <code>freq_table</code> tell us that our sample includes <em>9 females (which is 45% of all students in the sample) and 11 males (which is 55% of all students sampled)</em>. But, what about the precision of those estimates?</p>
 <p>If we are only interested in the proportion of students in our sample that are male and female, then we’re done. We have our answer. Typically, though, our interest extends beyond our little sample. What we really want to know is if the proportion of males and females differ among all students on our hypothetical campus (our superpopulation).</p>
 <p>I like the following quote from Daniel Kaplan that discusses sampling variability and its relationship to precision of our estimate:</p>
@@ -196,11 +196,11 @@ Rothman, Kenneth J. Modern Epidemiology (p. 149). Lippincot (Wolters Kluwer Hea
 <span class="st">  </span><span class="kw">group_by</span>(male) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_test</span>()
-<span class="co">#&gt; # A tibble: 2 x 11</span>
-<span class="co">#&gt;    male     n n_total percent   lcl   ucl n_expected chi2_contrib</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     0     9      20      45 23.76 68.23         10          0.1</span>
-<span class="co">#&gt; 2     1    11      20      55 31.77 76.24         10          0.1</span>
+<span class="co">#&gt; # A tibble: 2 x 12</span>
+<span class="co">#&gt;     var   cat     n n_total percent   lcl   ucl n_expected chi2_contrib</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  male     0     9      20      45 23.76 68.23         10          0.1</span>
+<span class="co">#&gt; 2  male     1    11      20      55 31.77 76.24         10          0.1</span>
 <span class="co">#&gt; # ... with 3 more variables: chi2_pearson &lt;dbl&gt;, df &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
 </div>
@@ -224,10 +224,10 @@ Rothman, Kenneth J. Modern Epidemiology (p. 149). Lippincot (Wolters Kluwer Hea
 <span class="st">  </span><span class="kw">freq_test</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, p_chi2_pearson)
 <span class="co">#&gt; # A tibble: 2 x 7</span>
-<span class="co">#&gt;      am     n n_total percent   lcl   ucl p_chi2_pearson</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     0    19      32   59.38 40.94 75.50      0.2888444</span>
-<span class="co">#&gt; 2     1    13      32   40.62 24.50 59.06      0.2888444</span></code></pre></div>
+<span class="co">#&gt;     var   cat     n n_total percent   lcl p_chi2_pearson</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    am     0    19      32   59.38 40.94      0.2888444</span>
+<span class="co">#&gt; 2    am     1    13      32   40.62 24.50      0.2888444</span></code></pre></div>
 <p> </p>
 <p>These results match the results obtained from Stata and SAS (see below).</p>
 <p> </p>
@@ -274,12 +274,12 @@ Rothman, Kenneth J. Modern Epidemiology (p. 149). Lippincot (Wolters Kluwer Hea
 <span class="st">  </span><span class="kw">group_by</span>(cyl) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_test</span>()
-<span class="co">#&gt; # A tibble: 3 x 11</span>
-<span class="co">#&gt;     cyl     n n_total percent   lcl   ucl n_expected chi2_contrib</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     4    11      32   34.38 19.50 53.11   10.66667   0.01041667</span>
-<span class="co">#&gt; 2     6     7      32   21.88 10.35 40.45   10.66667   1.26041667</span>
-<span class="co">#&gt; 3     8    14      32   43.75 27.10 61.94   10.66667   1.04166667</span>
+<span class="co">#&gt; # A tibble: 3 x 12</span>
+<span class="co">#&gt;     var   cat     n n_total percent   lcl   ucl n_expected chi2_contrib</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1   cyl     4    11      32   34.38 19.50 53.11   10.66667   0.01041667</span>
+<span class="co">#&gt; 2   cyl     6     7      32   21.88 10.35 40.45   10.66667   1.26041667</span>
+<span class="co">#&gt; 3   cyl     8    14      32   43.75 27.10 61.94   10.66667   1.04166667</span>
 <span class="co">#&gt; # ... with 3 more variables: chi2_pearson &lt;dbl&gt;, df &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
 <p> </p>
@@ -317,31 +317,32 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">freq_test</span>()
 <span class="co">#&gt; Warning in freq_test.freq_table_two_way(.): One or more expected cell</span>
 <span class="co">#&gt; counts are &lt;= 5. Pearson's Chi-square may not be a valid test.</span>
-<span class="co">#&gt; # A tibble: 4 x 16</span>
-<span class="co">#&gt;    male binge     n n_row n_total percent_row lcl_row ucl_row n_col</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1     0     0     8    11      20       72.73   37.63   92.18    15</span>
-<span class="co">#&gt; 2     0     1     3    11      20       27.27    7.82   62.37     5</span>
-<span class="co">#&gt; 3     1     0     7     9      20       77.78   37.12   95.40    15</span>
-<span class="co">#&gt; 4     1     1     2     9      20       22.22    4.60   62.88     5</span>
-<span class="co">#&gt; # ... with 7 more variables: n_expected &lt;dbl&gt;, chi2_contrib &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   chi2_pearson &lt;dbl&gt;, r &lt;int&gt;, c &lt;int&gt;, df &lt;dbl&gt;, p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 4 x 18</span>
+<span class="co">#&gt;   row_var row_cat col_var col_cat     n n_row n_total percent_row lcl_row</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;int&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    male       0   binge       0     8    11      20       72.73   37.63</span>
+<span class="co">#&gt; 2    male       0   binge       1     3    11      20       27.27    7.82</span>
+<span class="co">#&gt; 3    male       1   binge       0     7     9      20       77.78   37.12</span>
+<span class="co">#&gt; 4    male       1   binge       1     2     9      20       22.22    4.60</span>
+<span class="co">#&gt; # ... with 9 more variables: ucl_row &lt;dbl&gt;, n_col &lt;int&gt;, n_expected &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chi2_contrib &lt;dbl&gt;, chi2_pearson &lt;dbl&gt;, r &lt;int&gt;, c &lt;int&gt;, df &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
 <p>There are a couple things worth mentioning here. First, 27% of the females in our sample engaged in binge drinking, compared to 22% of males – even though we know that the underlying probability in our superpopulation was 10% for females and 30% for males. This discrepancy highlights the potential for sampling variability, and small sample estimates, to be misleading.</p>
 <p>Additionally, because some expected cell counts were less than 5, we should estimate our p-value using Fisher’s exact method.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">students <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(male, binge) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_test</span>(<span class="dt">method =</span> <span class="st">&quot;fisher&quot;</span>)
-<span class="co">#&gt; # A tibble: 4 x 17</span>
-<span class="co">#&gt;    male binge     n n_row n_total percent_row lcl_row ucl_row n_col</span>
-<span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1     0     0     8    11      20       72.73   37.63   92.18    15</span>
-<span class="co">#&gt; 2     0     1     3    11      20       27.27    7.82   62.37     5</span>
-<span class="co">#&gt; 3     1     0     7     9      20       77.78   37.12   95.40    15</span>
-<span class="co">#&gt; 4     1     1     2     9      20       22.22    4.60   62.88     5</span>
-<span class="co">#&gt; # ... with 8 more variables: n_expected &lt;dbl&gt;, chi2_contrib &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   chi2_pearson &lt;dbl&gt;, r &lt;int&gt;, c &lt;int&gt;, df &lt;dbl&gt;, p_chi2_pearson &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   p_fisher &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 4 x 19</span>
+<span class="co">#&gt;   row_var row_cat col_var col_cat     n n_row n_total percent_row lcl_row</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;int&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1    male       0   binge       0     8    11      20       72.73   37.63</span>
+<span class="co">#&gt; 2    male       0   binge       1     3    11      20       27.27    7.82</span>
+<span class="co">#&gt; 3    male       1   binge       0     7     9      20       77.78   37.12</span>
+<span class="co">#&gt; 4    male       1   binge       1     2     9      20       22.22    4.60</span>
+<span class="co">#&gt; # ... with 10 more variables: ucl_row &lt;dbl&gt;, n_col &lt;int&gt;,</span>
+<span class="co">#&gt; #   n_expected &lt;dbl&gt;, chi2_contrib &lt;dbl&gt;, chi2_pearson &lt;dbl&gt;, r &lt;int&gt;,</span>
+<span class="co">#&gt; #   c &lt;int&gt;, df &lt;dbl&gt;, p_chi2_pearson &lt;dbl&gt;, p_fisher &lt;dbl&gt;</span></code></pre></div>
 <div id="interpretation-1" class="section level3">
 <h3>Interpretation</h3>
 <p>The large p-value (p = 1.0) calculated using Fisher’s exact method indicates that the data are highly consistent with the null hypothesis of statistical independence between gender and binge drinking at our hypothetical campus, assuming that the null hypothesis is true and the study is free of bias. However, wide range of the 95% confidence intervals makes the precision of the point estimates doubtful. Another study using larger sample size is needed to get a more precise estimate of the relationship between gender and binge drinking.</p>
@@ -365,12 +366,12 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">freq_test</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, p_chi2_pearson)
 <span class="co">#&gt; # A tibble: 4 x 9</span>
-<span class="co">#&gt;      am    vs     n n_row n_total percent_row lcl_row ucl_row</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     0     0    12    19      32       63.16   38.76   82.28</span>
-<span class="co">#&gt; 2     0     1     7    19      32       36.84   17.72   61.24</span>
-<span class="co">#&gt; 3     1     0     6    13      32       46.15   20.83   73.63</span>
-<span class="co">#&gt; 4     1     1     7    13      32       53.85   26.37   79.17</span>
+<span class="co">#&gt;   row_var row_cat col_var col_cat     n n_row n_total percent_row</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;</span>
+<span class="co">#&gt; 1      am       0      vs       0    12    19      32       63.16</span>
+<span class="co">#&gt; 2      am       0      vs       1     7    19      32       36.84</span>
+<span class="co">#&gt; 3      am       1      vs       0     6    13      32       46.15</span>
+<span class="co">#&gt; 4      am       1      vs       1     7    13      32       53.85</span>
 <span class="co">#&gt; # ... with 1 more variables: p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
 <p> </p>
 <div id="stata-1" class="section level4">
@@ -404,17 +405,18 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">freq_test</span>()
 <span class="co">#&gt; Warning in freq_test.freq_table_two_way(.): One or more expected cell</span>
 <span class="co">#&gt; counts are &lt;= 5. Pearson's Chi-square may not be a valid test.</span>
-<span class="co">#&gt; # A tibble: 6 x 16</span>
-<span class="co">#&gt;      am   cyl     n n_row n_total percent_row lcl_row ucl_row n_col</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1     0     4     3    19      32       15.79    4.78   41.20    11</span>
-<span class="co">#&gt; 2     0     6     4    19      32       21.05    7.58   46.44     7</span>
-<span class="co">#&gt; 3     0     8    12    19      32       63.16   38.76   82.28    14</span>
-<span class="co">#&gt; 4     1     4     8    13      32       61.54   32.30   84.29    11</span>
-<span class="co">#&gt; 5     1     6     3    13      32       23.08    6.91   54.82     7</span>
-<span class="co">#&gt; 6     1     8     2    13      32       15.38    3.43   48.18    14</span>
-<span class="co">#&gt; # ... with 7 more variables: n_expected &lt;dbl&gt;, chi2_contrib &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   chi2_pearson &lt;dbl&gt;, r &lt;int&gt;, c &lt;int&gt;, df &lt;dbl&gt;, p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 6 x 18</span>
+<span class="co">#&gt;   row_var row_cat col_var col_cat     n n_row n_total percent_row lcl_row</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1      am       0     cyl       4     3    19      32       15.79    4.78</span>
+<span class="co">#&gt; 2      am       0     cyl       6     4    19      32       21.05    7.58</span>
+<span class="co">#&gt; 3      am       0     cyl       8    12    19      32       63.16   38.76</span>
+<span class="co">#&gt; 4      am       1     cyl       4     8    13      32       61.54   32.30</span>
+<span class="co">#&gt; 5      am       1     cyl       6     3    13      32       23.08    6.91</span>
+<span class="co">#&gt; 6      am       1     cyl       8     2    13      32       15.38    3.43</span>
+<span class="co">#&gt; # ... with 9 more variables: ucl_row &lt;dbl&gt;, n_col &lt;int&gt;, n_expected &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   chi2_contrib &lt;dbl&gt;, chi2_pearson &lt;dbl&gt;, r &lt;int&gt;, c &lt;int&gt;, df &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   p_chi2_pearson &lt;dbl&gt;</span></code></pre></div>
 <p> </p>
 <blockquote>
 <p>There is one problem with the chi-square test, which is that the sampling distribution of the test statistic has an approximate chi-square distribution. The larger the sample is, the better this approximation becomes, and in large samples the approximation is good enough to not worry about the fact that it is an approximation. However, in small samples the approximation is not good enough, making significance tests of the chi-square distribution inaccurate.</p>
@@ -427,18 +429,18 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="co">#&gt; Warning in freq_test.freq_table_two_way(., method = &quot;fisher&quot;): One or more</span>
 <span class="co">#&gt; expected cell counts are &lt;= 5. Pearson's Chi-square may not be a valid</span>
 <span class="co">#&gt; test.</span>
-<span class="co">#&gt; # A tibble: 6 x 17</span>
-<span class="co">#&gt;      am   cyl     n n_row n_total percent_row lcl_row ucl_row n_col</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1     0     4     3    19      32       15.79    4.78   41.20    11</span>
-<span class="co">#&gt; 2     0     6     4    19      32       21.05    7.58   46.44     7</span>
-<span class="co">#&gt; 3     0     8    12    19      32       63.16   38.76   82.28    14</span>
-<span class="co">#&gt; 4     1     4     8    13      32       61.54   32.30   84.29    11</span>
-<span class="co">#&gt; 5     1     6     3    13      32       23.08    6.91   54.82     7</span>
-<span class="co">#&gt; 6     1     8     2    13      32       15.38    3.43   48.18    14</span>
-<span class="co">#&gt; # ... with 8 more variables: n_expected &lt;dbl&gt;, chi2_contrib &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   chi2_pearson &lt;dbl&gt;, r &lt;int&gt;, c &lt;int&gt;, df &lt;dbl&gt;, p_chi2_pearson &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   p_fisher &lt;dbl&gt;</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 6 x 19</span>
+<span class="co">#&gt;   row_var row_cat col_var col_cat     n n_row n_total percent_row lcl_row</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;       &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1      am       0     cyl       4     3    19      32       15.79    4.78</span>
+<span class="co">#&gt; 2      am       0     cyl       6     4    19      32       21.05    7.58</span>
+<span class="co">#&gt; 3      am       0     cyl       8    12    19      32       63.16   38.76</span>
+<span class="co">#&gt; 4      am       1     cyl       4     8    13      32       61.54   32.30</span>
+<span class="co">#&gt; 5      am       1     cyl       6     3    13      32       23.08    6.91</span>
+<span class="co">#&gt; 6      am       1     cyl       8     2    13      32       15.38    3.43</span>
+<span class="co">#&gt; # ... with 10 more variables: ucl_row &lt;dbl&gt;, n_col &lt;int&gt;,</span>
+<span class="co">#&gt; #   n_expected &lt;dbl&gt;, chi2_contrib &lt;dbl&gt;, chi2_pearson &lt;dbl&gt;, r &lt;int&gt;,</span>
+<span class="co">#&gt; #   c &lt;int&gt;, df &lt;dbl&gt;, p_chi2_pearson &lt;dbl&gt;, p_fisher &lt;dbl&gt;</span></code></pre></div>
 <blockquote>
 <p>Interpret</p>
 <p>Compare to Stata and SAS</p>
@@ -485,12 +487,12 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">freq_test</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, n_col, n_total, n_expected<span class="op">:</span>chi2_pearson)
 <span class="co">#&gt; # A tibble: 4 x 9</span>
-<span class="co">#&gt;      am    vs     n n_row n_col n_total n_expected chi2_contrib</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     0     0    12    19    18      32    10.6875    0.1611842</span>
-<span class="co">#&gt; 2     0     1     7    19    14      32     8.3125    0.2072368</span>
-<span class="co">#&gt; 3     1     0     6    13    18      32     7.3125    0.2355769</span>
-<span class="co">#&gt; 4     1     1     7    13    14      32     5.6875    0.3028846</span>
+<span class="co">#&gt;   row_var row_cat col_var col_cat n_col n_total n_expected chi2_contrib</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;   &lt;int&gt;      &lt;dbl&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1      am       0      vs       0    18      32    10.6875    0.1611842</span>
+<span class="co">#&gt; 2      am       0      vs       1    14      32     8.3125    0.2072368</span>
+<span class="co">#&gt; 3      am       1      vs       0    18      32     7.3125    0.2355769</span>
+<span class="co">#&gt; 4      am       1      vs       1    14      32     5.6875    0.3028846</span>
 <span class="co">#&gt; # ... with 1 more variables: chi2_pearson &lt;dbl&gt;</span></code></pre></div>
 <p>After obtaining the Pearson chi-squared value (0.9068826 above), we compare it to the critical value for the chi-square distribution with degrees of freedom = (rows - 1)(columns - 1) = 1. If the observed value is bigger than the critical value, we conclude that there is a statistically significant relationship.</p>
 <p>For example:</p>
@@ -500,12 +502,12 @@ students &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">freq_test</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, chi2_pearson<span class="op">:</span>p_chi2_pearson)
 <span class="co">#&gt; # A tibble: 4 x 8</span>
-<span class="co">#&gt;      am    vs     n chi2_pearson     r     c    df p_chi2_pearson</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;        &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;          &lt;dbl&gt;</span>
-<span class="co">#&gt; 1     0     0    12    0.9068826     2     2     1      0.3409429</span>
-<span class="co">#&gt; 2     0     1     7    0.9068826     2     2     1      0.3409429</span>
-<span class="co">#&gt; 3     1     0     6    0.9068826     2     2     1      0.3409429</span>
-<span class="co">#&gt; 4     1     1     7    0.9068826     2     2     1      0.3409429</span></code></pre></div>
+<span class="co">#&gt;   row_var row_cat col_var chi2_pearson     r     c    df p_chi2_pearson</span>
+<span class="co">#&gt;     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;          &lt;dbl&gt;</span>
+<span class="co">#&gt; 1      am       0      vs    0.9068826     2     2     1      0.3409429</span>
+<span class="co">#&gt; 2      am       0      vs    0.9068826     2     2     1      0.3409429</span>
+<span class="co">#&gt; 3      am       1      vs    0.9068826     2     2     1      0.3409429</span>
+<span class="co">#&gt; 4      am       1      vs    0.9068826     2     2     1      0.3409429</span></code></pre></div>
 <p>And this is the same result we get from R’s built-in chi-square test.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">chisq.test</span>(mtcars<span class="op">$</span>am, mtcars<span class="op">$</span>vs, <span class="dt">correct =</span> <span class="ot">FALSE</span>)
 <span class="co">#&gt; </span>

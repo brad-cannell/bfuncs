@@ -69,7 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Presenting and Disseminating Results</h1>
 <h4 class="author"><em>Brad Cannell</em></h4>
-<h4 class="date"><em>Created: 2017-11-28 <br> Updated: 2018-01-05</em></h4>
+<h4 class="date"><em>Created: 2017-11-28 <br> Updated: 2018-01-07</em></h4>
 
 
 
@@ -149,20 +149,21 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <h3>Calculating formatted descriptive statistics for continuous variables</h3>
 <p>The descriptive analysis vignette gives examples for calculating common descriptive statistics for continuous variables. For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg)</code></pre></div>
-<pre><code>## # A tibble: 2 x 8
-##      am   var     n  mean   lcl   ucl   min   max
-##   &lt;dbl&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0   mpg    19 17.15 15.30 19.00  10.4  24.4
-## 2     1   mpg    13 24.39 20.67 28.12  15.0  33.9</code></pre>
+<pre><code>## # A tibble: 2 x 10
+##   response_var group_var group_cat     n  mean       sem   lcl   ucl   min
+##          &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1          mpg        am         0    19 17.15 0.8795722 15.30 19.00  10.4
+## 2          mpg        am         1    13 24.39 1.7102804 20.67 28.12  15.0
+## # ... with 1 more variables: max &lt;dbl&gt;</code></pre>
 <p>Although the statistics we need are there, they aren’t in a form that can easily be put into a Word table. To help with that process, I’ve created the <code>format_table</code> function.</p>
 <p>The <code>format_table</code> function is an S3 generic. It currently has methods for formatting the output of the <code>freq_table</code> and <code>mean_table</code> functions. Examples of how to use of <code>format_table</code> will be give here and below.</p>
 <div id="example-mean-and-95-confidence-interval-the-default-overall" class="section level4">
 <h4>Example: mean and 95% confidence interval (the default) overall</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>()</code></pre></div>
 <pre><code>## # A tibble: 1 x 2
-##     var               mean_95
-##   &lt;chr&gt;                 &lt;chr&gt;
-## 1   mpg 20.09 (17.92 - 22.26)</code></pre>
+##   response_var               mean_95
+##          &lt;chr&gt;                 &lt;chr&gt;
+## 1          mpg 20.09 (17.92 - 22.26)</code></pre>
 <ul>
 <li>Note: Changing the digits argument to <code>format_table</code> will change the number of digits displayed, but does not change the underlying rounding of the value. That must be changed in the digits argument to <code>mean_table</code>.</li>
 </ul>
@@ -171,27 +172,27 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <h4>Example: n and mean overall</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>(<span class="dt">stats =</span> <span class="st">&quot;n and mean&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 1 x 2
-##     var     n_mean
-##   &lt;chr&gt;      &lt;chr&gt;
-## 1   mpg 32 (20.09)</code></pre>
+##   response_var     n_mean
+##          &lt;chr&gt;      &lt;chr&gt;
+## 1          mpg 32 (20.09)</code></pre>
 </div>
 <div id="example-mean-and-95-confidence-interval-the-default-by-subgroup" class="section level4">
 <h4>Example: mean and 95% confidence interval (the default) by subgroup</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>()</code></pre></div>
-<pre><code>## # A tibble: 2 x 3
-##      am   var               mean_95
-##   &lt;dbl&gt; &lt;chr&gt;                 &lt;chr&gt;
-## 1     0   mpg 17.15 (15.30 - 19.00)
-## 2     1   mpg 24.39 (20.67 - 28.12)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   response_var group_var group_cat               mean_95
+##          &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;                 &lt;chr&gt;
+## 1          mpg        am         0 17.15 (15.30 - 19.00)
+## 2          mpg        am         1 24.39 (20.67 - 28.12)</code></pre>
 </div>
 <div id="example-n-and-mean-by-subgroup" class="section level4">
 <h4>Example: n and mean by subgroup</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mean_table</span>(mpg) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>(<span class="dt">stats =</span> <span class="st">&quot;n and mean&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 2 x 3
-##      am   var     n_mean
-##   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;
-## 1     0   mpg 19 (17.15)
-## 2     1   mpg 13 (24.39)</code></pre>
+<pre><code>## # A tibble: 2 x 4
+##   response_var group_var group_cat     n_mean
+##          &lt;chr&gt;     &lt;chr&gt;     &lt;dbl&gt;      &lt;chr&gt;
+## 1          mpg        am         0 19 (17.15)
+## 2          mpg        am         1 13 (24.39)</code></pre>
 <p> </p>
 <hr />
 </div>
@@ -202,46 +203,46 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <div id="example-overall-percent-and-95-confidence-interval-the-default" class="section level4">
 <h4>Example: Overall percent and 95% confidence interval (the default)</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>()</code></pre></div>
-<pre><code>## # A tibble: 2 x 2
-##      am            percent_95
-##   &lt;dbl&gt;                 &lt;chr&gt;
-## 1     0 59.38 (40.94 - 75.50)
-## 2     1 40.62 (24.50 - 59.06)</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##     var   cat            percent_95
+##   &lt;chr&gt; &lt;dbl&gt;                 &lt;chr&gt;
+## 1    am     0 59.38 (40.94 - 75.50)
+## 2    am     1 40.62 (24.50 - 59.06)</code></pre>
 </div>
 <div id="example-overall-n-and-percent" class="section level4">
 <h4>Example: Overall n and percent</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>(<span class="dt">stats =</span> <span class="st">&quot;n and percent&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 2 x 2
-##      am  n_percent
-##   &lt;dbl&gt;      &lt;chr&gt;
-## 1     0 19 (59.38)
-## 2     1 13 (40.62)</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##     var   cat  n_percent
+##   &lt;chr&gt; &lt;dbl&gt;      &lt;chr&gt;
+## 1    am     0 19 (59.38)
+## 2    am     1 13 (40.62)</code></pre>
 </div>
 <div id="example-row-percent-and-95-confidence-interval-the-default" class="section level4">
 <h4>Example: Row percent and 95% confidence interval (the default)</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>()</code></pre></div>
-<pre><code>## # A tibble: 6 x 3
-##      am   cyl        percent_row_95
-##   &lt;dbl&gt; &lt;dbl&gt;                 &lt;chr&gt;
-## 1     0     4 15.79 ( 4.78 - 41.20)
-## 2     0     6 21.05 ( 7.58 - 46.44)
-## 3     0     8 63.16 (38.76 - 82.28)
-## 4     1     4 61.54 (32.30 - 84.29)
-## 5     1     6 23.08 ( 6.91 - 54.82)
-## 6     1     8 15.38 ( 3.43 - 48.18)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   row_var row_cat col_var col_cat        percent_row_95
+##     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;   &lt;dbl&gt;                 &lt;chr&gt;
+## 1      am       0     cyl       4  15.79 (4.78 - 41.20)
+## 2      am       0     cyl       6  21.05 (7.58 - 46.44)
+## 3      am       0     cyl       8 63.16 (38.76 - 82.28)
+## 4      am       1     cyl       4 61.54 (32.30 - 84.29)
+## 5      am       1     cyl       6  23.08 (6.91 - 54.82)
+## 6      am       1     cyl       8  15.38 (3.43 - 48.18)</code></pre>
 </div>
 <div id="example-n-and-row-percent" class="section level4">
 <h4>Example: N and row percent</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">freq_table</span>(<span class="dt">output =</span> <span class="st">&quot;all&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">format_table</span>(<span class="dt">stats =</span> <span class="st">&quot;n and percent&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 6 x 3
-##      am   cyl n_percent_total
-##   &lt;dbl&gt; &lt;dbl&gt;           &lt;chr&gt;
-## 1     0     4       3 ( 9.38)
-## 2     0     6       4 (12.50)
-## 3     0     8      12 (37.50)
-## 4     1     4       8 (25.00)
-## 5     1     6       3 ( 9.38)
-## 6     1     8       2 ( 6.25)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   row_var row_cat col_var col_cat n_percent_total
+##     &lt;chr&gt;   &lt;dbl&gt;   &lt;chr&gt;   &lt;dbl&gt;           &lt;chr&gt;
+## 1      am       0     cyl       4       3 ( 9.38)
+## 2      am       0     cyl       6       4 (12.50)
+## 3      am       0     cyl       8      12 (37.50)
+## 4      am       1     cyl       4       8 (25.00)
+## 5      am       1     cyl       6       3 ( 9.38)
+## 6      am       1     cyl       8       2 ( 6.25)</code></pre>
 <p><a href="#stat-tables">Creating tables of summary statistics</a></p>
 <p><a href="#top">top</a></p>
 <p> </p>
@@ -257,13 +258,13 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>)</code></pre></div>
-<pre><code>## # A tibble: 3 x 3
-##     cyl                   `0`                   `1`
-## * &lt;dbl&gt;                 &lt;chr&gt;                 &lt;chr&gt;
-## 1     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)
-## 2     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)
-## 3     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)</code></pre>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> row_cat, <span class="dt">value =</span> percent_row_<span class="dv">95</span>)</code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   row_var col_var col_cat                   `0`                   `1`
+## *   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;                 &lt;chr&gt;                 &lt;chr&gt;
+## 1      am     cyl       4  15.79 (4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 2      am     cyl       6  21.05 (7.58 - 46.44)  23.08 (6.91 - 54.82)
+## 3      am     cyl       8 63.16 (38.76 - 82.28)  15.38 (3.43 - 48.18)</code></pre>
 <p>Where:</p>
 <ul>
 <li><p>Key = the variable whose levels make up our comparison groups of interest</p></li>
@@ -274,15 +275,16 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span>cyl, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> row_cat, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>row_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co"># Rename to row bind with table shell</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">variable =</span> col_var, <span class="dt">class =</span> col_cat, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) </code></pre></div>
 <pre><code>## # A tibble: 3 x 4
-##   class                  am_0                  am_1 variable
-##   &lt;dbl&gt;                 &lt;chr&gt;                 &lt;chr&gt;    &lt;chr&gt;
-## 1     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)      cyl
-## 2     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)      cyl
-## 3     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)      cyl</code></pre>
+##   variable class                  am_0                  am_1
+## *    &lt;chr&gt; &lt;dbl&gt;                 &lt;chr&gt;                 &lt;chr&gt;
+## 1      cyl     4  15.79 (4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 2      cyl     6  21.05 (7.58 - 46.44)  23.08 (6.91 - 54.82)
+## 3      cyl     8 63.16 (38.76 - 82.28)  15.38 (3.43 - 48.18)</code></pre>
 <p>There may be better ways to do this, but this is the best I’ve found so far.</p>
 <p><a href="#stat-tables">Creating tables of summary statistics</a></p>
 <p><a href="#top">top</a></p>
@@ -297,9 +299,9 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 <span class="st">  </span><span class="kw">group_by</span>(am, cyl) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span>cyl, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> row_cat, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>row_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">variable =</span> col_var, <span class="dt">class =</span> col_cat, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class)) <span class="co"># Need for bind_rows below</span>
 
 <span class="kw">bind_rows</span>(table, row)</code></pre></div>
@@ -307,9 +309,9 @@ table &lt;-<span class="st"> </span><span class="kw">tibble</span>(
 ##   variable class                  am_0                  am_1
 ##      &lt;chr&gt; &lt;chr&gt;                 &lt;chr&gt;                 &lt;chr&gt;
 ## 1                               N = 19                N = 13
-## 2      cyl     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)
-## 3      cyl     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)
-## 4      cyl     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)</code></pre>
+## 2      cyl     4  15.79 (4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 3      cyl     6  21.05 (7.58 - 46.44)  23.08 (6.91 - 54.82)
+## 4      cyl     8 63.16 (38.76 - 82.28)  15.38 (3.43 - 48.18)</code></pre>
 <p>Then, it’s trivial to extend this method to multiple variables using a for loop.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Select variables </span>
 cat_vars &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
@@ -322,10 +324,10 @@ cat_vars &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <span class="st">    </span><span class="kw">group_by</span>(am, <span class="op">!!</span>cat_vars[[i]]) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span><span class="op">!!</span>cat_vars[[i]], <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class)) <span class="co"># Need for bind_rows below</span>
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> row_cat, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>row_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="dt">variable =</span> col_var, <span class="dt">class =</span> col_cat, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class))
 
   <span class="co"># Append to bottom of table</span>
   table &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(table, row)
@@ -336,9 +338,9 @@ cat_vars &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 ##   variable class                  am_0                  am_1
 ##      &lt;chr&gt; &lt;chr&gt;                 &lt;chr&gt;                 &lt;chr&gt;
 ## 1                               N = 19                N = 13
-## 2      cyl     4 15.79 ( 4.78 - 41.20) 61.54 (32.30 - 84.29)
-## 3      cyl     6 21.05 ( 7.58 - 46.44) 23.08 ( 6.91 - 54.82)
-## 4      cyl     8 63.16 (38.76 - 82.28) 15.38 ( 3.43 - 48.18)
+## 2      cyl     4  15.79 (4.78 - 41.20) 61.54 (32.30 - 84.29)
+## 3      cyl     6  21.05 (7.58 - 46.44)  23.08 (6.91 - 54.82)
+## 4      cyl     8 63.16 (38.76 - 82.28)  15.38 (3.43 - 48.18)
 ## 5       vs     0 63.16 (38.76 - 82.28) 46.15 (20.83 - 73.63)
 ## 6       vs     1 36.84 (17.72 - 61.24) 53.85 (26.37 - 79.17)</code></pre>
 <ul>
@@ -372,8 +374,9 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <span class="st">    </span><span class="kw">group_by</span>(am) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span>bfuncs<span class="op">::</span><span class="kw">mean_table</span>(<span class="op">!!</span>cont_vars[[i]]) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span>bfuncs<span class="op">::</span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> mean_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;variable&quot;</span> =<span class="st"> </span>var, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> group_cat, <span class="dt">value =</span> mean_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;variable&quot;</span> =<span class="st"> </span>response_var, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>)
 
   <span class="co"># Append to bottom of table</span>
   table &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(table, row)
@@ -389,10 +392,10 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <span class="st">    </span><span class="kw">group_by</span>(am, <span class="op">!!</span>cat_vars[[i]]) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">freq_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">    </span><span class="kw">format_table</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> am, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">variable =</span> <span class="kw">colnames</span>(.)[<span class="dv">1</span>]) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">rename</span>(<span class="st">&quot;class&quot;</span> =<span class="st"> </span><span class="op">!!</span>cat_vars[[i]], <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class)) <span class="co"># Need for bind_rows below</span>
+<span class="st">    </span><span class="kw">spread</span>(<span class="dt">key =</span> row_cat, <span class="dt">value =</span> percent_row_<span class="dv">95</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>row_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">rename</span>(<span class="dt">variable =</span> col_var, <span class="dt">class =</span> col_cat, <span class="st">&quot;am_0&quot;</span> =<span class="st"> `</span><span class="dt">0</span><span class="st">`</span>, <span class="st">&quot;am_1&quot;</span> =<span class="st"> `</span><span class="dt">1</span><span class="st">`</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">class =</span> <span class="kw">as.character</span>(class))
 
   <span class="co"># Append to bottom of table</span>
   table &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(table, row)
@@ -400,16 +403,16 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 
 <span class="kw">print</span>(table)</code></pre></div>
 <pre><code>## # A tibble: 8 x 4
-##   variable class                     am_0                     am_1
-##      &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;                    &lt;chr&gt;
-## 1                                  N = 19                   N = 13
-## 2      mpg  &lt;NA&gt;    17.15 (15.30 - 19.00)    24.39 (20.67 - 28.12)
-## 3     disp  &lt;NA&gt; 290.38 (237.28 - 343.48) 143.53 ( 90.83 - 196.23)
-## 4      cyl     4    15.79 ( 4.78 - 41.20)    61.54 (32.30 - 84.29)
-## 5      cyl     6    21.05 ( 7.58 - 46.44)    23.08 ( 6.91 - 54.82)
-## 6      cyl     8    63.16 (38.76 - 82.28)    15.38 ( 3.43 - 48.18)
-## 7       vs     0    63.16 (38.76 - 82.28)    46.15 (20.83 - 73.63)
-## 8       vs     1    36.84 (17.72 - 61.24)    53.85 (26.37 - 79.17)</code></pre>
+##   variable class                     am_0                    am_1
+##      &lt;chr&gt; &lt;chr&gt;                    &lt;chr&gt;                   &lt;chr&gt;
+## 1                                  N = 19                  N = 13
+## 2      mpg  &lt;NA&gt;    17.15 (15.30 - 19.00)   24.39 (20.67 - 28.12)
+## 3     disp  &lt;NA&gt; 290.38 (237.28 - 343.48) 143.53 (90.83 - 196.23)
+## 4      cyl     4     15.79 (4.78 - 41.20)   61.54 (32.30 - 84.29)
+## 5      cyl     6     21.05 (7.58 - 46.44)    23.08 (6.91 - 54.82)
+## 6      cyl     8    63.16 (38.76 - 82.28)    15.38 (3.43 - 48.18)
+## 7       vs     0    63.16 (38.76 - 82.28)   46.15 (20.83 - 73.63)
+## 8       vs     1    36.84 (17.72 - 61.24)   53.85 (26.37 - 79.17)</code></pre>
 <ul>
 <li>Again, this still feels clunky.</li>
 </ul>
@@ -443,8 +446,8 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 ## 1                                                               N = 19
 ## 2       Miles per gallon, mean (95% CI)  &lt;NA&gt;    17.15 (15.30 - 19.00)
 ## 3           Displacement, mean (95% CI)  &lt;NA&gt; 290.38 (237.28 - 343.48)
-## 4 Number of cylinders, percent (95% CI)     4    15.79 ( 4.78 - 41.20)
-## 5 Number of cylinders, percent (95% CI)     6    21.05 ( 7.58 - 46.44)
+## 4 Number of cylinders, percent (95% CI)     4     15.79 (4.78 - 41.20)
+## 5 Number of cylinders, percent (95% CI)     6     21.05 (7.58 - 46.44)
 ## 6 Number of cylinders, percent (95% CI)     8    63.16 (38.76 - 82.28)
 ## 7                 V/S, percent (95% CI)     0    63.16 (38.76 - 82.28)
 ## 8                 V/S, percent (95% CI)     1    36.84 (17.72 - 61.24)
@@ -471,8 +474,8 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 ## 1                                                               N = 19
 ## 2       Miles per gallon, mean (95% CI)  &lt;NA&gt;    17.15 (15.30 - 19.00)
 ## 3           Displacement, mean (95% CI)  &lt;NA&gt; 290.38 (237.28 - 343.48)
-## 4 Number of cylinders, percent (95% CI)     4    15.79 ( 4.78 - 41.20)
-## 5                                           6    21.05 ( 7.58 - 46.44)
+## 4 Number of cylinders, percent (95% CI)     4     15.79 (4.78 - 41.20)
+## 5                                           6     21.05 (7.58 - 46.44)
 ## 6                                           8    63.16 (38.76 - 82.28)
 ## 7                 V/S, percent (95% CI)     0    63.16 (38.76 - 82.28)
 ## 8                                           1    36.84 (17.72 - 61.24)
@@ -488,7 +491,7 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <li><p>For some reason, R automatically strips the leading white space.</p></li>
 <li><p>The best work around I can come up with is to add dashes, then find and replaces dashes with white space in Word.</p></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># table %&gt;% </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># table %&gt;%</span>
 <span class="co">#   mutate(</span>
 <span class="co">#     class = stringr::str_replace(class, &quot;^&quot;, &quot;---&quot;),</span>
 <span class="co">#     variable = if_else(variable == &quot;&quot;, class, variable),</span>
@@ -515,15 +518,15 @@ cat_vars  &lt;-<span class="st"> </span><span class="kw">quos</span>(cyl, vs)
 <span class="kw">print</span>(table_kable)</code></pre></div>
 <pre><code>## 
 ## 
-## Characteristic                          Class   Automatic Transmission     manual Transmission      
-## --------------------------------------  ------  -------------------------  -------------------------
-##                                                 N = 19                     N = 13                   
-## Miles per gallon, mean (95% CI)         NA      17.15 (15.30 - 19.00)      24.39 (20.67 - 28.12)    
-## Displacement, mean (95% CI)             NA      290.38 (237.28 - 343.48)   143.53 ( 90.83 - 196.23) 
-## Number of cylinders, percent (95% CI)   4       15.79 ( 4.78 - 41.20)      61.54 (32.30 - 84.29)    
-##                                         6       21.05 ( 7.58 - 46.44)      23.08 ( 6.91 - 54.82)    
-##                                         8       63.16 (38.76 - 82.28)      15.38 ( 3.43 - 48.18)    
-## V/S, percent (95% CI)                   0       63.16 (38.76 - 82.28)      46.15 (20.83 - 73.63)    
+## Characteristic                          Class   Automatic Transmission     manual Transmission     
+## --------------------------------------  ------  -------------------------  ------------------------
+##                                                 N = 19                     N = 13                  
+## Miles per gallon, mean (95% CI)         NA      17.15 (15.30 - 19.00)      24.39 (20.67 - 28.12)   
+## Displacement, mean (95% CI)             NA      290.38 (237.28 - 343.48)   143.53 (90.83 - 196.23) 
+## Number of cylinders, percent (95% CI)   4       15.79 (4.78 - 41.20)       61.54 (32.30 - 84.29)   
+##                                         6       21.05 (7.58 - 46.44)       23.08 (6.91 - 54.82)    
+##                                         8       63.16 (38.76 - 82.28)      15.38 (3.43 - 48.18)    
+## V/S, percent (95% CI)                   0       63.16 (38.76 - 82.28)      46.15 (20.83 - 73.63)   
 ##                                         1       36.84 (17.72 - 61.24)      53.85 (26.37 - 79.17)</code></pre>
 <ul>
 <li>Get rid of class NA.</li>

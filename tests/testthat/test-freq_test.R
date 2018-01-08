@@ -17,29 +17,34 @@ test_that("Dimensions of the object returned by freq_test are as expected", {
   columns <- ncol(df)
 
   expect_equal(rows, 2L)
-  expect_equal(columns, 11L)
+  expect_equal(columns, 12L)
 })
 
 test_that("Class of freq_table_one_way is freq_table_one_way", {
   expect_is(df, "freq_table_one_way")
 })
 
-test_that("The correct var name is returned by freq_test", {
+test_that("The correct var name is returned by freq_table", {
   name <- names(df)[1]
-  expect_match(name, "am")
+  expect_match(name, "var")
+})
+
+test_that("The correct cat var name is returned by freq_table", {
+  name <- names(df)[2]
+  expect_match(name, "cat")
 })
 
 test_that("The correct variables levels are returned by freq_test", {
-  levels <- df[, 1] %>% unlist() %>% unname()
+  levels <- pull(df, cat)
   expect_equal(levels, c(0, 1))
 })
 
 test_that("The correct default statistics are returned by freq_test", {
-  n_expected     <- df[, 7] %>% unlist() %>% unname()
-  chi2_contrib   <- df[, 8] %>% unlist() %>% unname()
-  chi2_pearson   <- df[, 9] %>% unlist() %>% unname()
-  deg_freedom    <- df[, 10] %>% unlist() %>% unname()
-  p_chi2_pearson <- df[, 11] %>% unlist() %>% unname() %>% round(7)
+  n_expected     <- pull(df, n_expected)
+  chi2_contrib   <- pull(df, chi2_contrib)
+  chi2_pearson   <- pull(df, chi2_pearson)
+  deg_freedom    <- pull(df, df)
+  p_chi2_pearson <- pull(df, p_chi2_pearson) %>% round(7)
 
   expect_equal(n_expected,     rep(16, 2))
   expect_equal(chi2_contrib,   rep(0.5625, 2))
@@ -64,7 +69,7 @@ test_that("Dimensions of the object returned by freq_table are as expected", {
   columns <- ncol(df)
 
   expect_equal(rows, 6L)
-  expect_equal(columns, 16L)
+  expect_equal(columns, 18L)
 })
 
 test_that("Class of freq_table_two_way is freq_table_two_way", {
@@ -72,30 +77,30 @@ test_that("Class of freq_table_two_way is freq_table_two_way", {
 })
 
 test_that("The correct var names are returned by freq_table", {
-  group_1 <- names(df)[1]
-  group_2 <- names(df)[2]
+  row_var <- pull(df, row_var)
+  col_var <- pull(df, col_var)
 
-  expect_match(group_1, "am")
-  expect_match(group_2, "cyl")
+  expect_match(row_var, "am")
+  expect_match(col_var, "cyl")
 })
 
 test_that("The correct variables levels are returned by freq_table", {
-  level_1 <- df[, 1] %>% unlist() %>% unname()
-  level_2 <- df[, 2] %>% unlist() %>% unname()
+  row_cat <- pull(df, row_cat)
+  col_cat <- pull(df, col_cat)
 
-  expect_equal(level_1, c(0, 0, 0, 1, 1, 1))
-  expect_equal(level_2, c(4, 6, 8, 4, 6, 8))
+  expect_equal(row_cat, c(0, 0, 0, 1, 1, 1))
+  expect_equal(col_cat, c(4, 6, 8, 4, 6, 8))
 })
 
 test_that("The correct default statistics are returned by freq_table", {
-  n_col          <- df[, 9] %>% unlist() %>% unname()
-  n_expected     <- df[, 10] %>% unlist() %>% unname()
-  chi2_contrib   <- df[, 11] %>% unlist() %>% unname()
-  chi2_pearson   <- df[, 12] %>% unlist() %>% unname()
-  r_column       <- df[, 13] %>% unlist() %>% unname()
-  c_column       <- df[, 14] %>% unlist() %>% unname()
-  deg_freedom    <- df[, 15] %>% unlist() %>% unname()
-  p_chi2_pearson <- df[, 16] %>% unlist() %>% unname() %>% round(7)
+  n_col          <- pull(df, n_col)
+  n_expected     <- pull(df, n_expected)
+  chi2_contrib   <- pull(df, chi2_contrib)
+  chi2_pearson   <- pull(df, chi2_pearson)
+  r_column       <- pull(df, r)
+  c_column       <- pull(df, c)
+  deg_freedom    <- pull(df, df)
+  p_chi2_pearson <- pull(df, p_chi2_pearson) %>% round(7)
 
   expect_equal(n_col,          c(11, 7, 14, 11, 7, 14))
   expect_equal(n_expected,     c(6.53125, 4.15625, 8.31250, 4.46875, 2.84375, 5.68750))
@@ -116,7 +121,7 @@ df <- mtcars %>%
   freq_test(method = "fisher")
 
 test_that("The expected p-value is returned from the fisher method", {
-  fisher_p_value <- df[, 17] %>% unlist() %>% unname()
+  fisher_p_value <- pull(df, p_fisher)
   expect_equal(fisher_p_value, rep(0.009104702, 6))
 })
 

@@ -33,13 +33,13 @@
 #'   group_by(am) %>%
 #'   freq_table() %>%
 #'   freq_test() %>%
-#'   select(1:6, p_chi2_pearson)
+#'   select(var:percent, p_chi2_pearson)
 #'
-#' #>  # A tibble: 2 x 7
-#' #>     am     n n_total percent   lcl   ucl p_chi2_pearson
-#' #>  <dbl> <int>   <int>   <dbl> <dbl> <dbl>          <dbl>
-#' #>  1   0    19      32   59.38 40.94 75.50      0.2888444
-#' #>  2   1    13      32   40.62 24.50 59.06      0.2888444
+#' #>  # A tibble: 2 x 6
+#' #>      var   cat     n n_total percent p_chi2_pearson
+#' #>    <chr> <dbl> <int>   <int>   <dbl>          <dbl>
+#' #>  1    am     0    19      32   59.38      0.2888444
+#' #>  2    am     1    13      32   40.62      0.2888444
 #'
 #' # Chi-square test of independence
 #'
@@ -47,15 +47,15 @@
 #'   group_by(am, vs) %>%
 #'   freq_table() %>%
 #'   freq_test() %>%
-#'   select(1:8, p_chi2_pearson)
+#'   select(row_var:n, percent_row, p_chi2_pearson)
 #'
-#' #> # A tibble: 4 x 9
-#' #>      am    vs     n n_row n_total percent_row lcl_row ucl_row p_chi2_pearson
-#' #>   <dbl> <dbl> <int> <int>   <int>       <dbl>   <dbl>   <dbl>          <dbl>
-#' #> 1     0     0    12    19      32       63.16   38.76   82.28      0.3409429
-#' #> 2     0     1     7    19      32       36.84   17.72   61.24      0.3409429
-#' #> 3     1     0     6    13      32       46.15   20.83   73.63      0.3409429
-#' #> 4     1     1     7    13      32       53.85   26.37   79.17      0.3409429
+#' #> # A tibble: 4 x 7
+#' #>   row_var row_cat col_var col_cat     n percent_row p_chi2_pearson
+#' #>     <chr>   <dbl>   <chr>   <dbl> <int>       <dbl>          <dbl>
+#' #> 1      am       0      vs       0    12       63.16      0.3409429
+#' #> 2      am       0      vs       1     7       36.84      0.3409429
+#' #> 3      am       1      vs       0     6       46.15      0.3409429
+#' #> 4      am       1      vs       1     7       53.85      0.3409429
 
 # =============================================================================
 # S3 Generic function
@@ -126,7 +126,7 @@ freq_test.freq_table_two_way <- function(x, method = "pearson", ...) {
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
   # ------------------------------------------------------------------
   n_row = n_col = n_total = n_expected = chi2_contrib = r = pchisq = NULL
-  chi2_pearson = df = NULL
+  chi2_pearson = df = col_cat = n = row_cat = NULL
 
   # Check to make sure x is a freq_table_two_way
   # --------------------------------------------
@@ -134,25 +134,19 @@ freq_test.freq_table_two_way <- function(x, method = "pearson", ...) {
     stop("x must be of class freq_table_two_way. It is currently: ", class(x))
   }
 
-  # Grab name of row variable (first column from freq_table)
-  # Grab name of column variable (second column from freq_table)
-  # ------------------------------------------------------------
-  row_var <- x %>% dplyr::select(1) %>% names() %>% rlang::sym()
-  col_var <- x %>% dplyr::select(2) %>% names() %>% rlang::sym()
-
   # Calculate Pearson's Chi-square test
   # Test whether population is equally distributed across categories of x
   # ---------------------------------------------------------------------
   out <- x %>%
-    dplyr::group_by(!! col_var) %>%
+    dplyr::group_by(col_cat) %>%
     dplyr::mutate(n_col = sum(n)) %>%  # Find marginal totals for "columns"
     dplyr::ungroup() %>%
     dplyr::mutate(
       n_expected     = (n_row * n_col) / n_total,
       chi2_contrib   = (n - n_expected)**2 / n_expected,
       chi2_pearson   = sum(chi2_contrib),
-      r              = unique(!! row_var) %>% length(),
-      c              = unique(!! col_var) %>% length(),
+      r              = unique(row_cat) %>% length(),
+      c              = unique(col_cat) %>% length(),
       df             = (r -1) * (c - 1),
       p_chi2_pearson = pchisq(chi2_pearson, df, lower.tail = FALSE)
     )
@@ -168,8 +162,8 @@ freq_test.freq_table_two_way <- function(x, method = "pearson", ...) {
     if ("fisher" %in% method) {
 
       # Convert x to a matrix
-      n  <- x[, 3] %>% unlist()
-      mx <- matrix(n, nrow = 2, byrow = TRUE)
+      n_s  <- dplyr::pull(x, n)
+      mx   <- matrix(n_s, nrow = 2, byrow = TRUE)
 
       # Use R's built-in fisher.test
       fisher <- stats::fisher.test(mx)

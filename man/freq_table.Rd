@@ -73,6 +73,7 @@ The freq_table function produces one-way and two-way frequency
 }
 \examples{
 library(tidyverse)
+library(bfuncs)
 
 data(mtcars)
 
@@ -82,11 +83,11 @@ mtcars \%>\%
   group_by(am) \%>\%
   freq_table()
 
-#> # A tibble: 2 x 6
-#>      am     n n_total percent lcl_log ucl_log
-#>     <dbl> <int>   <int>   <dbl>   <dbl>   <dbl>
-#> 1     0    19      32   59.38   40.94   75.50
-#> 2     1    13      32   40.62   24.50   59.06
+#> # A tibble: 2 x 7
+#>     var   cat     n n_total percent   lcl   ucl
+#>   <chr> <dbl> <int>   <int>   <dbl> <dbl> <dbl>
+#> 1    am     0    19      32   59.38 40.94 75.50
+#> 2    am     1    13      32   40.62 24.50 59.06
 
 # Two-way frequency table with defaults
 
@@ -94,15 +95,15 @@ mtcars \%>\%
   group_by(am, cyl) \%>\%
   freq_table()
 
-#> # A tibble: 6 x 8
-#>      am   cyl     n n_row n_total percent_row lcl_row_log ucl_row_log
-#>     <dbl> <dbl> <int>   <int>   <int>       <dbl>       <dbl>       <dbl>
-#> 1     0     4     3      19      32       15.79        4.78       41.20
-#> 2     0     6     4      19      32       21.05        7.58       46.44
-#> 3     0     8    12      19      32       63.16       38.76       82.28
-#> 4     1     4     8      13      32       61.54       32.30       84.29
-#> 5     1     6     3      13      32       23.08        6.91       54.82
-#> 6     1     8     2      13      32       15.38        3.43       48.18
+#> # A tibble: 6 x 10
+#>   row_var row_cat col_var col_cat     n n_row n_total percent_row lcl_row ucl_row
+#>     <chr>   <dbl>   <chr>   <dbl> <int> <int>   <int>       <dbl>   <dbl>   <dbl>
+#> 1      am       0     cyl       4     3    19      32       15.79    4.78   41.20
+#> 2      am       0     cyl       6     4    19      32       21.05    7.58   46.44
+#> 3      am       0     cyl       8    12    19      32       63.16   38.76   82.28
+#> 4      am       1     cyl       4     8    13      32       61.54   32.30   84.29
+#> 5      am       1     cyl       6     3    13      32       23.08    6.91   54.82
+#> 6      am       1     cyl       8     2    13      32       15.38    3.43   48.18
 }
 \references{
 Agresti, A. (2012). Categorical Data Analysis (3rd ed.). Hoboken, NJ: Wiley.

@@ -27,7 +27,7 @@ format_table(.data, ...)
 
 \item{...}{Other parameters to be passed on.}
 
-\item{digits}{Determines the number of decimal place to display. Passed to
+\item{digits}{Determines the number of decimal places to display. Passed to
   the "nsmall =" parameter of the format function.
 
   Note: Changing the digits argument to format_table will change the number
@@ -62,28 +62,74 @@ library(bfuncs)
 
 data(mtcars)
 
-# Overall mean table
+# Overall mean table with defaults
 
 mtcars \%>\%
   mean_table(mpg) \%>\%
   format_table()
 
 #> # A tibble: 1 x 2
-#>     var               mean_95
-#>   <chr>                 <chr>
-#> 1   mpg 20.09 (17.92 - 22.26)
+#>   response_var               mean_95
+#>          <chr>                 <chr>
+#> 1          mpg 20.09 (17.92 - 22.26)
 
-# Grouped means table
+# Grouped means table with defaults
 
 mtcars \%>\%
   group_by(cyl) \%>\%
   mean_table(mpg) \%>\%
   format_table()
 
-#> # A tibble: 3 x 3
-#>     cyl   var               mean_95
-#>   <dbl> <chr>                 <chr>
-#> 1     4   mpg 26.66 (23.63 - 29.69)
-#> 2     6   mpg 19.74 (18.40 - 21.09)
-#> 3     8   mpg 15.10 (13.62 - 16.58)
+#> # A tibble: 3 x 4
+#>   response_var group_var group_cat               mean_95
+#>          <chr>     <chr>     <dbl>                 <chr>
+#> 1          mpg       cyl         4 26.66 (23.63 - 29.69)
+#> 2          mpg       cyl         6 19.74 (18.40 - 21.09)
+#> 3          mpg       cyl         8 15.10 (13.62 - 16.58)
+
+# One-way frequency tables with defaults
+
+mtcars \%>\%
+group_by(cyl) \%>\%
+  mean_table(mpg) \%>\%
+  format_table()
+#> # A tibble: 2 x 3
+#>     var   cat            percent_95
+#>   <chr> <dbl>                 <chr>
+#> 1    am     0 59.38 (40.94 - 75.50)
+#> 2    am     1 40.62 (24.50 - 59.06)
+
+# Two-way frequency tables with defaults
+
+mtcars \%>\%
+  group_by(am, cyl) \%>\%
+  freq_table() \%>\%
+  format_table()
+
+#> # A tibble: 6 x 5
+#>   row_var row_cat col_var col_cat        percent_row_95
+#>     <chr>   <dbl>   <chr>   <dbl>                 <chr>
+#> 1      am       0     cyl       4  15.79 (4.78 - 41.20)
+#> 2      am       0     cyl       6  21.05 (7.58 - 46.44)
+#> 3      am       0     cyl       8 63.16 (38.76 - 82.28)
+#> 4      am       1     cyl       4 61.54 (32.30 - 84.29)
+#> 5      am       1     cyl       6  23.08 (6.91 - 54.82)
+#> 6      am       1     cyl       8  15.38 (3.43 - 48.18)
+
+#' # Two-way frequency tables with with stats = "n and row percent"
+
+mtcars \%>\%
+  group_by(am, cyl) \%>\%
+  freq_table(output = all) \%>\% # Don't forget output = all
+  format_table(stats = "n and row percent")
+
+#> # A tibble: 6 x 5
+#>   row_var row_cat col_var col_cat n_percent_row
+#>     <chr>   <dbl>   <chr>   <dbl>         <chr>
+#> 1      am       0     cyl       4     3 (15.79)
+#> 2      am       0     cyl       6     4 (21.05)
+#> 3      am       0     cyl       8    12 (63.16)
+#> 4      am       1     cyl       4     8 (61.54)
+#> 5      am       1     cyl       6     3 (23.08)
+#> 6      am       1     cyl       8     2 (15.38)
 }

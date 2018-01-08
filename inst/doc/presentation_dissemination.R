@@ -64,25 +64,26 @@ mtcars %>%
   group_by(am, cyl) %>% 
   freq_table() %>% 
   format_table() %>% 
-  spread(key = am, value = percent_row_95)
+  spread(key = row_cat, value = percent_row_95)
 
 ## ------------------------------------------------------------------------
 mtcars %>% 
   group_by(am, cyl) %>% 
   freq_table() %>% 
   format_table() %>% 
-  spread(key = am, value = percent_row_95) %>% 
-  mutate(variable = colnames(.)[1]) %>% 
-  rename("class" = cyl, "am_0" = `0`, "am_1" = `1`)
+  spread(key = row_cat, value = percent_row_95) %>% 
+  select(-row_var) %>% 
+  # Rename to row bind with table shell
+  rename(variable = col_var, class = col_cat, "am_0" = `0`, "am_1" = `1`) 
 
 ## ------------------------------------------------------------------------
 row <- mtcars %>% 
   group_by(am, cyl) %>% 
   freq_table() %>% 
   format_table() %>% 
-  spread(key = am, value = percent_row_95) %>% 
-  mutate(variable = colnames(.)[1]) %>% 
-  rename("class" = cyl, "am_0" = `0`, "am_1" = `1`) %>% 
+  spread(key = row_cat, value = percent_row_95) %>% 
+  select(-row_var) %>% 
+  rename(variable = col_var, class = col_cat, "am_0" = `0`, "am_1" = `1`) %>% 
   mutate(class = as.character(class)) # Need for bind_rows below
 
 bind_rows(table, row)
@@ -99,10 +100,10 @@ for (i in seq_along(cat_vars)) {
     group_by(am, !!cat_vars[[i]]) %>% 
     freq_table() %>% 
     format_table() %>% 
-    spread(key = am, value = percent_row_95) %>% 
-    mutate(variable = colnames(.)[1]) %>% 
-    rename("class" = !!cat_vars[[i]], "am_0" = `0`, "am_1" = `1`) %>% 
-    mutate(class = as.character(class)) # Need for bind_rows below
+    spread(key = row_cat, value = percent_row_95) %>% 
+    select(-row_var) %>% 
+    rename(variable = col_var, class = col_cat, "am_0" = `0`, "am_1" = `1`) %>% 
+    mutate(class = as.character(class))
 
   # Append to bottom of table
   table <- bind_rows(table, row)
@@ -136,8 +137,9 @@ for (i in seq_along(cont_vars)) {
     group_by(am) %>% 
     bfuncs::mean_table(!!cont_vars[[i]]) %>% 
     bfuncs::format_table() %>% 
-    spread(key = am, value = mean_95) %>% 
-    rename("variable" = var, "am_0" = `0`, "am_1" = `1`)
+    spread(key = group_cat, value = mean_95) %>% 
+    select(-group_var) %>% 
+    rename("variable" = response_var, "am_0" = `0`, "am_1" = `1`)
 
   # Append to bottom of table
   table <- bind_rows(table, row)
@@ -153,10 +155,10 @@ for (i in seq_along(cat_vars)) {
     group_by(am, !!cat_vars[[i]]) %>% 
     freq_table() %>% 
     format_table() %>% 
-    spread(key = am, value = percent_row_95) %>% 
-    mutate(variable = colnames(.)[1]) %>% 
-    rename("class" = !!cat_vars[[i]], "am_0" = `0`, "am_1" = `1`) %>% 
-    mutate(class = as.character(class)) # Need for bind_rows below
+    spread(key = row_cat, value = percent_row_95) %>% 
+    select(-row_var) %>% 
+    rename(variable = col_var, class = col_cat, "am_0" = `0`, "am_1" = `1`) %>% 
+    mutate(class = as.character(class))
 
   # Append to bottom of table
   table <- bind_rows(table, row)
@@ -190,7 +192,7 @@ table <- table %>%
   print
 
 ## ------------------------------------------------------------------------
-# table %>% 
+# table %>%
 #   mutate(
 #     class = stringr::str_replace(class, "^", "---"),
 #     variable = if_else(variable == "", class, variable),

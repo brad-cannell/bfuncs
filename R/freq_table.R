@@ -71,6 +71,7 @@
 #'
 #' @examples
 #' library(tidyverse)
+#' library(bfuncs)
 #'
 #' data(mtcars)
 #'
@@ -80,11 +81,11 @@
 #'   group_by(am) %>%
 #'   freq_table()
 #'
-#' #> # A tibble: 2 x 6
-#' #>      am     n n_total percent lcl_log ucl_log
-#' #>     <dbl> <int>   <int>   <dbl>   <dbl>   <dbl>
-#' #> 1     0    19      32   59.38   40.94   75.50
-#' #> 2     1    13      32   40.62   24.50   59.06
+#' #> # A tibble: 2 x 7
+#' #>     var   cat     n n_total percent   lcl   ucl
+#' #>   <chr> <dbl> <int>   <int>   <dbl> <dbl> <dbl>
+#' #> 1    am     0    19      32   59.38 40.94 75.50
+#' #> 2    am     1    13      32   40.62 24.50 59.06
 #'
 #' # Two-way frequency table with defaults
 #'
@@ -92,15 +93,15 @@
 #'   group_by(am, cyl) %>%
 #'   freq_table()
 #'
-#' #> # A tibble: 6 x 8
-#' #>      am   cyl     n n_row n_total percent_row lcl_row_log ucl_row_log
-#' #>     <dbl> <dbl> <int>   <int>   <int>       <dbl>       <dbl>       <dbl>
-#' #> 1     0     4     3      19      32       15.79        4.78       41.20
-#' #> 2     0     6     4      19      32       21.05        7.58       46.44
-#' #> 3     0     8    12      19      32       63.16       38.76       82.28
-#' #> 4     1     4     8      13      32       61.54       32.30       84.29
-#' #> 5     1     6     3      13      32       23.08        6.91       54.82
-#' #> 6     1     8     2      13      32       15.38        3.43       48.18
+#' #> # A tibble: 6 x 10
+#' #>   row_var row_cat col_var col_cat     n n_row n_total percent_row lcl_row ucl_row
+#' #>     <chr>   <dbl>   <chr>   <dbl> <int> <int>   <int>       <dbl>   <dbl>   <dbl>
+#' #> 1      am       0     cyl       4     3    19      32       15.79    4.78   41.20
+#' #> 2      am       0     cyl       6     4    19      32       21.05    7.58   46.44
+#' #> 3      am       0     cyl       8    12    19      32       63.16   38.76   82.28
+#' #> 4      am       1     cyl       4     8    13      32       61.54   32.30   84.29
+#' #> 5      am       1     cyl       6     3    13      32       23.08    6.91   54.82
+#' #> 6      am       1     cyl       8     2    13      32       15.38    3.43   48.18
 
 freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default", digits = 2, ...) {
 
@@ -112,7 +113,9 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
   se_total = prop_log_total = t_crit_total = se_log_total = lcl_total_log = NULL
   percent_total = n_row = prop_row = se_row = prop_log_row = t_crit_row = NULL
   se_log_row = lcl_row_log = ucl_row_log = percent_row = lcl_row = NULL
-  ucl_row = lcl_total = ucl_total = ucl_total_log = NULL
+  ucl_row = lcl_total = ucl_total = ucl_total_log = n_groups = NULL
+  ci_type_arg = output_arg = `.` = var = row_var = row_cat = NULL
+  col_var = col_cat = NULL
 
   # ===========================================================================
   # Check for grouped tibble
@@ -120,18 +123,33 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
   if (!("grouped_df" %in% class(x))) {
     stop(paste("The x argument to freq_table must be a grouped tibble.
                The class of the current x argument is", class(x)))
-  } # No else
+  }
+
+  # ===========================================================================
+  # Enquo arguments
+  # enquo/quo_name/UQ the ci_type and output argument so that I don't have to
+  # use quotation marks around the argument being passed.
+  # ===========================================================================
+  ci_type_arg <- rlang::enquo(ci_type) %>% rlang::quo_name() %>% rlang::UQ()
+  output_arg  <- rlang::enquo(output) %>% rlang::quo_name() %>% rlang::UQ()
 
   # ===========================================================================
   # Check for number of group vars:
   # ===========================================================================
-  out <- x %>%
-    dplyr::summarise(n = n())
+  n_groups <- attributes(x)$vars %>% length()
 
   # ===========================================================================
   # One-way tables
   # ===========================================================================
-  if (ncol(out) == 2) { # else is in two-way tables.
+  if (n_groups == 1) { # "else" is in two-way tables.
+
+    # Create first three columns of summary table: grouped variable name,
+    # grouped variable categories, and n of each category
+    out <- x %>%
+      dplyr::summarise(n = n()) %>%
+      dplyr::mutate(var = !!names(.[1])) %>%
+      dplyr::rename(cat = !!names(.[1])) %>%
+      dplyr::select(var, cat, n)
 
     # Update out to include elements needed for Wald and Logit transformed CI's
     # One-way tables
@@ -147,7 +165,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # -------------------
     # and put prop, se, and CI's on percent scale
     # One-way tables
-    if (ci_type == "wald") {
+    if (ci_type_arg == "wald") {
 
       out <- out %>%
         dplyr::mutate(
@@ -165,20 +183,20 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
       # Control output
       # Typically, I only want the frequency, percent and 95% CI
       # Make that the default
-      if (output == "default") {
+      if (output_arg == "default") {
         out <- out %>%
-          dplyr::select(1, n, n_total, percent, lcl, ucl)
+          dplyr::select(var, cat, n, n_total, percent, lcl, ucl)
 
-      } else if (output == "all") {
+      } else if (output_arg == "all") {
         out <- out %>%
-          dplyr::select(1, n, n_total, percent, se, t_crit, lcl, ucl)
+          dplyr::select(var, cat, n, n_total, percent, se, t_crit, lcl, ucl)
       }
 
       # Calculate logit transformed CI's
       # ------------------------------
       # and put prop, se, and CI's on percent scale
       # One-way tables
-    } else if (ci_type == "logit") {
+    } else if (ci_type_arg == "logit") {
 
       out <- out %>%
         dplyr::mutate(
@@ -200,13 +218,13 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
       # Control output
       # Typically, I only want the frequency, percent and 95% CI
       # Make that the default
-      if (output == "default") {
+      if (output_arg == "default") {
         out <- out %>%
-          dplyr::select(1, n, n_total, percent, lcl, ucl)
+          dplyr::select(var, cat, n, n_total, percent, lcl, ucl)
 
-      } else if (output == "all") {
+      } else if (output_arg == "all") {
         out <- out %>%
-          dplyr::select(1, n, n_total, percent, se, t_crit, lcl, ucl)
+          dplyr::select(var, cat, n, n_total, percent, se, t_crit, lcl, ucl)
       }
 
     }
@@ -220,9 +238,23 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # Only logit transformed CI's
     # Need percent and row percent
     # ===========================================================================
-  } else if (ncol(out) == 3) { # if is one-way tables
+  } else if (n_groups == 2) { # "if" is one-way tables
 
-    out <- out %>%
+    # Create first three columns of summary table: row variable name,
+    # row variable categories, column variable name, column variable categories
+    # and n of each category row/col combination
+    out <- x %>%
+      dplyr::summarise(n = n()) %>%
+      dplyr::mutate(
+        row_var = !!names(.[1]),
+        col_var = !!names(.[2])
+      ) %>%
+      dplyr::rename(
+        row_cat = !!names(.[1]),
+        col_cat = !!names(.[2])
+      ) %>%
+      dplyr::select(row_var, row_cat, col_var, col_cat, n) %>%
+
       # Calculate within row n
       dplyr::mutate(n_row = sum(n)) %>%
       # Ungroup to get total_n
@@ -271,15 +303,17 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
     # Control output
     # Typically, I only want the frequency, row percent and 95% CI for the row percent
     # Make that the default
-    if (output == "default") {
+    if (output_arg == "default") {
       out <- out %>%
-        dplyr::select(1:2, n, n_row, n_total, percent_row, lcl_row, ucl_row)
+        dplyr::select(row_var, row_cat, col_var, col_cat, n, n_row, n_total,
+                      percent_row, lcl_row, ucl_row)
 
-    } else if (output == "all") {
+    } else if (output_arg == "all") {
       out <- out %>%
-        dplyr::select(1:2, n, n_row, n_total, percent_total, se_total, t_crit_total,
-               lcl_total, ucl_total, percent_row, se_row, t_crit_row,
-               lcl_row, ucl_row)
+        dplyr::select(row_var, row_cat, col_var, col_cat, n, n_row, n_total,
+                      percent_total, se_total, t_crit_total,
+                      lcl_total, ucl_total, percent_row, se_row, t_crit_row,
+                      lcl_row, ucl_row)
     }
 
     # Add freq_table class to out

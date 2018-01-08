@@ -45,13 +45,13 @@ mtcars \%>\%
   group_by(am) \%>\%
   freq_table() \%>\%
   freq_test() \%>\%
-  select(1:6, p_chi2_pearson)
+  select(var:percent, p_chi2_pearson)
 
-#>  # A tibble: 2 x 7
-#>     am     n n_total percent   lcl   ucl p_chi2_pearson
-#>  <dbl> <int>   <int>   <dbl> <dbl> <dbl>          <dbl>
-#>  1   0    19      32   59.38 40.94 75.50      0.2888444
-#>  2   1    13      32   40.62 24.50 59.06      0.2888444
+#>  # A tibble: 2 x 6
+#>      var   cat     n n_total percent p_chi2_pearson
+#>    <chr> <dbl> <int>   <int>   <dbl>          <dbl>
+#>  1    am     0    19      32   59.38      0.2888444
+#>  2    am     1    13      32   40.62      0.2888444
 
 # Chi-square test of independence
 
@@ -59,13 +59,13 @@ mtcars \%>\%
   group_by(am, vs) \%>\%
   freq_table() \%>\%
   freq_test() \%>\%
-  select(1:8, p_chi2_pearson)
+  select(row_var:n, percent_row, p_chi2_pearson)
 
-#> # A tibble: 4 x 9
-#>      am    vs     n n_row n_total percent_row lcl_row ucl_row p_chi2_pearson
-#>   <dbl> <dbl> <int> <int>   <int>       <dbl>   <dbl>   <dbl>          <dbl>
-#> 1     0     0    12    19      32       63.16   38.76   82.28      0.3409429
-#> 2     0     1     7    19      32       36.84   17.72   61.24      0.3409429
-#> 3     1     0     6    13      32       46.15   20.83   73.63      0.3409429
-#> 4     1     1     7    13      32       53.85   26.37   79.17      0.3409429
+#> # A tibble: 4 x 7
+#>   row_var row_cat col_var col_cat     n percent_row p_chi2_pearson
+#>     <chr>   <dbl>   <chr>   <dbl> <int>       <dbl>          <dbl>
+#> 1      am       0      vs       0    12       63.16      0.3409429
+#> 2      am       0      vs       1     7       36.84      0.3409429
+#> 3      am       1      vs       0     6       46.15      0.3409429
+#> 4      am       1      vs       1     7       53.85      0.3409429
 }

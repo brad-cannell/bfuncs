@@ -16,7 +16,7 @@ test_that("Dimensions of the object returned by freq_table are as expected", {
   columns <- ncol(df)
 
   expect_equal(rows, 2L)
-  expect_equal(columns, 6L)
+  expect_equal(columns, 7L)
 })
 
 test_that("Class of freq_table_one_way is freq_table_one_way", {
@@ -25,20 +25,25 @@ test_that("Class of freq_table_one_way is freq_table_one_way", {
 
 test_that("The correct var name is returned by freq_table", {
   name <- names(df)[1]
-  expect_match(name, "am")
+  expect_match(name, "var")
+})
+
+test_that("The correct cat var name is returned by freq_table", {
+  name <- names(df)[2]
+  expect_match(name, "cat")
 })
 
 test_that("The correct variables levels are returned by freq_table", {
-  levels <- df[, 1] %>% unlist() %>% unname()
+  levels <- pull(df, cat)
   expect_equal(levels, c(0, 1))
 })
 
 test_that("The correct default statistics are returned by freq_table", {
-  n        <- df[, 2] %>% unlist() %>% unname()
-  n_total  <- df[, 3] %>% unlist() %>% unname()
-  percent  <- df[, 4] %>% unlist() %>% unname()
-  lcl      <- df[, 5] %>% unlist() %>% unname()
-  ucl      <- df[, 6] %>% unlist() %>% unname()
+  n        <- pull(df, n)
+  n_total  <- pull(df, n_total)
+  percent  <- pull(df, percent)
+  lcl      <- pull(df, lcl)
+  ucl      <- pull(df, ucl)
 
   expect_equal(n,       c(19, 13))
   expect_equal(n_total, c(32, 32))
@@ -54,11 +59,11 @@ df <- mtcars %>%
   freq_table(ci_type = "wald")
 
 test_that("The correct Wald CI's are returned by freq_table", {
-  lcl      <- df[1, 5] %>% as.numeric()
-  ucl      <- df[1, 6] %>% as.numeric()
+  lcl <- pull(df, lcl)
+  ucl <- pull(df, ucl)
 
-  expect_equal(lcl, 41.38)
-  expect_equal(ucl, 77.37)
+  expect_equal(lcl, c(41.38, 22.63))
+  expect_equal(ucl, c(77.37, 58.62))
 })
 
 
@@ -76,7 +81,7 @@ test_that("Dimensions of the object returned by freq_table are as expected", {
   columns <- ncol(df)
 
   expect_equal(rows, 6L)
-  expect_equal(columns, 8L)
+  expect_equal(columns, 10L)
 })
 
 test_that("Class of freq_table_two_way is freq_table_two_way", {
@@ -84,28 +89,28 @@ test_that("Class of freq_table_two_way is freq_table_two_way", {
 })
 
 test_that("The correct var names are returned by freq_table", {
-  group_1 <- names(df)[1]
-  group_2 <- names(df)[2]
+  row_var <- pull(df, row_var)
+  col_var <- pull(df, col_var)
 
-  expect_match(group_1, "am")
-  expect_match(group_2, "cyl")
+  expect_match(row_var, "am")
+  expect_match(col_var, "cyl")
 })
 
 test_that("The correct variables levels are returned by freq_table", {
-  level_1 <- df[, 1] %>% unlist() %>% unname()
-  level_2 <- df[, 2] %>% unlist() %>% unname()
+  row_cat <- pull(df, row_cat)
+  col_cat <- pull(df, col_cat)
 
-  expect_equal(level_1, c(0, 0, 0, 1, 1, 1))
-  expect_equal(level_2, c(4, 6, 8, 4, 6, 8))
+  expect_equal(row_cat, c(0, 0, 0, 1, 1, 1))
+  expect_equal(col_cat, c(4, 6, 8, 4, 6, 8))
 })
 
 test_that("The correct default statistics are returned by freq_table", {
-  n           <- df[, 3] %>% unlist() %>% unname()
-  n_row       <- df[, 4] %>% unlist() %>% unname()
-  n_total     <- df[, 5] %>% unlist() %>% unname()
-  percent_row <- df[, 6] %>% unlist() %>% unname()
-  lcl_row     <- df[, 7] %>% unlist() %>% unname()
-  ucl_row     <- df[, 8] %>% unlist() %>% unname()
+  n           <- pull(df, n)
+  n_row       <- pull(df, n_row)
+  n_total     <- pull(df, n_total)
+  percent_row <- pull(df, percent_row)
+  lcl_row     <- pull(df, lcl_row)
+  ucl_row     <- pull(df, ucl_row)
 
   expect_equal(n,           c(3, 4, 12, 8, 3, 2))
   expect_equal(n_row,       c(rep(19, 3), rep(13, 3)))
@@ -122,9 +127,9 @@ df <- mtcars %>%
   freq_table(output = "all")
 
 test_that("The correct overall percents and 95% CI's are returned", {
-  percent_total <- df[, 6] %>% unlist() %>% unname()
-  lcl_total     <- df[, 9] %>% unlist() %>% unname()
-  ucl_total     <- df[, 10] %>% unlist() %>% unname()
+  percent_total <- pull(df, percent_total)
+  lcl_total     <- pull(df, lcl_total)
+  ucl_total     <- pull(df, ucl_total)
 
   expect_equal(percent_total, c(9.38, 12.50, 37.50, 25.00, 9.38, 6.25))
   expect_equal(lcl_total,     c(2.86, 4.51, 21.97, 12.51, 2.86, 1.45))
@@ -148,8 +153,8 @@ df <- mtcars %>%
   freq_table(t_prob = t)
 
 test_that("The 99% confidence intervals are correct", {
-  lcl <- df[, 5] %>% unlist() %>% unname()
-  ucl <- df[, 6] %>% unlist() %>% unname()
+  lcl <- pull(df, lcl)
+  ucl <- pull(df, ucl)
 
   expect_equal(lcl, c(34.89, 20.05))
   expect_equal(ucl, c(79.95, 65.11))
@@ -162,9 +167,9 @@ df <- mtcars %>%
   freq_table(digits = 3)
 
 test_that("The 'digits' parameter works as expected", {
-  percent <- df[, 4] %>% unlist() %>% unname()
-  lcl     <- df[, 5] %>% unlist() %>% unname()
-  ucl     <- df[, 6] %>% unlist() %>% unname()
+  percent <- pull(df, percent)
+  lcl     <- pull(df, lcl)
+  ucl     <- pull(df, ucl)
 
   expect_equal(percent, c(59.375, 40.625))
   expect_equal(lcl,     c(40.942, 24.502))

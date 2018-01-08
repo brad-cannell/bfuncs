@@ -6,14 +6,14 @@ context("test-mean_table.R")
 
 
 # =============================================================================
-# Test one-way table of means
+# Test one-way table of means with output = all
 # =============================================================================
 df <- mtcars %>%
-  mean_table(mpg)
+  mean_table(mpg, output = all)
 
 test_that("Dimensions of the object returned by mean_table are as expected", {
   dims <- dim(df)
-  expect_equal(dims, c(1, 7))
+  expect_equal(dims, c(1L, 10L))
 })
 
 test_that("Class of mean_table is mean_table", {
@@ -21,20 +21,26 @@ test_that("Class of mean_table is mean_table", {
 })
 
 test_that("The correct var name is returned by mean_table", {
-  name <- df[1, 1] %>% unlist()
-  expect_match(name, "mpg")
+  response_var <- pull(df, response_var) %>% unique()
+  expect_match(response_var, "mpg")
 })
 
 test_that("The correct statistics are returned by mean_table", {
-  n    <- df[1, 2] %>% as.integer()
-  mean <- df[1, 3] %>% as.numeric()
-  lcl  <- df[1, 4] %>% as.numeric()
-  ucl  <- df[1, 5] %>% as.numeric()
-  min  <- df[1, 6] %>% as.numeric()
-  max  <- df[1, 7] %>% as.numeric()
+  n_miss <- pull(df, n_miss)
+  n      <- pull(df, n)
+  mean   <- pull(df, mean)
+  t_crit <- pull(df, t_crit) %>% round(6)
+  sem    <- pull(df, sem) %>% round(6)
+  lcl    <- pull(df, lcl)
+  ucl    <- pull(df, ucl)
+  min    <- pull(df, min)
+  max    <- pull(df, max)
 
+  expect_equal(n_miss, 0L)
   expect_equal(n, 32L)
   expect_equal(mean, 20.09)
+  expect_equal(t_crit, 2.039513)
+  expect_equal(sem, 1.065424)
   expect_equal(lcl, 17.92)
   expect_equal(ucl, 22.26)
   expect_equal(min, 10.4)
@@ -45,15 +51,15 @@ test_that("The correct statistics are returned by mean_table", {
 
 
 # =============================================================================
-# Test grouped means table
+# Test grouped means table with output = all
 # =============================================================================
 df <- mtcars %>%
   group_by(cyl) %>%
-  mean_table(mpg)
+  mean_table(mpg, output = all)
 
 test_that("Dimensions of the object returned by mean_table are as expected", {
   dims <- dim(df)
-  expect_equal(dims, c(3, 8))
+  expect_equal(dims, c(3L, 12L))
 })
 
 test_that("Class of mean_table is mean_table_grouped", {
@@ -61,27 +67,88 @@ test_that("Class of mean_table is mean_table_grouped", {
 })
 
 test_that("The correct var names are returned by mean_table", {
-  group_level <- df[1, 1] %>% as.numeric()
-  name <- df[1, 2] %>% unlist()
+  response_var <- pull(df, response_var)
+  group_var    <- pull(df, group_var)
 
-  expect_equal(group_level, 4)
-  expect_match(name, "mpg")
+  expect_match(response_var, "mpg")
+  expect_match(group_var, "cyl")
+})
+
+test_that("The expected group categories are returned by mean_table", {
+  group_cat <- pull(df, group_cat)
+  expect_equal(group_cat, c(4L, 6L, 8L))
 })
 
 test_that("The correct statistics are returned by mean_table", {
-  n    <- df[1, 3] %>% as.integer()
-  mean <- df[1, 4] %>% as.numeric()
-  lcl  <- df[1, 5] %>% as.numeric()
-  ucl  <- df[1, 6] %>% as.numeric()
-  min  <- df[1, 7] %>% as.numeric()
-  max  <- df[1, 8] %>% as.numeric()
+  n_miss <- pull(df, n_miss)
+  n      <- pull(df, n)
+  mean   <- pull(df, mean)
+  t_crit <- pull(df, t_crit) %>% round(6)
+  sem    <- pull(df, sem) %>% round(7)
+  lcl    <- pull(df, lcl)
+  ucl    <- pull(df, ucl)
+  min    <- pull(df, min)
+  max    <- pull(df, max)
 
-  expect_equal(n, 11L)
-  expect_equal(mean, 26.66)
-  expect_equal(lcl, 23.63)
-  expect_equal(ucl, 29.69)
-  expect_equal(min, 21.4)
-  expect_equal(max, 33.9)
+  expect_equal(n_miss, c(0L, 0L, 0L))
+  expect_equal(n, c(11L, 7L, 14L))
+  expect_equal(mean, c(26.66, 19.74, 15.10))
+  expect_equal(t_crit, c(2.228139, 2.446912, 2.160369))
+  expect_equal(sem, c(1.3597642, 0.5493967, 0.6842016))
+  expect_equal(lcl, c(23.63, 18.40, 13.62))
+  expect_equal(ucl, c(29.69, 21.09, 16.58))
+  expect_equal(min, c(21.4, 17.8, 10.4))
+  expect_equal(max, c(33.9, 21.4, 19.2))
+})
+
+
+
+
+# =============================================================================
+# Test grouped means table with two group_by variables and output = all
+# =============================================================================
+df <- mtcars %>%
+  group_by(cyl, am) %>%
+  mean_table(mpg, output = all)
+
+test_that("Dimensions of the object returned by mean_table are as expected", {
+  dims <- dim(df)
+  expect_equal(dims, c(6L, 14L))
+})
+
+test_that("Class of mean_table is mean_table_grouped", {
+  expect_is(df, "mean_table_grouped")
+})
+
+test_that("The correct var names are returned by mean_table", {
+  response_var <- pull(df, response_var)
+  group_1      <- pull(df, group_1)
+  group_2      <- pull(df, group_2)
+
+  expect_match(response_var, "mpg")
+  expect_match(group_1, "cyl")
+  expect_match(group_2, "am")
+})
+
+test_that("The expected group categories are returned by mean_table", {
+  group_1_cat <- pull(df, group_1_cat)
+  group_2_cat <- pull(df, group_2_cat)
+
+  expect_equal(group_1_cat, c(4L, 4L, 6L, 6L, 8L, 8L))
+  expect_equal(group_2_cat, c(0L, 1L, 0L, 1L, 0L, 1L))
+})
+
+test_that("The correct statistics are returned by mean_table", {
+  # Just need to check a subgroup of all stats here.
+  n      <- pull(df, n)
+  mean   <- pull(df, mean)
+  lcl    <- pull(df, lcl)
+  ucl    <- pull(df, ucl)
+
+  expect_equal(n, c(3L, 8L, 4L, 3L, 12L, 2L))
+  expect_equal(mean, c(22.90, 28.07, 19.12, 20.57, 15.05, 15.40))
+  expect_equal(lcl, c(19.29, 24.33, 16.53, 18.70, 13.29, 10.32))
+  expect_equal(ucl, c(26.51, 31.82, 21.72, 22.43, 16.81, 20.48))
 })
 
 
@@ -99,25 +166,21 @@ df <- mtcars %>%
   mean_table(mpg, t_prob = t)
 
 test_that("The 99% confidence intervals are correct", {
-  lcl <- df[1, 4] %>% as.numeric()
-  ucl <- df[1, 5] %>% as.numeric()
+  lcl <- pull(df, lcl)
+  ucl <- pull(df, ucl)
 
   expect_equal(lcl, 17.17)
   expect_equal(ucl, 23.01)
 })
 
-# Output = "all"
+# Output = "default"
 df <- mtcars %>%
-  mean_table(mpg, output = "all")
+  mean_table(mpg, output = default)
 
-test_that("Additional statistics from output = 'all' are as expected", {
-  n_miss <- df[1, 2] %>% as.numeric()
-  t_crit <- df[1, 5] %>% as.numeric()
-  sem    <- df[1, 6] %>% as.numeric()
-
-  expect_equal(n_miss, 0)
-  expect_equal(t_crit, 2.039513, tolerance = .000001)
-  expect_equal(sem, 1.065424, tolerance = .000001)
+test_that("Additional default list of statistics from output = default are as expected", {
+  vars <- names(df)
+  expect_equal(vars, c("response_var", "n", "mean", "sem", "lcl", "ucl",
+                       "min", "max"))
 })
 
 # digits = 3
@@ -125,9 +188,9 @@ df <- mtcars %>%
   mean_table(mpg, digits = 3)
 
 test_that("The 'digits' parameter works as expected", {
-  mean <- df[1, 3] %>% as.numeric()
-  lcl  <- df[1, 4] %>% as.numeric()
-  ucl  <- df[1, 5] %>% as.numeric()
+  mean <- pull(df, mean)
+  lcl  <- pull(df, lcl)
+  ucl  <- pull(df, ucl)
 
   expect_equal(mean, 20.091)
   expect_equal(lcl, 17.918)

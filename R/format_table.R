@@ -141,6 +141,7 @@ format_table.mean_table <- function(.data, digits = 2, stats = "mean and ci", ..
     dplyr::mutate(
       n       = format(n, big.mark = ","),
       mean    = format(mean, nsmall = digits),
+      mean    = trimws(mean),
       lcl     = format(lcl,  nsmall = digits),
       lcl     = trimws(lcl),
       ucl     = format(ucl,  nsmall = digits),
@@ -187,6 +188,7 @@ format_table.mean_table_grouped <- function(.data, digits = 2, stats = "mean and
     dplyr::mutate(
       n       = format(n, big.mark = ","),
       mean    = format(mean, nsmall = digits),
+      mean    = trimws(mean),
       lcl     = format(lcl,  nsmall = digits),
       lcl     = trimws(lcl),
       ucl     = format(ucl,  nsmall = digits),
@@ -234,6 +236,7 @@ format_table.freq_table_one_way <- function(.data, digits = 2, stats = "percent 
     dplyr::mutate(
       n          = format(n, big.mark = ","),
       percent    = format(percent, nsmall = digits),
+      percent    = trimws(percent),
       lcl        = format(lcl,  nsmall = digits),
       lcl        = trimws(lcl),
       ucl        = format(ucl,  nsmall = digits),
@@ -295,6 +298,7 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
     dplyr::mutate(
       n              = format(n, big.mark = ","),
       percent_row    = format(percent_row, nsmall = digits),
+      percent_row    = trimws(percent_row),
       lcl_row        = format(lcl_row,  nsmall = digits),
       lcl_row        = trimws(lcl_row),
       ucl_row        = format(ucl_row,  nsmall = digits),
@@ -310,6 +314,7 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
       dplyr::mutate(
         n                = format(n, big.mark = ","),
         percent_total    = format(percent_total, nsmall = digits),
+        percent_total    = trimws(percent_total),
         lcl_total        = format(lcl_total,  nsmall = digits),
         lcl_total        = trimws(lcl_total),
         ucl_total        = format(ucl_total,  nsmall = digits),

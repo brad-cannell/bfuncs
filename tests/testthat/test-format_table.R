@@ -155,7 +155,7 @@ test_that("The expected group categories are returned by format_table", {
 
 test_that("The correct statistics are returned by format_table", {
   n_mean <- pull(df, n_mean)
-  expect_equal(n_mean, c("12 (15.05)", "7 (20.74)", "6 (19.75)", "7 (28.37)"))
+  expect_equal(n_mean, c("12 (15.05)", " 7 (20.74)", " 6 (19.75)", " 7 (28.37)"))
 })
 
 
@@ -292,8 +292,8 @@ test_that("The correct variables levels are returned by format_table", {
 
 test_that("The correct statistics are returned by format_table", {
   n_percent_total <- pull(df, n_percent_total)
-  expect_equal(n_percent_total, c("12 (37.50)", "7 (21.88)",
-                                  "6 (18.75)", "7 (21.88)"))
+  expect_equal(n_percent_total, c("12 (37.50)", " 7 (21.88)",
+                                  " 6 (18.75)", " 7 (21.88)"))
 })
 
 

@@ -139,6 +139,7 @@ format_table.mean_table <- function(.data, digits = 2, stats = "mean and ci", ..
   # Format statistics
   out <- .data %>%
     dplyr::mutate(
+      n       = format(n, big.mark = ","),
       mean    = format(mean, nsmall = digits),
       lcl     = format(lcl,  nsmall = digits),
       lcl     = trimws(lcl),
@@ -184,6 +185,7 @@ format_table.mean_table_grouped <- function(.data, digits = 2, stats = "mean and
   # Format statistics
   out <- .data %>%
     dplyr::mutate(
+      n       = format(n, big.mark = ","),
       mean    = format(mean, nsmall = digits),
       lcl     = format(lcl,  nsmall = digits),
       lcl     = trimws(lcl),
@@ -230,6 +232,7 @@ format_table.freq_table_one_way <- function(.data, digits = 2, stats = "percent 
   # Format statistics
   out <- .data %>%
     dplyr::mutate(
+      n          = format(n, big.mark = ","),
       percent    = format(percent, nsmall = digits),
       lcl        = format(lcl,  nsmall = digits),
       lcl        = trimws(lcl),
@@ -290,6 +293,7 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
   # ---------------------
   out <- .data %>%
     dplyr::mutate(
+      n              = format(n, big.mark = ","),
       percent_row    = format(percent_row, nsmall = digits),
       lcl_row        = format(lcl_row,  nsmall = digits),
       lcl_row        = trimws(lcl_row),
@@ -304,6 +308,7 @@ format_table.freq_table_two_way <- function(.data, digits = 2, stats = "row perc
   if ((stats == "percent and ci" || stats == "n and percent") && has_overall_percent) {
     out <- out %>%
       dplyr::mutate(
+        n                = format(n, big.mark = ","),
         percent_total    = format(percent_total, nsmall = digits),
         lcl_total        = format(lcl_total,  nsmall = digits),
         lcl_total        = trimws(lcl_total),

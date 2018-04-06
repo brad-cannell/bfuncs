@@ -94,7 +94,7 @@ mean_table <- function(.data, x, t_prob = 0.975, output = default, digits = 2, .
   # quotation marks around the argument being passed.
   # ===========================================================================
   x          <- rlang::enquo(x)
-  output_arg <- rlang::enquo(output) %>% rlang::quo_name() %>% rlang::UQ()
+  output_arg <- rlang::enquo(output) %>% rlang::quo_name()
 
   # ===========================================================================
   # Grouping variables

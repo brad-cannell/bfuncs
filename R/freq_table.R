@@ -130,8 +130,8 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
   # enquo/quo_name/UQ the ci_type and output argument so that I don't have to
   # use quotation marks around the argument being passed.
   # ===========================================================================
-  ci_type_arg <- rlang::enquo(ci_type) %>% rlang::quo_name() %>% rlang::UQ()
-  output_arg  <- rlang::enquo(output) %>% rlang::quo_name() %>% rlang::UQ()
+  ci_type_arg <- rlang::enquo(ci_type) %>% rlang::quo_name()
+  output_arg  <- rlang::enquo(output) %>% rlang::quo_name()
 
   # ===========================================================================
   # Check for number of group vars:

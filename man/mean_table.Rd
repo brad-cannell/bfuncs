@@ -4,7 +4,8 @@
 \alias{mean_table}
 \title{Estimate Percents and 95 Percent Confidence Intervals in dplyr Pipelines}
 \usage{
-mean_table(.data, x, t_prob = 0.975, output = default, digits = 2, ...)
+mean_table(.data, x, t_prob = 0.975, output = default, digits = 2,
+  ...)
 }
 \arguments{
 \item{.data}{A tibble or grouped tibble.}

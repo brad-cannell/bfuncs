@@ -10,8 +10,8 @@
 \usage{
 format_table(.data, ...)
 
-\method{format_table}{mean_table}(.data, digits = 2, stats = "mean and ci",
-  ...)
+\method{format_table}{mean_table}(.data, digits = 2,
+  stats = "mean and ci", ...)
 
 \method{format_table}{mean_table_grouped}(.data, digits = 2,
   stats = "mean and ci", ...)

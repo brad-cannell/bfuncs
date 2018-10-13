@@ -6,7 +6,6 @@
 # View project progress and tasks:
 open https://github.com/brad-cannell/bfuncs/projects/4
 
-
 # Creating tests
 https://github.com/r-lib/testthat
 

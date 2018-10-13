@@ -23,6 +23,7 @@ Imports:
   utils,
   rlang,
   DiagrammeR,
-  tidyr
+  tidyr,
+  stringr
 RoxygenNote: 6.1.0
 VignetteBuilder: knitr

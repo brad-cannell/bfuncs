@@ -95,6 +95,12 @@ check_join_conflicts <- function(.data, suffix = c("x", "y")) {
   )
 
 
+  # ===========================================================================
+  # Convert all columns of .data to character
+  # Just prevents problems
+  # ===========================================================================
+  .data <- .data %>% dplyr::mutate_all(.funs = as.character)
+
 
   # ===========================================================================
   # Find all variables with a suffix

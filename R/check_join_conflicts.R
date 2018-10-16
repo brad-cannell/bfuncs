@@ -68,7 +68,7 @@
 #' #>  first_name     1 john     jon
 #' #>  first_name     3 sally    salle
 #' #>  gender        NA NA       NA
-check_join_conflicts <- function(.data, suffix = c("x", "y"), show_context = TRUE) {
+check_join_conflicts <- function(.data, suffix = c(".x", ".y"), show_context = TRUE) {
 
   # ------------------------------------------------------------------
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
@@ -108,8 +108,8 @@ check_join_conflicts <- function(.data, suffix = c("x", "y"), show_context = TRU
   # Find all variables with a suffix
   # ===========================================================================
   var_names_to_check <- names(.data)
-  suffix_pattern_1   <- paste0("\\.", suffix[1], "$")
-  suffix_pattern_2   <- paste0("\\.", suffix[2], "$")
+  suffix_pattern_1   <- paste0(suffix[1], "$")
+  suffix_pattern_2   <- paste0(suffix[2], "$")
   suffix_1_index     <- stringr::str_detect(var_names_to_check, suffix_pattern_1)
   suffix_2_index     <- stringr::str_detect(var_names_to_check, suffix_pattern_2)
   keep_index         <- as.logical(suffix_1_index + suffix_2_index)
@@ -167,10 +167,10 @@ check_join_conflicts <- function(.data, suffix = c("x", "y"), show_context = TRU
 
   # Make sure shell data frame variable names match suffix names
   if (suffix[1] != "x") {
-    names(out)[names(out) == ".x"] <- paste0(".", suffix[1])
+    names(out)[names(out) == ".x"] <- suffix[1]
   }
   if (suffix[2] != "y") {
-    names(out)[names(out) == ".y"] <- paste0(".", suffix[2])
+    names(out)[names(out) == ".y"] <- suffix[2]
   }
 
 

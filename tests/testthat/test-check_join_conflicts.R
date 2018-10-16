@@ -67,7 +67,7 @@ df4 <- df3
 names(df4) <- stringr::str_replace_all(names(df4), "\\.x", ".medstar")
 names(df4) <- stringr::str_replace_all(names(df4), "\\.y", ".aps")
 
-df <- check_join_conflicts(df4, suffix = c("medstar", "aps"), show_context = FALSE)
+df <- check_join_conflicts(df4, suffix = c(".medstar", ".aps"), show_context = FALSE)
 
 test_that("Dimensions of the data frame returned by check_join_conflicts are as expected", {
   dims <- dim(df)

@@ -5,7 +5,8 @@
 \title{Compare Values of Non-Joined Duplicate Variables After Joining Data
 Frames}
 \usage{
-check_join_conflicts(.data, suffix = c("x", "y"), show_context = TRUE)
+check_join_conflicts(.data, suffix = c(".x", ".y"),
+  show_context = TRUE)
 }
 \arguments{
 \item{.data}{The joined data frame -- resulting from a dplyr::*_join function.}

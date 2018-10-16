@@ -14,6 +14,8 @@
 #' @param .data The joined data frame -- resulting from a dplyr::*_join function.
 #' @param suffix The suffix disambiguates non-joined duplicate variables. The
 #' default is x and y.
+#' @param show_context Show the other non-joined duplicate varibles from the
+#' same row of the joined data frame.
 #'
 #' @return a tibble
 #' @export
@@ -66,7 +68,7 @@
 #' #>  first_name     1 john     jon
 #' #>  first_name     3 sally    salle
 #' #>  gender        NA NA       NA
-check_join_conflicts <- function(.data, suffix = c("x", "y")) {
+check_join_conflicts <- function(.data, suffix = c("x", "y"), show_context = TRUE) {
 
   # ------------------------------------------------------------------
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
@@ -97,7 +99,7 @@ check_join_conflicts <- function(.data, suffix = c("x", "y")) {
 
   # ===========================================================================
   # Convert all columns of .data to character
-  # Just prevents problems
+  # Problem with bind_rows later
   # ===========================================================================
   .data <- .data %>% dplyr::mutate_all(.funs = as.character)
 
@@ -170,6 +172,26 @@ check_join_conflicts <- function(.data, suffix = c("x", "y")) {
   if (suffix[2] != "y") {
     names(out)[names(out) == ".y"] <- paste0(".", suffix[2])
   }
+
+
+  # ===========================================================================
+  # Add selected variables back to the results data frame for context
+  # ===========================================================================
+
+  if (show_context == TRUE) {
+    # Before joining .data with results table create a row number variable and
+    # keep only variables that end with suffix
+    .data <- .data %>%
+      dplyr::mutate(row = dplyr::row_number()) %>%
+      dplyr::select(
+        row,
+        dplyr::ends_with(suffix[1]),
+        dplyr::ends_with(suffix[2])
+      ) %>%
+      dplyr::select(sort(names(.))) # Arrange var names in alphabetical order
+    out <- out %>% dplyr::left_join(.data, by = "row")
+  }
+
 
   # ===========================================================================
   # Return data frame of results

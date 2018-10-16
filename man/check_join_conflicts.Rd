@@ -5,13 +5,16 @@
 \title{Compare Values of Non-Joined Duplicate Variables After Joining Data
 Frames}
 \usage{
-check_join_conflicts(.data, suffix = c("x", "y"))
+check_join_conflicts(.data, suffix = c("x", "y"), show_context = TRUE)
 }
 \arguments{
 \item{.data}{The joined data frame -- resulting from a dplyr::*_join function.}
 
 \item{suffix}{The suffix disambiguates non-joined duplicate variables. The
 default is x and y.}
+
+\item{show_context}{Show the other non-joined duplicate varibles from the
+same row of the joined data frame.}
 }
 \value{
 a tibble

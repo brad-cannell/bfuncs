@@ -25,7 +25,8 @@ df3
 # =============================================================================
 # Test function
 # =============================================================================
-df <- check_join_conflicts(df3)
+
+df <- check_join_conflicts(df3, show_context = FALSE)
 
 test_that("Dimensions of the data frame returned by check_join_conflicts are as expected", {
   dims <- dim(df)
@@ -50,15 +51,23 @@ test_that("The correct values are returned by check_join_conflicts", {
   expect_setequal(y, df[[".y"]])
 })
 
+df <- check_join_conflicts(df3, show_context = TRUE)
+
+test_that("Show context works", {
+  dims <- dim(df)
+  expect_equal(dims, c(4L, 10L))
+})
+
 
 # =============================================================================
 # Test on different suffix names
 # =============================================================================
+
 df4 <- df3
 names(df4) <- stringr::str_replace_all(names(df4), "\\.x", ".medstar")
 names(df4) <- stringr::str_replace_all(names(df4), "\\.y", ".aps")
 
-df <- check_join_conflicts(df4, suffix = c("medstar", "aps"))
+df <- check_join_conflicts(df4, suffix = c("medstar", "aps"), show_context = FALSE)
 
 test_that("Dimensions of the data frame returned by check_join_conflicts are as expected", {
   dims <- dim(df)

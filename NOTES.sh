@@ -29,3 +29,8 @@ https://github.com/r-lib/testthat
 
 # Prevents R CMD check: "no visible binding for global variable ‘.’"
 # n = n_total = prop = t_crit = se = lcl_wald = ucl_wald = percent = NULL
+
+
+# Currently getting this warning during build check:
+# '::' or ':::' import not declared from: ‘flextable’
+#  When I try to add flextable to the Namespace I get an error. I'll deal with this later.

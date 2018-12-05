@@ -25,6 +25,7 @@ Imports:
   DiagrammeR,
   tidyr,
   stringr,
-  officer
+  officer,
+  purrr
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr

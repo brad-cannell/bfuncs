@@ -26,3 +26,6 @@ https://github.com/r-lib/testthat
 # ‘develop_test_table.Rmd’ ‘develop_test_table.nb.html’
 
 # Need to delete these files when I'm done developing chi-square test.
+
+# Prevents R CMD check: "no visible binding for global variable ‘.’"
+# n = n_total = prop = t_crit = se = lcl_wald = ucl_wald = percent = NULL

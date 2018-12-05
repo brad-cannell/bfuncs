@@ -73,7 +73,7 @@ check_join_conflicts <- function(.data, suffix = c(".x", ".y"), show_context = T
   # ------------------------------------------------------------------
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
   # ------------------------------------------------------------------
-  temp = NULL
+  temp = . = NULL
 
   # ===========================================================================
   # Check for two unique suffix values

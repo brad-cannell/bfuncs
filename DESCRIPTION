@@ -24,6 +24,7 @@ Imports:
   rlang,
   DiagrammeR,
   tidyr,
-  stringr
-RoxygenNote: 6.1.0
+  stringr,
+  officer
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr

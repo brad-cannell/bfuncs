@@ -10,6 +10,7 @@
 #' @param ... Arbitrary list of attributes (i.e., attribute = "value")
 #'
 #' @return Data frame
+#' @export
 codebook_add_col_attributes <- function(df, .x, ...) {
 
   # ===========================================================================

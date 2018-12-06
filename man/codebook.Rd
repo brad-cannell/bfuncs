@@ -4,36 +4,41 @@
 \alias{codebook}
 \title{Automate creation of a data codebook}
 \usage{
-codebook(x, label = NA)
+codebook(df, path = NA, title = NA, subtitle = NA,
+  description = NA)
 }
 \arguments{
-\item{x}{A data frame}
+\item{df}{The saved file at `path`, read into memory as a data frame}
 
-\item{label}{Optional vector of variable labels. Default is NA.}
+\item{path}{The path to the saved dataset of interest}
+
+\item{title}{Optional title}
+
+\item{subtitle}{Optional subtitle}
+
+\item{description}{Text description of the dataset}
 }
 \value{
-A list of lists
+An rdocx object that can be printed to a Word document
 }
 \description{
 The codebook function assists with the creation of a codebook for a given
  data frame.
 }
+\details{
+Codebook expects that `df ` is a data frame that you have read into memory
+from a saved data file. Please provide the path to the saved data file. This
+function gets selected attributes about file saved at `path` and stores
+those attributes in a data frame, which is later turned into a flextable and
+added to the codebook document.
+}
 \examples{
-data("mtcars")
-
-# Optional: Create label vector
-labels <- c("Miles Per Gallon", "Number of cylinders")
-
-# Codebook with one variable
-codebook(mtcars["mpg"], label = labels)
-
-# Codebook with multiple variables
-varlist <- c("mpg", "cyl")
-codebook(mtcars[varlist], label = labels)
-
-# Codebook with all variables
-codebook(mtcars)
-
-# Do not use:
-# lapply(mtcars[varlist], codebook)
+# codebook_detect_5wk <- codebook(
+#   df = detect_5wk \%>\% select(1:2),
+#   path = "../data/detect_5wk.csv",
+#   title = "Detection of Elder abuse Through Emergency Care Technicians (DETECT)",
+#   subtitle = "5-Week Pilot Study",
+#   description = description
+# ) \%>\%
+#   print(target = "example_officer_codebook.docx")
 }

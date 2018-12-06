@@ -18,8 +18,8 @@ codebook_theme_df_attributes <- function(ft) {
     # Set the width of both columns
     flextable::width(width = 3.25) %>%
     # Add borders all around
-    flextable::border_outer(part = "all", border = flextable::fp_border()) %>%
-    flextable::border_inner_v(part = "all", border = flextable::fp_border())
+    flextable::border_outer(part = "all", border = officer::fp_border()) %>%
+    flextable::border_inner_v(part = "all", border = officer::fp_border())
 
   # Return formatted flextable
   ft

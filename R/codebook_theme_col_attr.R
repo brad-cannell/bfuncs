@@ -6,8 +6,8 @@
 codebook_theme_col_attr <- function(ft) {
 
   # Set border attributes
-  border_thick <- flextable::fp_border(color = "black", width = 3)
-  border_lt_gr <- flextable::fp_border(color = "gray80", width = 1)
+  border_thick <- officer::fp_border(color = "black", width = 3)
+  border_lt_gr <- officer::fp_border(color = "gray80", width = 1)
 
   ft <- ft %>%
     # Delete the header row

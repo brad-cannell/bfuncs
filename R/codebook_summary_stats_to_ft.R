@@ -38,7 +38,7 @@ codebook_summary_stats_to_ft.summary_numeric <- function(df, col_width = 1.3) {
     # Remove default borders
     flextable::border_remove() %>%
     # Add light gray top border
-    flextable::hline_top(border = flextable::fp_border(color = "gray80", width = 1), part = "all")
+    flextable::hline_top(border = officer::fp_border(color = "gray80", width = 1), part = "all")
 
   # Return formatted flextable
   ft
@@ -76,7 +76,7 @@ codebook_summary_stats_to_ft.summary_many_cats <- function(df, col_width = 1.62)
     # Remove default borders
     flextable::border_remove() %>%
     # Add light gray top border
-    flextable::hline_top(border = flextable::fp_border(color = "gray80", width = 1), part = "all")
+    flextable::hline_top(border = officer::fp_border(color = "gray80", width = 1), part = "all")
 
   # Return formatted flextable
   ft
@@ -117,7 +117,7 @@ codebook_summary_stats_to_ft.summary_few_cats <- function(df, col_width = 1.62) 
     # Remove default borders
     flextable::border_remove() %>%
     # Add light gray top border
-    flextable::hline_top(border = flextable::fp_border(color = "gray80", width = 1), part = "all")
+    flextable::hline_top(border = officer::fp_border(color = "gray80", width = 1), part = "all")
 
   # Return formatted flextable
   ft
@@ -150,7 +150,7 @@ codebook_summary_stats_to_ft.summary_time <- function(df, col_width = 1.62) {
     # Remove default borders
     flextable::border_remove() %>%
     # Add light gray top border
-    flextable::hline_top(border = flextable::fp_border(color = "gray80", width = 1), part = "all")
+    flextable::hline_top(border = officer::fp_border(color = "gray80", width = 1), part = "all")
 
   # Return formatted flextable
   ft

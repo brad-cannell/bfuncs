@@ -137,14 +137,14 @@ codebook <- function(df, path = NA, title = NA, subtitle = NA, description = NA)
   # Add metadata to codebook shell
   # ===========================================================================
   # Create tibble of metadata
-  meta <- tibble(
+  meta <- tibble::tibble(
     `Dataset name:` = df_name,
-    `Dataset size:` = df %>% object.size() %>% format_object_size(units = "auto"),
+    `Dataset size:` = df %>% utils::object.size() %>% format_object_size(units = "auto"),
     `Column count:` = df %>% ncol() %>% format(big.mark = ","),
     `Row count:` = df %>% nrow() %>% format(big.mark = ","),
     `Last modified date:` = file.mtime(path) %>% as.character()
   ) %>%
-    gather() %>%  # Reorient the data frame vertically
+    tidyr::gather() %>%  # Reorient the data frame vertically
     flextable::regulartable() %>% # Convert to flextable
     codebook_theme_df_attributes() # Format
 

@@ -65,8 +65,8 @@ codebook_add_summary_stats <- function(df, .x, many_cats = 10, num_to_cat = 4, d
       # Use num_to_cat as a cut-off value for determining if a numeric variable
       # is really categorical
     } else if (x_class %in% c("integer", "numeric")) {
-      # If n_unique_vals is <= num_to_cat then we guess categorical
-      if (n_unique_vals <= num_to_cat) {
+      # If n_unique_vals is >= num_to_cat then we guess categorical
+      if (n_unique_vals >= num_to_cat) {
         # If guessed categorical, then determine if many cats or few cats
         if (n_unique_vals >=  many_cats) {
           col_type <- "many_cats"

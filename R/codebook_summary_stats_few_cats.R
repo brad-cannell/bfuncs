@@ -10,7 +10,7 @@ codebook_summary_stats_few_cats <- function(df, .x, digits = 2) {
   # ===========================================================================
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
   # ===========================================================================
-  var = NULL
+  var = n = n_total = percent = NULL
 
   # ===========================================================================
   # Variable management
@@ -27,7 +27,7 @@ codebook_summary_stats_few_cats <- function(df, .x, digits = 2) {
     dplyr::select(cat, n, n_total, percent) %>%
 
     # Format numeric results
-    mutate_all(format, nsmall = digits, big.mark = ",")
+    dplyr::mutate_all(format, nsmall = digits, big.mark = ",")
 
   # ===========================================================================
   # Return tibble of results

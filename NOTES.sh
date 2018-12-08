@@ -29,3 +29,4 @@ https://github.com/r-lib/testthat
 
 # Prevents R CMD check: "no visible binding for global variable ‘.’"
 # n = n_total = prop = t_crit = se = lcl_wald = ucl_wald = percent = NULL
+

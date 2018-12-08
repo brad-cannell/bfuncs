@@ -10,7 +10,7 @@ codebook_summary_stats_many_cats <- function(df, .x, n_extreme_cats = 5) {
   # ===========================================================================
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
   # ===========================================================================
-  n = head = tail = NULL
+  n = head = tail = lowest_cats = highest_cats = NULL
 
   # ===========================================================================
   # Variable management

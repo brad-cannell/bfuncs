@@ -50,5 +50,11 @@ codebook_summary_stats_many_cats <- function(df, .x, n_extreme_cats = 5) {
   # ===========================================================================
   summary[, 1:2] <- lowest[, 1:2]
   summary[, 3:4] <- highest[, 1:2]
+  summary <- summary %>%
+    # Replace NA with "Missing"
+    dplyr::mutate(
+      lowest_cats = tidyr::replace_na(lowest_cats, "Missing"),
+      highest_cats = tidyr::replace_na(highest_cats, "Missing")
+    )
   summary
 }

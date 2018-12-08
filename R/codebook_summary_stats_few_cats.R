@@ -24,7 +24,10 @@ codebook_summary_stats_few_cats <- function(df, .x, digits = 2) {
     dplyr::group_by(!!x) %>%
     bfuncs::freq_table(digits = digits) %>%
     dplyr::mutate(cat = tidyr::replace_na(cat, "Missing")) %>%
-    dplyr::select(-var)
+    dplyr::select(cat, n, n_total, percent) %>%
+
+    # Format numeric results
+    mutate_all(format, nsmall = digits, big.mark = ",")
 
   # ===========================================================================
   # Return tibble of results

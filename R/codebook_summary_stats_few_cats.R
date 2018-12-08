@@ -10,7 +10,7 @@ codebook_summary_stats_few_cats <- function(df, .x, digits = 2) {
   # ===========================================================================
   # Prevents R CMD check: "no visible binding for global variable ‘.’"
   # ===========================================================================
-  var = n = n_total = percent = NULL
+  var = n = cum_freq = percent = NULL
 
   # ===========================================================================
   # Variable management
@@ -24,7 +24,9 @@ codebook_summary_stats_few_cats <- function(df, .x, digits = 2) {
     dplyr::group_by(!!x) %>%
     bfuncs::freq_table(digits = digits) %>%
     dplyr::mutate(cat = tidyr::replace_na(cat, "Missing")) %>%
-    dplyr::select(cat, n, n_total, percent) %>%
+    # Change overall total to cumulative total
+    dplyr::mutate(cum_freq = cumsum(n)) %>%
+    dplyr::select(cat, n, percent, cum_freq) %>%
 
     # Format numeric results
     dplyr::mutate_all(format, nsmall = digits, big.mark = ",")

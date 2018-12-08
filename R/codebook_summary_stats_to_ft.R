@@ -98,12 +98,10 @@ codebook_summary_stats_to_ft.summary_few_cats <- function(df, col_width = 1.62) 
     flextable::regulartable() %>%
     # Change header text
     flextable::set_header_labels(
-      cat     = "Categories",
-      n       = "Frequency",
-      n_total = "Total",
-      percent = "Percent",
-      lcl     = "Lower Confidence Limit",
-      ucl     = "Upper Confidence Limit"
+      cat      = "Categories",
+      n        = "Frequency",
+      percent  = "Percent",
+      cum_freq = "Cumulative Frequency"
     ) %>%
     # Set font to TNR 11
     flextable::font(fontname = "Times New Roman", part = "all") %>%

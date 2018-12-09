@@ -33,13 +33,13 @@ codebook_get_col_attributes <- function(df, .x) {
 
   attr_df <- df %>%
     dplyr::summarise(
-      `Column name`                    = .x,
-      `Column description`             = attributes(df[[.x]])[["description"]],
-      `Source information`             = attributes(df[[.x]])[["source"]],
-      `Column type`                    = attributes(df[[.x]])[["col_type"]],
-      `Data type`                      = data_type,
-      `Unique non-missing value count` = unique(!!x) %>% stats::na.exclude() %>% length(),
-      `Missing value count`            = is.na(!!x) %>% sum()
+      `Column name:`                    = .x,
+      `Column description:`             = attributes(df[[.x]])[["description"]],
+      `Source information:`             = attributes(df[[.x]])[["source"]],
+      `Column type:`                    = attributes(df[[.x]])[["col_type"]],
+      `Data type:`                      = data_type,
+      `Unique non-missing value count:` = unique(!!x) %>% stats::na.exclude() %>% length(),
+      `Missing value count:`            = is.na(!!x) %>% sum()
     ) %>%
     # Format output
     dplyr::mutate_if(is.numeric, format, big.mark = ",") %>%

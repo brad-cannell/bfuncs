@@ -24,13 +24,20 @@ codebook_get_col_attributes <- function(df, .x) {
   # ===========================================================================
   # Create attributes data frame - will be converted to flextable
   # ===========================================================================
+  data_type <- class(df[[.x]])
+  data_type <- stringr::str_replace(
+    data_type,
+    stringr::str_extract(data_type, "^\\w{1}"),
+    toupper(stringr::str_extract(data_type, "^\\w{1}"))
+  )
+
   attr_df <- df %>%
     dplyr::summarise(
       `Column name`                    = .x,
       `Column description`             = attributes(df[[.x]])[["description"]],
       `Source information`             = attributes(df[[.x]])[["source"]],
       `Column type`                    = attributes(df[[.x]])[["col_type"]],
-      `Data type`                      = class(df[[.x]]),
+      `Data type`                      = data_type,
       `Unique non-missing value count` = unique(!!x) %>% stats::na.exclude() %>% length(),
       `Missing value count`            = is.na(!!x) %>% sum()
     ) %>%

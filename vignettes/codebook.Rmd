@@ -1,0 +1,53 @@
+---
+title: "Using codebook"
+author: "Brad Cannell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using codebook}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Load libraries
+
+```{r}
+library(tidyverse)
+library(bfuncs)
+```
+
+# Load data
+
+By default, `codebook` assumes that you want to make a codebook about a dataset file that you have saved somewhere, as opposed to a data frame you're working on in an r session, but don't intend to save. Therefore, the first thing you will need to do is read the data into the current R session.
+
+For the purposes of making a self-contained example, we will actually just create an example data frame in the code chunk below and use it to demonstrate how to use `codebook`
+
+```{r}
+set.seed(123)
+df <- tibble(
+  id = factor(seq(1001, 1020, 1)),
+  gender = sample(c("Female", "Male"), 20, TRUE),
+  date = sample(seq.Date(as.Date("2015-09-15"), as.Date("2015-10-26"), "day"), 20, TRUE),
+  height = rnorm(20, 71, 10)
+) %>% 
+  print()
+```
+
+## Column types
+
+`codebook` classifies all columns as one of four types and uses these categories to determine which descriptive statistics are given in the codebook document:
+
+1. Categorical with many different categories, for example `id` above     
+2. Categorical with few different categories, for example `gender` above     
+3. Time, for example `date` above    
+4. Numeric, for example `height` above    
+
+
+

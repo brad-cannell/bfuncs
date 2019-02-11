@@ -1,0 +1,91 @@
+---
+title: "Adding Rcpp files to a package"
+author: "Brad Cannell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Overview
+
+I just finished the [optimizing R code with Rcpp](https://www.datacamp.com/courses/optimizing-r-code-with-rcpp) course on DataCamp today. I added a simple C++ file to bfuncs as practice, for future reference, and to make sure I understand the process for using C++ files in R packages (as opposed to interactively). Below are some lessons learned and benchmarks.
+
+[Hadley's chapter](http://r-pkgs.had.co.nz/src.html#cpp) was helpful; however, there were a couple of things that could be more clear.
+
+1. `devtool::use_rcpp()` is depricated. Use `usethis::use_rcpp()` instead.
+
+2. It will tell you to add the tags below "somewhere" in your package. After reading through Stack Overflow, I put them in a stand-alone R script called "rcpp_roxygen_tags.R". It seems to be working.
+
+3. Next, add roxygen headers to the rcpp file using `//` instead of `#`. Do this before building and reloading or documenting.
+
+4. Make sure to add `@export` to the roxygen header or the functions won't be available in the package namespace. In other words, the `// [[Rcpp::export]]` alone does not make the function available to be called by the package.
+
+5. Click buld and reload _before_ documenting.
+
+6. Document (Ctrl/Cmd + Shift + D).
+
+# Example
+
+As an example, I added a simple version of last observation carried forward. This is something I want to work on implementing anyway. Keep in mind that this version only works on numeric vectors and has no error checking at the moment.
+
+Having said that, I'm going to compare the Rcpp function to a home spun R version using loops and to zoo::na.locf.
+
+```{r}
+na_locf_r_loop <- function(x) {
+  current <- NA
+  res <- x
+  for (i in seq_along(x)) {
+    if (is.na(x[i])) {
+      res[i] <- current
+    } else {
+      current <- x[i]
+    }
+  }
+  res
+}
+```
+
+## Benchmark
+
+```{r}
+set.seed(42)
+x <- rnorm(1e5)
+
+# Sprinkle some NA into x
+x[sample(1e5, 100)] <- NA
+```
+
+Check to make sure we get the same results from all functions
+
+```{r}
+all.equal(na_locf_r_loop(x), zoo::na.locf(x))
+```
+
+```{r}
+all.equal(bfuncs::na_locf(x), zoo::na.locf(x))
+```
+
+```{r}
+microbenchmark::microbenchmark(
+  na_locf_r_loop(x),
+  zoo::na.locf(x),
+  bfuncs::na_locf(x),
+  times = 5
+)
+```
+
+So, the R loop is very readable, but roughly 46 times slower than the Rcpp loop.
+
+I believe zoo::na.locf is vectorized, but still 25 times slower than the Rcpp function.
+
+The Rcpp function is as readable as the R loop funcion (if you learn how to read a little C++) and much faster.

@@ -13,20 +13,25 @@ BugReports: https://github.com/brad-cannell/bfuncs/issues
 Suggests:
     testthat,
     rmarkdown,
-    knitr
+    knitr,
+    microbenchmark,
+    zoo
 Imports:
-  gmodels, 
-  tibble,
-  tidyverse,
-  magrittr,
-  dplyr,
-  utils,
-  rlang,
-  DiagrammeR,
-  tidyr,
-  stringr,
-  officer,
-  purrr,
-  flextable
+    gmodels,
+    tibble,
+    tidyverse,
+    magrittr,
+    dplyr,
+    utils,
+    rlang,
+    DiagrammeR,
+    tidyr,
+    stringr,
+    officer,
+    purrr,
+    flextable,
+    Rcpp
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
+LinkingTo: 
+    Rcpp

@@ -1,0 +1,4 @@
+Name: Insert comment
+Description: Inserts comment notation at the cursor position.
+Binding: insert_comment
+Interactive: false

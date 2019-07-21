@@ -102,17 +102,17 @@ mean_table <- function(.data, x, t_prob = 0.975, output = default, digits = 2, .
   # Grab their names - later returned in summary table
   # ===========================================================================
   if ("grouped_df" %in% class(.data)) {
-    n_groups <- attributes(.data)$vars %>% length()
+    n_groups <- attributes(.data)$groups %>% length() - 1
   } else {
     n_groups <- 0L
   }
 
   if (n_groups == 1) {
-    group_1 <- attributes(.data)$vars
+    group_1 <- attributes(.data)$groups[1] %>% names()
 
   } else if (n_groups == 2) {
-    group_1 <- attributes(.data)$vars[1]
-    group_2 <- attributes(.data)$vars[2]
+    group_1 <- attributes(.data)$groups[1] %>% names()
+    group_2 <- attributes(.data)$groups[2] %>% names()
 
   } else if (n_groups > 2) {
     stop(".data can be grouped by up to two variables. It is currently grouped ",

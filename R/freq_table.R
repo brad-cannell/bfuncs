@@ -136,7 +136,7 @@ freq_table <- function(x, t_prob = 0.975, ci_type = "logit", output = "default",
   # ===========================================================================
   # Check for number of group vars:
   # ===========================================================================
-  n_groups <- attributes(x)$vars %>% length()
+  n_groups <- attributes(x)$groups %>% length() - 1
 
   # ===========================================================================
   # One-way tables
